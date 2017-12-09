@@ -1,0 +1,66 @@
+# depslib dependency file v1.0
+1188646118 source:c:\xynth\projects\face\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1188643152 c:\xynth\projects\face\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+	<cvaux.h>
+
+1188646133 source:c:\xynth\projects\face\face.cxx
+	"Face.h"
+
+1188643792 c:\xynth\projects\face\face.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	<fann.h>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Choice.H>
+
+1158160188 source:c:\xynth\projects\face\facedetect.c
+	"cv.h"
+	"highgui.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<math.h>
+	<float.h>
+	<limits.h>
+	<time.h>
+	<ctype.h>
+
+1188705861 source:c:\projects\face\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1188651948 c:\projects\face\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+	<cvaux.h>
+
+1188707653 source:c:\projects\face\face.cxx
+	"Face.h"
+
+1188707653 c:\projects\face\face.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	<fann.h>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Choice.H>
+

@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1192816271 source:c:\projects\new_ face\face.cxx
+	"Face.h"
+
+1192816250 c:\projects\new_ face\face.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	<fann.h>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Choice.H>
+
+1192813973 c:\projects\new_ face\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+
+1192813878 source:c:\projects\new_ face\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+

@@ -1,0 +1,276 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0108 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include "Fl_OpenCV.H"} {public
+} 
+
+decl {\#include <fann.h>} {public
+} 
+
+decl {IplImage *img;} {public
+} 
+
+decl {Fl_Capture Cap;} {public
+} 
+
+decl {CvMemStorage* storage;} {public
+} 
+
+decl {char* cascade_names[] ={"haarcascade_frontalface_alt.xml",
+                               "haarcascade_frontalface_alt2.xml",
+                               "haarcascade_frontalface_alt_tree.xml",
+                               "haarcascade_frontalface_default.xml",                                                                                          
+                               "haarcascade_profileface.xml",
+                               "haarcascade_upperbody.xml",
+                               "haarcascade_lowerbody.xml",
+                               "haarcascade_fullbody.xml"                         
+                               };} {} 
+
+decl {CvHaarClassifierCascade* cascade;} {public
+} 
+
+decl {Fl_OpenCV *Pict;} {public
+} 
+
+decl {bool playing;} {public global
+} 
+
+Function {make_window()} {} {
+  Fl_Window Win {
+    label {Yüz Bulma  by BlueKid}
+    xywh {-32000 -32000 804 466} type Double color 31 hide
+  } {
+    Fl_Button Open {
+      label {...}
+      callback {if(Source->value()==1)
+  OpenVideo_CB();
+
+if(Source->value()==0)
+  Open_CB();}
+      tooltip Open xywh {477 6 30 24} box PLASTIC_UP_BOX color 14 labelfont 1 labelsize 18
+    }
+    Fl_Scroll Board {open
+      xywh {10 40 405 404} box FLAT_BOX color 31
+      code0 {Pict=new Fl_OpenCV(11,40,400,400);}
+      code1 {Board->add(Pict);}
+      code2 {Pict->FitWindows();}
+    } {}
+    Fl_Output FName {
+      xywh {155 6 312 24}
+    }
+    Fl_Button Bul {
+      label Bul
+      callback {FindFaces();
+Board->redraw();}
+      tooltip Open xywh {737 6 59 24} box PLASTIC_UP_BOX color 14 labelfont 1 labelsize 18 deactivate
+    }
+    Fl_Choice Type {
+      callback {LoadHaarClassifier();} open
+      xywh {510 6 210 24} down_box BORDER_BOX when 1
+      code0 {LoadTypes();}
+    } {}
+    Fl_Choice Source {
+      callback {if(Source->value()==2){
+  if(!Cap.CaptureFromCAM(-1)) return;
+  Bul->activate();
+  playing=true;
+  Bul->label("Dur!");
+  Cap.SetFrameWidth(Pict->w());
+  Cap.SetFrameHeight(Pict->h());
+  Fl::add_timeout(0.05, Playing_CB);  
+  
+}} open selected
+      xywh {14 7 128 23} down_box BORDER_BOX when 1
+      code0 {Source->add("Photo");}
+      code1 {Source->add("Video");}
+      code2 {Source->add("WebCam");}
+      code3 {Source->value(0);}
+    } {}
+  }
+} 
+
+Function {} {} {
+  code {Fl_Window  * window;
+img=0;
+storage = 0;
+cascade = 0;
+playing=false;
+window = make_window( );
+window->show( argc, argv );
+return ( Fl :: run( ) );} {}
+} 
+
+Function {Open_CB()} {return_type {static void}
+} {
+  code {char* file;
+
+file = fl_file_chooser("Open", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+if(file==NULL) return;
+FName->value(file);
+
+// if(img)  cvReleaseImage(&img);
+
+Pict->Load(file, 1); 
+img=Pict->image;
+// Board->redraw();
+Win->redraw();
+Bul->activate();} {}
+} 
+
+Function {OpenVideo_CB()} {open return_type {static void}
+} {
+  code {char* file;
+
+file = fl_file_chooser("Open", "Picture (*.{avi})\\t", 0);
+if(file==NULL) return;
+FName->value(file);
+if(!Cap.CaptureFromFile(file)) return;
+Bul->activate();
+Pict->SetImage(Cap.GetFrame());
+Board->redraw();} {}
+} 
+
+Function {FindFaces()} {open return_type void
+} {
+  code {int nobj=0;
+
+if(playing){ 
+ playing=false;
+ Bul->label("Bul");
+ return;
+}
+if(Source->value()>0){
+ playing=true;
+ Bul->label("Dur!");
+ Fl::add_timeout(0.05, Playing_CB);
+ return;
+/*
+ do{
+   if(playing==false) break;
+   Pict->GetFrame();
+   img=Pict->image;
+   nobj=nobj+detect_and_draw();
+   Pict->ShowFrame();
+   Board->redraw();
+   Fl::wait(0);
+  }while(Pict->GetPositionPercent()<99.0);
+*/
+
+}
+else{
+  nobj=detect_and_draw();
+  Board->redraw();
+}  
+
+if(nobj==0)
+  fl_message("Malesef Hiç bir þey  bulamadým :( ");
+else
+  fl_message("%d Nesne Bulundu :)",nobj);} {}
+} 
+
+Function {detect_and_draw()} {open return_type int
+} {
+  code {static CvScalar colors[] =
+    {
+        {{0,0,255}},
+        {{0,128,255}},
+        {{0,255,255}},
+        {{0,255,0}},
+        {{255,128,0}},
+        {{255,255,0}},
+        {{255,0,0}},
+        {{255,0,255}}
+    };
+
+    double scale = 1.3;
+    IplImage* gray = cvCreateImage( cvSize(img->width,img->height), 8, 1 );
+    IplImage* small_img = cvCreateImage( cvSize( cvRound (img->width/scale),
+                         cvRound (img->height/scale)),
+                     8, 1 );
+    int i;
+
+    cvCvtColor( img, gray, CV_BGR2GRAY );
+    cvResize( gray, small_img, CV_INTER_LINEAR );
+    cvEqualizeHist( small_img, small_img );
+    cvClearMemStorage( storage );
+
+    if( cascade )
+    {
+//        double t = (double)cvGetTickCount();
+        CvSeq* faces = cvHaarDetectObjects( small_img, cascade, storage,
+                                            1.1, 2, 0/*CV_HAAR_DO_CANNY_PRUNING*/,
+                                            cvSize(30, 30) );
+//        t = (double)cvGetTickCount() - t;
+//        printf( "detection time = %gms\\n", t/((double)cvGetTickFrequency()*1000.) );
+        for( i = 0; i < (faces ? faces->total : 0); i++ )
+        {
+            CvRect* r = (CvRect*)cvGetSeqElem( faces, i );
+            CvPoint center;
+            int radius;
+            center.x = cvRound((r->x + r->width*0.5)*scale);
+            center.y = cvRound((r->y + r->height*0.5)*scale);
+            radius = cvRound((r->width + r->height)*0.25*scale);
+            cvCircle( img, center, radius, colors[i%8], 3, 8, 0 );
+        }
+    }
+
+    cvReleaseImage( &gray );
+    cvReleaseImage( &small_img );
+    return i;} {}
+} 
+
+Function {LoadHaarClassifier()} {return_type void
+} {
+  code {if(cascade )
+  cvReleaseHaarClassifierCascade(&cascade);
+
+cascade = (CvHaarClassifierCascade*)cvLoad( cascade_names[Type->value()], 0, 0, 0 );
+  
+if( !cascade )
+{
+    fl_alert("Sýnýflandýrýcý yüklenemedi ! ");
+
+    exit(-1);
+}
+storage = cvCreateMemStorage(0);} {}
+} 
+
+Function {LoadTypes()} {return_type void
+} {
+  code {Type->add("Yüz Önden");
+Type->add("Yüz Önden2");
+Type->add("Yüz Önden3");
+Type->add("Yüz Önden Genel");
+Type->add("Yüz Profilden");
+Type->add("Üst Vucut");
+Type->add("Alt Vucut");
+Type->add("Bütün Vucut");
+Type->value(0); 
+LoadHaarClassifier();} {}
+} 
+
+Function {Video_FindFaces()} {open return_type void
+} {
+  code {int nobj=detect_and_draw();
+if(nobj==0)
+  fl_message("Malesef Hiç bir þey  bulamadým :( ");
+else
+  fl_message("%d Nesne Bulundu :)",nobj);} {}
+} 
+
+Function {Playing_CB(void*)} {open return_type void
+} {
+  code {if(playing==false) return;
+if(Cap.GetPositionPercent()>=99.0) return;
+img=Cap.GetFrame();
+detect_and_draw();
+Pict->SetImage(img);
+Board->redraw();
+Fl::wait(0);
+
+Fl::add_timeout(0.05, Playing_CB);} {}
+} 
