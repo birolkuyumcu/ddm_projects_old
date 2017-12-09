@@ -1,0 +1,152 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+header_name {.h} 
+code_name {.cpp}
+decl {\#include "Fl_PlotXY.H"} {public global
+} 
+
+decl {\#include "rota.h"} {} 
+
+decl {\#include <stdlib.h>} {} 
+
+decl {int RotaLine,PlaneLine;} {global
+} 
+
+decl {int k;} {} 
+
+decl {double x,y,ry;} {global
+} 
+
+Function {} {open
+} {
+  code {srand( time(NULL) );
+ x=0;
+ y=Rota(0);
+ if(rand()%2)
+   y+=rand()%50+20;
+ else
+   y-=rand()%50+20;} {}
+  Fl_Window {} {
+    label {Bulanýk Mantýk ile Otamatik Pilot} open
+    xywh {445 199 727 595} type Double color 31 align 80 visible
+  } {
+    Fl_Box plot {
+      xywh {5 38 715 380} box GTK_THIN_DOWN_BOX color 38
+      code0 {RotaLine=plot->newline(0,-10,73,210,FL_PLOTXY_FIXED,FL_RED,"");}
+      code1 {PlaneLine=plot->newline(0,-10,73,210,FL_PLOTXY_FIXED,FL_BLUE,"");}
+      class Fl_PlotXY
+    }
+    Fl_Button start {
+      label {@>}
+      callback {SimulationStart();}
+      tooltip {Similasyonu Çalýþtýr} xywh {660 3 60 25} box GTK_UP_BOX color 15 labelcolor 1
+    }
+    Fl_Browser out {
+      xywh {5 431 400 154} type Multi
+      code0 {out->column_widths(widths);}
+      code1 {out->column_char('\\t');}
+    }
+    Fl_Value_Output PRota {
+      label {Rota Y :}
+      xywh {590 437 130 24}
+    }
+    Fl_Dial Dm {
+      xywh {420 433 85 75} type Line color 14 selection_color 1 minimum -30 maximum 30 step 1
+    }
+    Fl_Box {} {
+      label Rota
+      xywh {11 21 25 7} box THIN_UP_BOX color 1 align 8
+    }
+    Fl_Box {} {
+      label {Uçak Pozisyonu}
+      xywh {80 21 7 7} box OVAL_BOX color 4 align 8
+    }
+    Fl_Value_Output PPos {
+      label {Uçak Y :}
+      xywh {590 476 130 24}
+    }
+    Fl_Value_Output PAngle {
+      label {Uçak Açýsý}
+      xywh {590 516 130 24}
+    }
+  }
+} 
+
+Function {SimulationStart()} {open
+} {
+  code {x=0;
+ y=Rota(0);
+ k=rand()%100;
+ if(rand()%2)
+   y+=rand()%50+20;
+ else
+   y-=rand()%50+20;
+   
+ plot->clear(RotaLine);
+ plot->clear(PlaneLine); 
+ plot->drawmode(PlaneLine,FL_PLOTXY_DOT);
+ out->clear();
+ out->add(" Rota Yeri \\t Uçak Yeri\\t Rotadan Fark\\t Uçak Açýsý\\t");
+ PAngle->value(0);
+ PPos->value(0);
+ PRota->value(0);
+ start->deactivate();
+ Fl::add_timeout(0.15,Simulate);} {selected
+  }
+} 
+
+Function {Rota(double t)} {return_type double
+} {
+  code {return (100*sin((double)3.14*(t+k)/36)+100);} {}
+} 
+
+Function {Simulate(void *)} {open return_type {static void}
+} {
+  code {char buf[252];
+  int i;
+  
+  ry=Rota(x);
+  sprintf(buf," %.1lf \\t %.1lf \\t %.1f \\t %.1lf",ry,y,(ry-y),PAngle->value());
+  plot->add(RotaLine,x,ry);
+  PRota->value(ry);
+  plot->add(PlaneLine,x,y);     
+  PPos->value(y);  
+  plot->redraw();
+  out->add(buf); 
+  y=GetNewY(y,ry,Rota(x+1));         
+  
+  if(x<72)
+     Fl::add_timeout(0.15,Simulate); 
+   else
+     start->activate();
+  x=x+1;} {}
+} 
+
+Function {GetNewY(double y,double ry,double ryn )} {return_type double
+} {
+  code {double Dy1,Dy2;
+    Dy1=y-ry;
+    Dy2=y-ryn;
+
+    DeltaPNow[LEFT]=sfl_fuzzyfier_s(Dy1, -50.0, 0.0);
+    DeltaPNow[CENTER]=sfl_fuzzyfier_a(Dy1, -25.0, 0.0 , 25.0 );
+    DeltaPNow[RIGHT]=sfl_fuzzyfier_z(Dy1, 0.0, 50.0);
+
+    DeltaPNext[LEFT]=sfl_fuzzyfier_s(Dy2, -50.0, 0.0);
+    DeltaPNext[CENTER]=sfl_fuzzyfier_a(Dy2, -25.0, 0.0 , 25.0 );
+    DeltaPNext[RIGHT]=sfl_fuzzyfier_z(Dy2, 0.0, 50.0);
+
+    Angle[BIGLEFT]=sfl_and(DeltaPNow[LEFT],DeltaPNext[LEFT]);
+    Angle[ALEFT]=sfl_or(sfl_and(DeltaPNow[LEFT],DeltaPNext[CENTER]),sfl_and(DeltaPNow[CENTER],DeltaPNext[LEFT]));
+
+    Angle[ACENTER]=sfl_or(sfl_or(sfl_and(DeltaPNow[LEFT],DeltaPNext[RIGHT]),sfl_and(DeltaPNow[CENTER],DeltaPNext[CENTER])),sfl_and(DeltaPNow[RIGHT],DeltaPNext[LEFT]));
+    Angle[ARIGHT]=sfl_or(sfl_and(DeltaPNow[RIGHT],DeltaPNext[CENTER]),sfl_and(DeltaPNow[CENTER],DeltaPNext[RIGHT]));
+    Angle[BIGRIGHT]=sfl_and(DeltaPNow[RIGHT],DeltaPNext[RIGHT]);
+
+    double a=sfl_defuzzyfier_coa(5,Angle,angle_maxima);
+    PAngle->value(a); 
+    Dm->value(a);
+//    printf( "Angle %lf \\n\\n",a);
+
+    return (y-100*tan(3.14*a/360));} {}
+} 

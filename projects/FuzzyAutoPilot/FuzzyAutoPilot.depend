@@ -1,0 +1,127 @@
+# depslib dependency file v1.0
+1100065980 source:c:\projects\fuzzyautopilot\rotated.c
+	<FL/x.H>
+	<FL/fl_draw.H>
+	"Rotated.H"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+
+1153218200 c:\fltk-1.1.9\fl\x.h
+	"Enumerations.H"
+	"win32.H"
+	"mac.H"
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+	<X11/Xatom.h>
+	"Fl_Window.H"
+
+1207970338 c:\fltk-1.1.9\fl\enumerations.h
+	"Fl_Export.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_export.h
+
+1158418920 c:\fltk-1.1.9\fl\win32.h
+	<windows.h>
+	"Fl_Window.H"
+
+1121416494 c:\fltk-1.1.9\fl\fl_window.h
+	"Fl_Group.H"
+
+1197733320 c:\fltk-1.1.9\fl\fl_group.h
+	"Fl_Widget.H"
+
+1195485708 c:\fltk-1.1.9\fl\fl_widget.h
+	"Enumerations.H"
+
+1156845786 c:\fltk-1.1.9\fl\mac.h
+	<Carbon/Carbon.h>
+	"Fl_Window.H"
+
+1158330916 c:\fltk-1.1.9\fl\fl_draw.h
+	"Enumerations.H"
+
+1100065980 c:\projects\fuzzyautopilot\rotated.h
+
+1256371761 source:c:\projects\fuzzyautopilot\fl_plotxy.cxx
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Fl_PlotXY.H"
+	<windows.h>
+	"Rotated.H"
+
+1113483960 c:\projects\fuzzyautopilot\fl_plotxy.h
+	<FL/Fl_Widget.H>
+	<FL/fl_draw.H>
+
+1256376591 source:c:\projects\fuzzyautopilot\main.cpp
+	"main.h"
+	"rota.h"
+	<stdlib.h>
+
+1256376591 c:\projects\fuzzyautopilot\main.h
+	<FL/Fl.H>
+	"Fl_PlotXY.H"
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Browser.H>
+	<FL/Fl_Value_Output.H>
+	<FL/Fl_Dial.H>
+	<FL/Fl_Box.H>
+
+1179674312 c:\fltk-1.1.9\fl\fl.h
+	"Enumerations.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_double_window.h
+	"Fl_Window.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_button.h
+	"Fl_Widget.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_browser.h
+	"Fl_Browser_.H"
+
+1143584840 c:\fltk-1.1.9\fl\fl_browser_.h
+	"Fl_Group.H"
+	"Fl_Scrollbar.H"
+
+1203940854 c:\fltk-1.1.9\fl\fl_scrollbar.h
+	"Fl_Slider.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_slider.h
+	"Fl_Valuator.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_valuator.h
+	"Fl_Widget.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_value_output.h
+	"Fl_Valuator.H"
+
+1113606798 c:\fltk-1.1.9\fl\fl_dial.h
+	"Fl_Valuator.H"
+
+1256378138 c:\projects\fuzzyautopilot\rota.h
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	<time.h>
+	"SamFL.h"
+
+1230924176 c:\samfl\samfl.h
+	<sfl_defuzzyfier.h>
+	<sfl_fuzzyfier.h>
+	<sfl_fuzzyset.h>
+	<sfl_defuzzyfier.h>
+	<sfl_fuzzyfier.h>
+	<sfl_fuzzyset.h>
+
+1230912530 c:\samfl\sfl_defuzzyfier.h
+
+1230912648 c:\samfl\sfl_fuzzyfier.h
+
+1230912748 c:\samfl\sfl_fuzzyset.h
+
+1113606798 c:\fltk-1.1.9\fl\fl_box.h
+	"Fl_Widget.H"
+
