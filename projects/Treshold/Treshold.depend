@@ -1,0 +1,28 @@
+# depslib dependency file v1.0
+1187504819 source:c:\projects\treshold\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1187414982 c:\projects\treshold\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+	<cvaux.h>
+
+1187505390 source:c:\projects\treshold\treshold.cxx
+	"Treshold.h"
+
+1187505390 c:\projects\treshold\treshold.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	<fann.h>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Value_Slider.H>
+	<FL/Fl_Choice.H>
+

@@ -1,0 +1,137 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include "Fl_OpenCV.H"} {public
+} 
+
+decl {\#include <fann.h>} {public
+} 
+
+decl {IplImage *src;} {public
+} 
+
+decl {IplImage *trsh;} {public
+} 
+
+decl {char *tnames[]={ "THRESH BINARY",
+                "THRESH BINARY INV",
+                "THRESH TRUNC",
+                "TRESH TOZERO",             
+                "THRESH TOZERO INV"
+}} {} 
+
+decl {int types[]={CV_THRESH_BINARY,CV_THRESH_BINARY_INV,CV_THRESH_TRUNC,CV_THRESH_TOZERO,CV_THRESH_TOZERO_INV}} {} 
+
+decl {Fl_OpenCV *Pict;} {public
+} 
+
+Function {make_window()} {} {
+  Fl_Window Win {
+    label {Treshold  with Fl_OpenCv 0.3 by BlueKid}
+    xywh {107 153 772 610} type Double color 23 visible
+  } {
+    Fl_Button Open {
+      label {...}
+      callback Open_CB
+      tooltip {Select and Open Image File} xywh {461 4 30 26} box PLASTIC_UP_BOX color 4 labelfont 1 labelsize 18
+    }
+    Fl_Scroll Board {open selected
+      xywh {10 65 750 535} color 23
+      code0 {Pict=new Fl_OpenCV(Board->x(),Board->y());}
+      code1 {Board->add(Pict);}
+    } {}
+    Fl_Output FName {
+      label {Image :}
+      xywh {55 6 396 24}
+    }
+    Fl_Value_Slider Thresh {
+      label {Treshold:}
+      callback {Apply();}
+      xywh {70 35 417 20} type Horizontal box PLASTIC_DOWN_BOX color 4 align 4 maximum 255 step 1 textsize 14 deactivate
+    }
+    Fl_Choice Type {
+      label {Type:}
+      callback {Apply();} open
+      xywh {575 6 190 24} down_box BORDER_BOX deactivate
+      code0 {LoadTypes();}
+    } {}
+    Fl_Value_Slider Max {
+      label {Max value:}
+      callback {Apply();}
+      xywh {590 35 175 20} type Horizontal box PLASTIC_DOWN_BOX color 1 align 4 maximum 255 step 1 value 255 textsize 14 deactivate
+    }
+    Fl_Button Save {
+      label Save
+      callback Save_CB
+      tooltip {Save Image File} xywh {495 4 30 26} box PLASTIC_UP_BOX color 4 labelfont 1 labelsize 10 labelcolor 1 deactivate
+    }
+  }
+} 
+
+Function {} {} {
+  code {Fl_Window  * window;
+src=0;
+trsh=0;
+window = make_window( );
+Fl::set_atclose(Close);
+window->show( argc, argv );
+return ( Fl :: run( ) );} {}
+} 
+
+Function {Open_CB(Fl_Widget*,void*)} {open return_type {static void}
+} {
+  code {char* file;
+
+file = fl_file_chooser("Open", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+if(file==NULL) return;
+int clr;
+clr=fl_choice("Load Image ?", "as Gray Scale","as 3 Channel Color Scale",NULL);
+FName->value(file);
+
+if(src)
+ cvReleaseImage(&src);
+if(trsh)
+ cvReleaseImage(&trsh);
+
+Pict->Load(file, clr);
+Thresh->activate();
+Type->activate();
+Max->activate();
+Save->activate();
+src=cvCloneImage(Pict->image);
+trsh = cvCloneImage( src );
+Board->redraw();} {}
+} 
+
+Function {LoadTypes()} {} {
+  code {for(int i=0;i<5;i++)
+Type->add(tnames[i]);
+Type->value(0);} {}
+} 
+
+Function {Apply()} {} {
+  code {cvThreshold(src, trsh, Thresh->value(), Max->value(), types[Type->value()]);
+Pict->SetImage(trsh);
+Board->redraw();} {}
+} 
+
+Function {Close(Fl_Window*,void*)} {return_type void
+} {
+  code {if(src)
+ cvReleaseImage(&src);
+if(trsh)
+ cvReleaseImage(&trsh);
+exit(0);} {}
+} 
+
+Function {Save_CB(Fl_Widget*,void*)} {open return_type {static void}
+} {
+  code {char* file=NULL;
+file = fl_file_chooser("Save", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", file);
+if(file==NULL) return;
+Pict->Save(file);} {}
+} 
