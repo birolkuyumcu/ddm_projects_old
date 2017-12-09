@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1172924291 source:c:\xynth\projects\denklem\main.cpp
+	"fga.hpp"
+	<stdio.h>
+
+1165407767 c:\xynth\projects\denklem\fga.hpp
+	<cstdlib>
+	<cstring>
+	<pthread.h>
+
