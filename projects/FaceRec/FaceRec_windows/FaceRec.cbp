@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Face" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="default">
+				<Option output="Face.exe" prefix_auto="0" extension_auto="0" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+			</Target>
+			<Environment>
+				<Variable name="FLTK_DIR" value="C:\fltk-1.1.6" />
+				<Variable name="OPENCV_DIR" value='&quot;C:\Program Files\OpenCV&quot;' />
+			</Environment>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="default;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-g" />
+			<Add option="-mms-bitfields" />
+			<Add option="-DWIN32" />
+			<Add directory="$(FLTK_DIR)\include" />
+			<Add directory="$(OPENCV_DIR)\cv\include" />
+			<Add directory="$(OPENCV_DIR)\cvaux\include" />
+			<Add directory="$(OPENCV_DIR)\cxcore\include" />
+			<Add directory="$(OPENCV_DIR)\otherlibs\highgui" />
+		</Compiler>
+		<Linker>
+			<Add library="fltk" />
+			<Add library="gdi32" />
+			<Add library="user32" />
+			<Add library="kernel32" />
+			<Add library="ole32" />
+			<Add library="uuid" />
+			<Add library="comctl32" />
+			<Add library="wsock32" />
+			<Add library="m" />
+			<Add library="cv" />
+			<Add library="cvaux" />
+			<Add library="highgui" />
+			<Add library="cxcore" />
+			<Add directory="$(FLTK_DIR)\lib" />
+			<Add directory="$(OPENCV_DIR)\lib" />
+		</Linker>
+		<Unit filename="FaceRec.cxx" />
+		<Unit filename="FaceRec.fl" />
+		<Unit filename="FaceRec.h" />
+		<Unit filename="Fl_OpenCV.cxx" />
+		<Unit filename="Fl_OpenCV.h" />
+		<Unit filename="facedata.xml" />
+		<Unit filename="train.txt" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

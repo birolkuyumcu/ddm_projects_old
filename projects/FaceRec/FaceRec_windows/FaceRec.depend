@@ -1,0 +1,41 @@
+# depslib dependency file v1.0
+1192813345 source:c:\xynth\projects\facerec\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1192810373 c:\xynth\projects\facerec\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+
+1200091789 source:c:\projects\facerec\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1201902403 c:\projects\facerec\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+
+1211311977 source:c:\projects\facerec\facerec.cxx
+	"FaceRec.h"
+
+1211311672 c:\projects\facerec\facerec.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.h"
+	"cvaux.h"
+	<vector>
+	<string>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Group.H>
+	<FL/Fl_Input.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Browser.H>
+	<FL/Fl_Return_Button.H>
+

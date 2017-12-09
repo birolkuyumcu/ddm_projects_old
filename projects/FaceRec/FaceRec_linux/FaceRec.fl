@@ -1,0 +1,661 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include "Fl_OpenCV.h"} {public
+} 
+
+decl {\#include "cvaux.h"} {public
+} 
+
+decl {\#include <vector>} {public
+} 
+
+decl {\#include <string>} {public
+} 
+
+decl {using namespace std;} {public
+} 
+
+decl {vector <string> names;} {public
+} 
+
+decl {vector <string> files;} {public
+} 
+
+decl {IplImage ** faceImgArr        = 0; // array of face images} {public global
+} 
+
+decl {CvMat    *  personNumTruthMat = 0; // array of person numbers} {public global
+} 
+
+decl {int nTrainFaces               = 0; // the number of training images} {public global
+} 
+
+decl {int nEigens                   = 0; // the number of eigenvalues} {public global
+} 
+
+decl {IplImage * pAvgTrainImg       = 0; // the average image} {public global
+} 
+
+decl {IplImage ** eigenVectArr      = 0; // eigenvectors} {public global
+} 
+
+decl {CvMat * eigenValMat           = 0; // eigenvalues} {public global
+} 
+
+decl {CvMat * projectedTrainFaceMat = 0; // projected training faces} {public global
+} 
+
+decl {IplImage *img,*yuzg;} {public
+} 
+
+decl {Fl_Capture Cap;} {public
+} 
+
+decl {CvMemStorage* storage;} {public
+} 
+
+decl {CvSeq* faces} {public
+} 
+
+decl {char* cascade_names[] ={"haarcascade_frontalface_alt.xml",
+                               "haarcascade_frontalface_alt2.xml",
+                               "haarcascade_frontalface_alt_tree.xml",
+                               "haarcascade_frontalface_default.xml",                                                                                          
+                               "haarcascade_profileface.xml",
+                               "haarcascade_upperbody.xml",
+                               "haarcascade_lowerbody.xml",
+                               "haarcascade_fullbody.xml"                         
+                               };} {} 
+
+decl {CvHaarClassifierCascade* cascade;} {public
+} 
+
+decl {Fl_OpenCV *Pict;} {public
+} 
+
+decl {Fl_OpenCV *fFace;} {public
+} 
+
+decl {bool playing,extracting;} {public
+} 
+
+Function {make_window()} {} {
+  Fl_Window Win {
+    label {Face Recognation  } open
+    xywh {792 141 600 585} type Double color 31 visible
+  } {
+    Fl_Scroll Board {open
+      xywh {5 10 330 250} box EMBOSSED_FRAME color 23
+      code0 {Pict=new Fl_OpenCV(10,15,320,240);}
+      code1 {Board->add(Pict);}
+      code2 {Pict->FitWindows();}
+    } {}
+    Fl_Group {} {open
+      xywh {380 5 60 60} box EMBOSSED_FRAME color 23 align 129
+      code0 {fFace=new Fl_OpenCV(385,10,50,50);}
+    } {}
+    Fl_Input Name {
+      label Name
+      xywh {446 41 145 24} align 5
+    }
+    Fl_Button Open {
+      label {Open Web-CAM}
+      callback {OpenCAM_CB();
+Board->redraw();}
+      xywh {376 80 215 30} box PLASTIC_UP_BOX color 15 labelfont 1 labelsize 15
+    }
+    Fl_Button ExtractBut {
+      label {Extract Face}
+      callback {ExtractBut->deactivate();
+Fl::add_timeout(0.1, Extracting_CB);}
+      xywh {372 120 218 30} box PLASTIC_UP_BOX color 15 labelfont 1 labelsize 15 deactivate
+    }
+    Fl_Button SaveBut {
+      label {Save and Add Face}
+      callback {Save_Add();}
+      xywh {372 157 218 30} box PLASTIC_UP_BOX color 15 labelfont 1 labelsize 15 deactivate
+    }
+    Fl_Button Learn {
+      label {Learn Faces}
+      callback {learn();}
+      xywh {372 196 218 30} box PLASTIC_UP_BOX color 15 labelfont 1 labelsize 15
+    }
+    Fl_Button Recognize {
+      label {Recognize Face}
+      callback {recognize();}
+      xywh {372 235 218 30} box PLASTIC_UP_BOX color 15 labelfont 1 labelsize 15 deactivate
+    }
+    Fl_Browser List {
+      label {List of Faces}
+      xywh {5 284 585 176} type Select labelcolor 4 align 5 textcolor 4
+      code0 {LoadList();}
+    }
+    Fl_Browser Out {
+      label {Distances form Extracted face}
+      xywh {5 478 588 102} type Select selection_color 9 labelcolor 1 align 5 textcolor 1
+    }
+    Fl_Button {} {
+      label {?}
+      callback {playing=false;
+AboutDlg *ab=new AboutDlg();
+ab->show();
+// playing=true;}
+      xywh {566 5 25 25} box PLASTIC_UP_BOX color 1 labelfont 1 labelcolor 4
+    }
+  }
+} 
+
+Function {} {} {
+  code {Fl_Window  * window;
+img=0;
+storage = 0;
+cascade = 0;
+playing=false;
+window = make_window( );
+window->show( argc, argv );
+return ( Fl :: run( ) );} {}
+} 
+
+Function {OpenCAM_CB()} {return_type {static void}
+} {
+  code {if(!Cap.CaptureFromCAM(-1)) return;
+LoadHaarClassifier();
+Pict->SetImage(Cap.GetFrame());
+Board->redraw();
+playing=true;
+Fl::add_timeout(0.05, Playing_CB);
+ExtractBut->activate();
+SaveBut->activate();
+Open->deactivate();} {}
+} 
+
+Function {LoadHaarClassifier()} {return_type void
+} {
+  code {if(cascade )
+  cvReleaseHaarClassifierCascade(&cascade);
+
+cascade = (CvHaarClassifierCascade*)cvLoad( cascade_names[0], 0, 0, 0 );
+  
+if( !cascade )
+{
+    fl_alert("Sýnýflandýrýcý yüklenemedi ! ");
+
+    exit(-1);
+}
+storage = cvCreateMemStorage(0);} {}
+} 
+
+Function {Playing_CB(void*)} {return_type void
+} {
+  code {if(playing==false) return;
+img=Cap.GetFrame();
+// detect_and_draw();
+Pict->SetImage(img);
+Board->redraw();
+Fl::wait(0);
+
+Fl::add_timeout(0.01, Playing_CB);} {}
+} 
+
+Function {Extracting_CB(void*)} {return_type void
+} {
+  code {if(extracting) return;
+
+if(ExtractFace()){
+  fFace->redraw();
+  ExtractBut->activate();
+  Recognize->activate();
+}
+else
+  Fl::add_timeout(0.1, Extracting_CB);
+// Fl::wait(0);} {}
+} 
+
+Function {ExtractFace()} {return_type bool
+} {
+  code {//
+    playing=false;
+    extracting=true;
+    double scale = 1.3;
+    IplImage *yuz,*yuzt;    
+    bool ret=false;
+    IplImage* gray = cvCreateImage( cvSize(img->width,img->height), 8, 1 );
+    IplImage* small_img = cvCreateImage( cvSize( cvRound (img->width/scale),
+                         cvRound (img->height/scale)),
+                     8, 1 );
+
+    cvCvtColor( img, gray, CV_BGR2GRAY );
+    cvResize( gray, small_img, CV_INTER_LINEAR );
+    cvEqualizeHist( small_img, small_img );
+    cvClearMemStorage( storage );
+
+    if( cascade )
+    {
+        if(faces) cvClearSeq( faces );
+        faces = cvHaarDetectObjects( small_img, cascade, storage,
+                                            1.1, 2, 0/*CV_HAAR_DO_CANNY_PRUNING*/,
+                                            cvSize(30, 30) );
+
+        if(faces->total){
+          CvPoint leftup,rightdown;
+          CvRect* r = (CvRect*)cvGetSeqElem( faces, 0 );
+          leftup.x = cvRound(r->x *scale);
+          leftup.y = cvRound(r->y *scale);
+          rightdown.x = cvRound((r->x + r->width)*scale);
+          rightdown.y = cvRound((r->y + r->height)*scale);
+          cvSetImageROI(img, cvRect( leftup.x, leftup.y, rightdown.x-leftup.x,rightdown.y-leftup.y ) );
+          yuz=cvCreateImage( cvSize( rightdown.x-leftup.x,rightdown.y-leftup.y), img->depth, img->nChannels );
+          cvCopy( img,yuz);
+          yuzt=cvCreateImage( cvSize( 50,50), img->depth, img->nChannels );
+//          yuzt->widthStep=yuzt->width*yuzt->nChannels;
+          yuzg = cvCreateImage( cvSize( 50,50), 8, 1 );
+          yuzg->widthStep=yuzg->width*yuzg->nChannels;
+          cvResize( yuz,yuzt,CV_INTER_LINEAR );
+          cvCvtColor( yuzt, yuzg, CV_BGR2GRAY );
+          cvEqualizeHist( yuzg, yuzg );
+          fFace->SetImage(yuzg);
+          ret=true;
+          cvReleaseImage( &yuz );
+          cvReleaseImage( &yuzt );   
+                   
+        }
+        
+        
+    }
+
+    cvReleaseImage( &gray );
+    cvReleaseImage( &small_img );
+    extracting=false;
+    playing=true;
+    return ret;} {}
+} 
+
+Function {learn()} {return_type void
+} {
+  code {int i, offset;
+
+// load training data
+nTrainFaces = loadFaceImgArray("train.txt");
+if( nTrainFaces < 2 )
+{
+	fl_alert("Need 2 or more training faces\\n"
+	        "Input file contains only %d\\n", nTrainFaces);
+	return;
+}
+// do PCA on the training faces
+doPCA();
+
+// project the training images onto the PCA subspace
+projectedTrainFaceMat = cvCreateMat( nTrainFaces, nEigens, CV_32FC1 );
+offset = projectedTrainFaceMat->step / sizeof(float);
+for(i=0; i<nTrainFaces; i++)
+{
+	//int offset = i * nEigens;
+	cvEigenDecomposite(
+		faceImgArr[i],
+		nEigens,
+		eigenVectArr,
+		0, 0,
+		pAvgTrainImg,
+		//projectedTrainFaceMat->data.fl + i*nEigens);
+		projectedTrainFaceMat->data.fl + i*offset);
+}
+	// store the recognition data as an xml file
+storeTrainingData();} {}
+} 
+
+Function {recognize()} {return_type void
+} {
+  code {int i;
+// nTestFaces  = 0;         // the number of test images
+CvMat * trainPersonNumMat = 0;  // the person numbers during training
+float * projectedTestFace = 0;
+char Buf[50];
+        // load test images and ground truth for person number
+// nTestFaces = loadFaceImgArray("test.txt");
+// printf("%d test faces loaded\\n", nTestFaces);
+	// load the saved training data
+if( !loadTrainingData( &trainPersonNumMat ) ) return;
+	// project the test images onto the PCA subspace
+projectedTestFace = (float *)cvAlloc( nEigens*sizeof(float) );
+for(i=0; i<1; i++)
+{
+	int iNearest, nearest;
+		// project the test image onto the PCA subspace
+	cvEigenDecomposite(
+		fFace->image,
+		nEigens,
+		eigenVectArr,
+		0, 0,
+		pAvgTrainImg,
+		projectedTestFace);
+	iNearest = findNearestNeighbor(projectedTestFace);
+//        truth    = personNumTruthMat->data.i[i];
+	nearest  = trainPersonNumMat->data.i[iNearest];
+        sscanf(List->text(nearest),"%s",Buf);
+	fl_message("Nearest Face = %d - %s", nearest,Buf);
+	
+        List->select(nearest);
+        Out->select(nearest);
+}} {}
+} 
+
+Function {doPCA()} {return_type void
+} {
+  code {int i;
+	CvTermCriteria calcLimit;
+	CvSize faceImgSize;
+
+	// set the number of eigenvalues to use
+	nEigens = nTrainFaces-1;
+
+	// allocate the eigenvector images
+	faceImgSize.width  = faceImgArr[0]->width;
+	faceImgSize.height = faceImgArr[0]->height;
+	eigenVectArr = (IplImage**)cvAlloc(sizeof(IplImage*) * nEigens);
+	for(i=0; i<nEigens; i++)
+		eigenVectArr[i] = cvCreateImage(faceImgSize, IPL_DEPTH_32F, 1);
+
+	// allocate the eigenvalue array
+	eigenValMat = cvCreateMat( 1, nEigens, CV_32FC1 );
+
+	// allocate the averaged image
+	pAvgTrainImg = cvCreateImage(faceImgSize, IPL_DEPTH_32F, 1);
+
+	// set the PCA termination criterion
+	calcLimit = cvTermCriteria( CV_TERMCRIT_ITER, nEigens, 1);
+
+	// compute average image, eigenvalues, and eigenvectors
+	cvCalcEigenObjects(
+		nTrainFaces,
+		(void*)faceImgArr,
+		(void*)eigenVectArr,
+		CV_EIGOBJ_NO_CALLBACK,
+		0,
+		0,
+		&calcLimit,
+		pAvgTrainImg,
+		eigenValMat->data.fl);
+
+	cvNormalize(eigenValMat, eigenValMat, 1, 0, CV_L1, 0);} {}
+} 
+
+Function {storeTrainingData()} {return_type void
+} {
+  code {CvFileStorage * fileStorage;
+	int i;
+
+	// create a file-storage interface
+	fileStorage = cvOpenFileStorage( "facedata.xml", 0, CV_STORAGE_WRITE );
+
+	// store all the data
+	cvWriteInt( fileStorage, "nEigens", nEigens );
+	cvWriteInt( fileStorage, "nTrainFaces", nTrainFaces );
+	cvWrite(fileStorage, "trainPersonNumMat", personNumTruthMat, cvAttrList(0,0));
+	cvWrite(fileStorage, "eigenValMat", eigenValMat, cvAttrList(0,0));
+	cvWrite(fileStorage, "projectedTrainFaceMat", projectedTrainFaceMat, cvAttrList(0,0));
+	cvWrite(fileStorage, "avgTrainImg", pAvgTrainImg, cvAttrList(0,0));
+	for(i=0; i<nEigens; i++)
+	{
+		char varname[200];
+		sprintf( varname, "eigenVect_%d", i );
+		cvWrite(fileStorage, varname, eigenVectArr[i], cvAttrList(0,0));
+	}
+
+	// release the file-storage interface
+	cvReleaseFileStorage( &fileStorage );} {}
+} 
+
+Function {loadTrainingData(CvMat ** pTrainPersonNumMat)} {return_type int
+} {
+  code {CvFileStorage * fileStorage;
+	int i;
+
+	// create a file-storage interface
+	fileStorage = cvOpenFileStorage( "facedata.xml", 0, CV_STORAGE_READ );
+	if( !fileStorage )
+	{
+		fprintf(stderr, "Can't open facedata.xml\\n");
+		return 0;
+	}
+
+	nEigens = cvReadIntByName(fileStorage, 0, "nEigens", 0);
+	nTrainFaces = cvReadIntByName(fileStorage, 0, "nTrainFaces", 0);
+	*pTrainPersonNumMat = (CvMat *)cvReadByName(fileStorage, 0, "trainPersonNumMat", 0);
+	eigenValMat  = (CvMat *)cvReadByName(fileStorage, 0, "eigenValMat", 0);
+	projectedTrainFaceMat = (CvMat *)cvReadByName(fileStorage, 0, "projectedTrainFaceMat", 0);
+	pAvgTrainImg = (IplImage *)cvReadByName(fileStorage, 0, "avgTrainImg", 0);
+	eigenVectArr = (IplImage **)cvAlloc(nTrainFaces*sizeof(IplImage *));
+	for(i=0; i<nEigens; i++)
+	{
+		char varname[200];
+		sprintf( varname, "eigenVect_%d", i );
+		eigenVectArr[i] = (IplImage *)cvReadByName(fileStorage, 0, varname, 0);
+	}
+
+	// release the file-storage interface
+	cvReleaseFileStorage( &fileStorage );
+
+	return 1;} {}
+} 
+
+Function {findNearestNeighbor(float * projectedTestFace)} {return_type int
+} {
+  code {//double leastDistSq = 1e12;
+char Buf[100];
+Out->clear();
+double leastDistSq = DBL_MAX;
+int i, iTrain, iNearest = 0;
+
+for(iTrain=0; iTrain<nTrainFaces; iTrain++)
+{
+  double distSq=0;
+  for(i=0; i<nEigens; i++)
+  {
+    float d_i =	projectedTestFace[i] -
+		projectedTrainFaceMat->data.fl[iTrain*nEigens + i];
+
+        distSq += d_i*d_i; // Euclidean
+
+  }
+  sprintf(Buf,"%03d  ->  %f",iTrain+1,distSq);
+  Out->add(Buf);
+  if(distSq < leastDistSq){
+     leastDistSq = distSq;
+     iNearest = iTrain;
+  }
+}
+
+return iNearest;} {}
+} 
+
+Function {loadFaceImgArray(char * filename)} {return_type int
+} {
+  code {FILE * imgListFile = 0;
+char imgFilename[512];
+char Buf[512];
+int iFace, nFaces=0;
+
+// open the input file
+if( !(imgListFile = fopen(filename, "r")) )
+{
+	fprintf(stderr, "Can\\'t open file %s\\n", filename);
+	return 0;
+}
+	// count the number of faces
+while( fgets(imgFilename, 512, imgListFile) ) ++nFaces;
+rewind(imgListFile);
+	// allocate the face-image array and person number matrix
+faceImgArr        = (IplImage **)cvAlloc( nFaces*sizeof(IplImage *) );
+personNumTruthMat = cvCreateMat( 1, nFaces, CV_32SC1 );
+	// store the face images in an array
+for(iFace=0; iFace<nFaces; iFace++)
+{
+	// read person number and name of image file
+	fscanf(imgListFile,
+		"%s %s", Buf, imgFilename);
+        *(personNumTruthMat->data.i+iFace)=iFace+1;		
+		// load the face image
+	faceImgArr[iFace] = cvLoadImage(imgFilename, CV_LOAD_IMAGE_GRAYSCALE);
+		if( !faceImgArr[iFace] )
+	{
+		fl_alert("Can\\'t load image from %s\\n", imgFilename);
+		return 0;
+	}
+}
+
+fclose(imgListFile);
+
+return nFaces;} {}
+} 
+
+Function {Save_Add()} {return_type void
+} {
+  code {char* file;
+  char Buf[1024];
+  playing=false;
+  if(!strcmp(Name->value(),"")){
+    fl_alert("You must be give name ");
+    playing=true;
+    return;
+  }
+  file = fl_file_chooser("Save Face", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", NULL);
+  if(file==NULL){
+    playing=true;
+    return;
+  }
+  fFace->Save(file);
+  sprintf(Buf,"%s %s",Name->value(),file);
+  fl_alert(Buf);
+  List->add(Buf);
+  SaveList();
+  playing=true;} {}
+} 
+
+Function {LoadTrainData()} {return_type int
+} {
+  code {FILE * imgListFile = 0;
+	char imgFilename[512];
+	int iFace, nFaces=0;
+	char * filename;
+
+
+	// open the input file
+	if( !(imgListFile = fopen("train.txt", "r")) )
+	{
+		fprintf(stderr, "Can\\'t open file %s\\n", filename);
+		return 0;
+	}
+
+	// count the number of faces
+	while( fgets(imgFilename, 512, imgListFile) ) ++nFaces;
+	rewind(imgListFile);
+
+	// allocate the face-image array and person number matrix
+	faceImgArr        = (IplImage **)cvAlloc( nFaces*sizeof(IplImage *) );
+	personNumTruthMat = cvCreateMat( 1, nFaces, CV_32SC1 );
+
+	// store the face images in an array
+	for(iFace=0; iFace<nFaces; iFace++)
+	{
+		// read person number and name of image file
+		fscanf(imgListFile,
+			"%d %s", personNumTruthMat->data.i+iFace, imgFilename);
+
+		// load the face image
+		faceImgArr[iFace] = cvLoadImage(imgFilename, CV_LOAD_IMAGE_GRAYSCALE);
+
+		if( !faceImgArr[iFace] )
+		{
+			fprintf(stderr, "Can\\'t load image from %s\\n", imgFilename);
+			return 0;
+		}
+	}
+
+	fclose(imgListFile);
+
+	return nFaces;} {}
+} 
+
+Function {SaveTrainData()} {return_type void
+} {
+  code {} {}
+} 
+
+Function {LoadList()} {return_type void
+} {
+  code {List->load("train.txt");
+List->remove(List->size());} {}
+} 
+
+Function {SaveList()} {return_type void
+} {
+  code {if(List->size()<1)return;
+char Buf[512];
+FILE *fp;
+fp=fopen("train.txt","wt");
+if(fp){
+  for(int i=1;i<=List->size();i++){
+    sprintf(Buf,"%s\\n",List->text(i));
+    fputs(Buf,fp);
+  }
+  fclose(fp);    
+   
+     
+}
+else
+  fl_alert("File Not opened");} {}
+} 
+
+class AboutDlg {} {
+  Function {AboutDlg()} {} {
+    Fl_Window window {
+      label About open
+      xywh {317 82 482 329} type Double box PLASTIC_UP_BOX color 22 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback cb_Ok
+        xywh {337 285 130 30} box PLASTIC_UP_BOX color 15
+      }
+      Fl_Browser Info {
+        xywh {5 16 465 256} color 31 textcolor 4
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {Info->add("@c@b@i@l@C1 Face Recognation Sample ");
+Info->add(" Programmed by Bluekid ");
+Info->add(" http://derindelimavi.blogspot.com/");
+Info->add(" adapted from 'Seeing With OpenCV Part 5 Implementing Eigenface '");
+Info->add(" Servo magazine 05 - 2007 by Robin Hewitt");
+Info->add(" it also includes Fl_OpenCv 0.85");
+Info->add("@i@C1 Fl_OpenCv :  ");
+Info->add("  is a widget which is render OpenCv image within the FLTK window");
+Info->add(" FLTK is a cross-platform C++ GUI toolkit ");
+Info->add(" ------------------------------------------------------");
+Info->add(" Please Send me any suggestion, modification or bugs.");
+Info->add(" Don't hesitate to contact me for any question");
+Info->add(" I will be very grateful with your feedbacks.");
+Info->add(" bluekid70@gmail.com");
+
+window->show();
+window->redraw();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+} 
+
+Function {cb_Ok(Fl_Return_Button*o, void*w)} {} {
+  code {((Fl_Window *)(o->parent()))->hide();
+playing=true;
+Fl::add_timeout(0.05, Playing_CB);} {}
+} 

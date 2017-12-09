@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="All" />
+	<File name="FaceRec.cxx" open="1" top="1" tabpos="1">
+		<Cursor position="18681" topLine="598" />
+	</File>
+	<File name="FaceRec.fl" open="1" top="0" tabpos="6">
+		<Cursor position="9628" topLine="295" />
+	</File>
+	<File name="FaceRec.h" open="1" top="0" tabpos="4">
+		<Cursor position="1561" topLine="10" />
+	</File>
+	<File name="Fl_OpenCV.cxx" open="1" top="0" tabpos="2">
+		<Cursor position="3446" topLine="0" />
+	</File>
+	<File name="Fl_OpenCV.h" open="1" top="0" tabpos="3">
+		<Cursor position="329" topLine="59" />
+	</File>
+	<File name="train.txt" open="1" top="0" tabpos="5">
+		<Cursor position="292" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>
