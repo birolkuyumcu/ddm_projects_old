@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="FuzzyEdge" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\FuzzyEdge" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\FuzzyEdge" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="C:\Program Files\OpenCV\cxcore\include" />
+			<Add directory="C:\Program Files\OpenCV\cv\include" />
+			<Add directory="C:\Program Files\OpenCV\cvaux\include" />
+			<Add directory="C:\Program Files\OpenCV\otherlibs\highgui" />
+			<Add directory="C:\Program Files\OpenCV\ml\include" />
+			<Add directory="C:\Program Files\OpenCV\otherlibs\cvcam" />
+			<Add directory="C:\SamFL" />
+		</Compiler>
+		<Linker>
+			<Add library="cxcore" />
+			<Add library="cv" />
+			<Add library="highgui" />
+			<Add library="C:\SamFL\libSamFL.a" />
+			<Add directory="C:\Program Files\OpenCV\lib" />
+		</Linker>
+		<Unit filename="FuzzyEdge.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
