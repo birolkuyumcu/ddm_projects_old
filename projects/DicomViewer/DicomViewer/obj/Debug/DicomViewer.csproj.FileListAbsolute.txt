@@ -1,0 +1,120 @@
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\obj\Debug\DicomViewer.Form1.resources
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\obj\Debug\DicomViewer.Properties.Resources.resources
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\obj\Debug\DicomViewer.csproj.GenerateResource.Cache
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\DicomViewer.exe
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\DicomViewer.pdb
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Calculators.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.CastFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Common.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ComposeFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.DistanceMaps.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.EdgeFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.GradientFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.IntensityFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Interpolators.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.IO.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Iterators.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.LevelSetFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Meshes.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.MorphologicalFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.NoiseFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Optimizers.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Paths.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.PixelMathFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ProjectionFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Registration.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ResizeFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.SpatialObjects.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Statistics.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ThresholdFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Transforms.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ValidationFilters.dll
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Calculators.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ValidationFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Paths.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.SpatialObjects.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Statistics.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ProjectionFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.EdgeFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.DistanceMaps.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ComposeFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ResizeFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Common.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.MorphologicalFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Optimizers.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.GradientFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.ThresholdFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Interpolators.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.NoiseFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.IO.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.LevelSetFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Registration.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.IntensityFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.PixelMathFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Transforms.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Iterators.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.CastFilters.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\bin\Debug\ManagedITK.Meshes.xml
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\obj\Debug\DicomViewer.exe
+C:\Users\Birol\AppData\Local\Temporary Projects\DicomViewer\obj\Debug\DicomViewer.pdb
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\obj\Debug\DicomViewer.exe
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\obj\Debug\DicomViewer.pdb
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\DicomViewer.exe
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\DicomViewer.pdb
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Calculators.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.CastFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Common.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ComposeFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.DistanceMaps.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.EdgeFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.GradientFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.IntensityFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Interpolators.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.IO.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Iterators.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.LevelSetFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Meshes.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.MorphologicalFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.NoiseFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Optimizers.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Paths.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.PixelMathFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ProjectionFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Registration.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ResizeFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.SpatialObjects.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Statistics.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ThresholdFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Transforms.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ValidationFilters.dll
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Calculators.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ValidationFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Paths.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.SpatialObjects.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Statistics.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ProjectionFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.EdgeFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.DistanceMaps.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ComposeFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ResizeFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Common.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.MorphologicalFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Optimizers.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.GradientFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.ThresholdFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Interpolators.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.NoiseFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.IO.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.LevelSetFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Registration.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.IntensityFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.PixelMathFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Transforms.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Iterators.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.CastFilters.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\bin\Debug\ManagedITK.Meshes.xml
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\obj\Debug\DicomViewer.Form1.resources
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\obj\Debug\DicomViewer.Properties.Resources.resources
+C:\Users\Birol\Documents\Visual Studio 2008\Projects\DicomViewer\DicomViewer\obj\Debug\DicomViewer.csproj.GenerateResource.Cache
