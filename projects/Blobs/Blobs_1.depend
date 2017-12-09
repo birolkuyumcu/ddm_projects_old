@@ -1,0 +1,107 @@
+# depslib dependency file v1.0
+1227593942 source:c:\projects\blobs\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1219374938 c:\projects\blobs\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+
+1234814329 source:c:\projects\blobs\blobs.cxx
+	"Blobs.h"
+
+1234814145 c:\projects\blobs\blobs.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	"BlobResult.h"
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Counter.H>
+	<FL/Fl_Value_Slider.H>
+
+1233225360 c:\projects\cvblobslib\blobresult.h
+	"BlobLibraryConfiguration.h"
+	<math.h>
+	"cxcore.h"
+	"matrixCV.h"
+	"vector"
+	<vector>
+	<functional>
+	"Blob.h"
+	"BlobOperators.h"
+	"ComponentLabeling.h"
+
+1233499882 c:\projects\cvblobslib\bloblibraryconfiguration.h
+
+1216720860 c:\projects\cvblobslib\blob.h
+	"cxcore.h"
+	"BlobLibraryConfiguration.h"
+	"BlobContour.h"
+	"..\inspecta\DesignPatterns\ObjectFactory.h"
+
+1188702262 source:c:\xynth\projects\blobs\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1188648348 c:\xynth\projects\blobs\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+	<cvaux.h>
+
+1189420059 source:c:\xynth\projects\blobs\blobs.cxx
+	"Blobs.h"
+
+1189420059 c:\xynth\projects\blobs\blobs.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	"BlobResult.h"
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Counter.H>
+	<FL/Fl_Value_Slider.H>
+
+1163145036 c:\xynth\projects\cvblobslib\blobresult.h
+	"BlobLibraryConfiguration.h"
+	<math.h>
+	"cxcore.h"
+	"matrixCV.h"
+	"vector"
+	<vector>
+	<functional>
+	"Blob.h"
+
+1163145138 c:\xynth\projects\cvblobslib\bloblibraryconfiguration.h
+
+1163145040 c:\xynth\projects\cvblobslib\blob.h
+	"cxcore.h"
+	"BlobLibraryConfiguration.h"
+	<functional>
+	<vector>
+	<algorithm>
+	"..\inspecta\DesignPatterns\ObjectFactory.h"
+
+1216720860 c:\projects\cvblobslib\blobcontour.h
+	"list"
+	"cv.h"
+	"cxtypes.h"
+
+1233499926 c:\projects\cvblobslib\bloboperators.h
+	"Blob.h"
+
+1233500044 c:\projects\cvblobslib\componentlabeling.h
+	"vector"
+	"BlobContour.h"
+	"Blob.h"
+

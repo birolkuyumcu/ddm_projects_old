@@ -1,0 +1,141 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include "Fl_OpenCV.H"} {public
+} 
+
+decl {\#include "BlobResult.h"} {public
+} 
+
+decl {IplImage *src;} {public
+} 
+
+decl {CBlobResult blobs;} {public
+} 
+
+decl {Fl_OpenCV *Pict;} {public
+} 
+
+Function {make_window()} {} {
+  Fl_Window Win {
+    label {FindBlobs  by BlueKid}
+    tooltip {http://derindelimavi.blogspot.com/} xywh {246 116 619 610} type Double color 23 visible
+  } {
+    Fl_Button Open {
+      label {...}
+      callback Open_CB
+      tooltip Open xywh {425 4 30 26} box PLASTIC_UP_BOX color 4 labelfont 1 labelsize 18
+    }
+    Fl_Scroll Board {open
+      xywh {10 65 610 545} color 20
+      code0 {Pict=new Fl_OpenCV(Board->x(),Board->y());}
+      code1 {Board->add(Pict);}
+    } {}
+    Fl_Output FName {
+      label {Image :}
+      xywh {55 6 360 24}
+    }
+    Fl_Button Save {
+      label {Save Blobs}
+      callback Save_CB
+      tooltip Open xywh {540 4 65 26} box PLASTIC_UP_BOX color 4 labelfont 1 labelsize 10 deactivate
+    }
+    Fl_Button Find {
+      label {Find Blobs}
+      callback {Apply();}
+      tooltip Open xywh {460 4 70 26} box PLASTIC_UP_BOX color 4 labelfont 1 labelsize 10 deactivate
+    }
+    Fl_Counter No {
+      label {Blob :}
+      callback {ShowBlob();}
+      xywh {50 35 95 24} type Simple box PLASTIC_UP_BOX color 14 labelcolor 1 align 4 minimum 0 maximum 10 step 1
+    }
+    Fl_Value_Slider Thresh {
+      label {Thrsh :}
+      tooltip Threshold xywh {456 34 149 26} type {Horz Knob} box PLASTIC_DOWN_BOX color 14 align 4 maximum 255 step 1 value 100 textsize 14
+    }
+    Fl_Value_Slider MBlob {
+      label {Min Blob}
+      tooltip {discard the blobs with less area ...  pixels} xywh {213 36 184 24} type {Horz Knob} box PLASTIC_DOWN_BOX color 14 align 4 minimum 1 maximum 5000 step 1 value 1000 textsize 14
+    }
+  }
+} 
+
+Function {} {} {
+  code {Fl_Window  * window;
+src=0;
+window = make_window( );
+Fl::set_atclose(Close);
+window->show( argc, argv );
+return ( Fl :: run( ) );} {}
+} 
+
+Function {Open_CB(Fl_Widget*,void*)} {return_type {static void}
+} {
+  code {char* file;
+
+file = fl_file_chooser("Open", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+if(file==NULL) return;
+
+FName->value(file);
+
+if(src)
+ cvReleaseImage(&src);
+ 
+blobs.ClearBlobs();
+No->deactivate();
+
+Pict->Load(file, 0);
+Save->activate();
+Find->activate();
+src=cvCloneImage(Pict->image);
+Board->redraw();} {}
+} 
+
+Function {Apply()} {open
+} {
+  code {int nblobs;
+blobs = CBlobResult( src, NULL, Thresh->value(), true );
+blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, MBlob->value());
+nblobs=blobs.GetNumBlobs();
+if(nblobs){ 
+  fl_message("%d Blobs Found ( Area >=  %.0f pixel )",nblobs,MBlob->value());
+  No->maximum(blobs.GetNumBlobs() - 1);
+  No->activate();
+  No->value(0);
+  ShowBlob();
+}
+else
+  fl_message("Nothing Found !  :( ");} {selected
+  }
+} 
+
+Function {Close(Fl_Window*,void*)} {return_type void
+} {
+  code {if(src)
+ cvReleaseImage(&src);
+exit(0);} {}
+} 
+
+Function {Save_CB(Fl_Widget*,void*)} {return_type {static void}
+} {
+  code {char* file=NULL;
+file = fl_file_chooser("Save", "Blob List(*.{txt})\\t", file);
+if(file==NULL) return;
+blobs.PrintBlobs(file);} {}
+} 
+
+Function {ShowBlob()} {} {
+  code {IplImage *outputImage;
+outputImage = cvCreateImage( cvSize( src->width, src->height ), IPL_DEPTH_8U, 3 );
+cvMerge( src, src, src, NULL, outputImage );
+CBlob bl;
+blobs.GetNthBlob( CBlobGetPerimeter(), No->value(), bl);
+bl.FillBlob( outputImage, CV_RGB( 255, 0, 0 ));
+Pict->SetImage(outputImage);
+Board->redraw();} {}
+} 

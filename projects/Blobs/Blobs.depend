@@ -1,0 +1,72 @@
+# depslib dependency file v1.0
+1188705861 source:c:\projects\blobs\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1188651948 c:\projects\blobs\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+	<cvaux.h>
+
+1189312780 source:c:\projects\blobs\blobs.cxx
+	"Blobs.h"
+
+1189312743 c:\projects\blobs\blobs.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	"BlobResult.h"
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+
+1163145036 c:\projects\cvblobslib\blobresult.h
+	"BlobLibraryConfiguration.h"
+	<math.h>
+	"cxcore.h"
+	"matrixCV.h"
+	"vector"
+	<vector>
+	<functional>
+	"Blob.h"
+
+1163145138 c:\projects\cvblobslib\bloblibraryconfiguration.h
+
+1163145040 c:\projects\cvblobslib\blob.h
+	"cxcore.h"
+	"BlobLibraryConfiguration.h"
+	<functional>
+	<vector>
+	<algorithm>
+	"..\inspecta\DesignPatterns\ObjectFactory.h"
+
+1188705862 source:c:\xynth\projects\blobs\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1188651948 c:\xynth\projects\blobs\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+	<cvaux.h>
+
+1189316798 source:c:\xynth\projects\blobs\blobs.cxx
+	"Blobs.h"
+
+1189316798 c:\xynth\projects\blobs\blobs.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	"BlobResult.h"
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Value_Slider.H>
+
