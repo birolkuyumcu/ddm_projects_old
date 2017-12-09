@@ -1,0 +1,8 @@
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\bin\Release\AcuteInflammations.exe
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\bin\Release\AcuteInflammations.pdb
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\obj\Release\ResolveAssemblyReference.cache
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\obj\Release\AcuteInflammations.Form1.resources
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\obj\Release\AcuteInflammations.Properties.Resources.resources
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\obj\Release\AcuteInflammations.csproj.GenerateResource.Cache
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\obj\Release\AcuteInflammations.exe
+D:\ProjectCSharp\AcuteInflammations\AcuteInflammations\obj\Release\AcuteInflammations.pdb
