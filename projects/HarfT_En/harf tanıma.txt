@@ -1,0 +1,32 @@
+         LETTER RECOGNATION SYSTEM :)
+Simple ANN application
+This program use FANN 2.0 library
+and FLTK 1.7 as a UI
+copiled mingw32 by CodeBlocks IDE
+
+Simple ANN application
+BlueKid - http://derindelimavi.blogspot.com/
+
+usage :
+- Draw  Letter in a 5x8  matrix and press ANN Test button
+- To see pre-defined letter use browsing buttons
+  { First, Previous,Next,Last}
+- To Add a new letter
+    Clear matrix
+    Draw Letter in a matrix
+    input Letter
+    Press Add Button
+    Save Data
+    ANN Train
+
+Note if you change data by adding or deleting you must
+re-arrange ANN by using "Save Data" and  "ANN Train"
+
+
+
+
+
+
+
+
+

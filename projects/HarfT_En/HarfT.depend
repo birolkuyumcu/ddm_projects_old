@@ -1,0 +1,45 @@
+# depslib dependency file v1.0
+1144748506 c:\xynth\projects\harft\main.cpp
+	<FL/Fl.H>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Box.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Input.H>
+	<FL/fl_ask.H>
+	<FL/Fl_Browser.H>
+	<stdio.h>
+	<stdlib.h>
+	<fann.h>
+	"dosya.h"
+
+1100949608 c:\xynth\projects\harft\dosya.h
+	<string.h>
+	<stdio.h>
+
+1100949608 c:\xynth\projects\harft\dosya.cpp
+	"dosya.h"
+
+1100949608 c:\xynth\projects\harft_en\dosya.cpp
+	"dosya.h"
+
+1100949608 c:\xynth\projects\harft_en\dosya.h
+	<string.h>
+	<stdio.h>
+
+1160899820 source:c:\xynth\projects\harft_en\main.cpp
+	<FL/Fl.H>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Box.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Input.H>
+	<FL/fl_ask.H>
+	<FL/Fl_Browser.H>
+	<stdio.h>
+	<stdlib.h>
+	<fann.h>
+	"dosya.h"
+
+1100949608 source:c:\xynth\projects\harft_en\dosya.cpp
+	"dosya.h"
+
