@@ -1,0 +1,27 @@
+# depslib dependency file v1.0
+1185524479 source:c:\xynth\projects\nodul\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1161181839 c:\xynth\projects\nodul\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+	<cvaux.h>
+
+1185795812 source:c:\xynth\projects\nodul\nodul.cxx
+	"Nodul.h"
+
+1185795812 c:\xynth\projects\nodul\nodul.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	<fann.h>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Browser.H>
+	<FL/Fl_Output.H>
+

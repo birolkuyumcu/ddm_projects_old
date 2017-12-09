@@ -1,0 +1,265 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include "Fl_OpenCV.H"} {public
+} 
+
+decl {\#include <fann.h>} {public
+} 
+
+decl {IplImage *numune;} {public
+} 
+
+decl {uchar lut[256];} {public
+} 
+
+decl {CvMat* lut_mat;} {public
+} 
+
+decl {Fl_OpenCV *Pict;} {public
+} 
+
+Function {make_window()} {} {
+  Fl_Window {} {
+    label {Nodul Sayýsý  by BlueKid}
+    xywh {-32000 -32000 505 669} type Double box PLASTIC_UP_BOX color 15 hide
+  } {
+    Fl_Button Open {
+      label {...}
+      callback Open_CB
+      tooltip Open xywh {396 4 30 26} box PLASTIC_UP_BOX color 14 labelfont 1 labelsize 18
+    }
+    Fl_Scroll Board {open
+      xywh {11 40 480 480} color 23
+      code0 {Pict=new Fl_OpenCV(11,40);}
+      code1 {Board->add(Pict);}
+    } {}
+    Fl_Browser Data {
+      xywh {11 531 484 128} box DOWN_BOX
+    }
+    Fl_Output FName {
+      label {Numune :}
+      xywh {74 6 312 24}
+    }
+    Fl_Button Bul {
+      label Bul
+      callback {Data->clear();
+FindNodule();
+Board->redraw();}
+      tooltip Open xywh {436 4 59 26} box PLASTIC_UP_BOX color 14 labelfont 1 labelsize 18 deactivate
+    }
+  }
+} 
+
+Function {} {} {
+  code {Fl_Window  * window;
+numune=0;
+window = make_window( );
+window->show( argc, argv );
+return ( Fl :: run( ) );} {}
+} 
+
+Function {Open_CB(Fl_Widget*,void*)} {return_type {static void}
+} {
+  code {char* file;
+
+file = fl_file_chooser("Open", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+if(file==NULL) return;
+FName->value(file);
+
+if(numune)
+ cvReleaseImage(&numune);
+
+Pict->Load(file, 1); 
+numune= cvLoadImage( file, 0 );
+Data->clear();
+Board->redraw();
+Bul->activate();} {}
+} 
+
+Function {GetIdentty(IplImage *image, fann_type *ID)} {open return_type void
+} {
+  code {char Buf[500];
+IplImage*d_image;
+    d_image = cvCloneImage(image);
+    lut_mat = cvCreateMatHeader( 1, 256, CV_8UC1 );
+    cvSetData( lut_mat, lut, 0 );
+
+    int brightness =-100;
+    int contrast = 100;
+    int i;
+
+    if( contrast > 0 )
+    {
+        double delta = 127.*contrast/100;
+        double a = 255./(255. - delta*2);
+        double b = a*(brightness - delta);
+        for( i = 0; i < 256; i++ )
+        {
+            int v = cvRound(a*i + b);
+            if( v < 0 )
+                v = 0;
+            if( v > 255 )
+                v = 255;
+            lut[i] = (uchar)v;
+        }
+    }
+    else
+    {
+        double delta = -128.*contrast/100;
+        double a = (256.-delta*2)/255.;
+        double b = a*brightness + delta;
+        for( i = 0; i < 256; i++ )
+        {
+            int v = cvRound(a*i + b);
+            if( v < 0 )
+                v = 0;
+            if( v > 255 )
+                v = 255;
+            lut[i] = (uchar)v;
+        }
+    }
+
+    cvLUT( image, d_image, lut_mat );
+
+
+    IplImage *image02 = 0, *image03 = 0, *image04 = 0;
+
+    image03 = cvCloneImage( d_image );
+
+    cvSmooth( d_image, image03, CV_MEDIAN ,3, 0,0,0 );
+
+    cvShowImage( "image", image03 );
+
+    image02 = cvCloneImage( image03 );
+    image04 = cvCloneImage( image03 );
+
+    CvMemStorage* stor;
+    CvSeq* cont;
+    CvBox2D32f* box;
+    CvPoint* PointArray;
+    CvPoint2D32f* PointArray2D32f;
+
+    // Create dynamic structure and sequence.
+    stor = cvCreateMemStorage(0);
+    cont = cvCreateSeq(CV_SEQ_ELTYPE_POINT, sizeof(CvSeq), sizeof(CvPoint) , stor);
+
+    // Threshold the source image. This needful for cvFindContours().
+    cvThreshold( image03, image02, 70, 255, CV_THRESH_TRUNC );
+
+    // Find all contours.
+    cvFindContours( image02, stor, &cont, sizeof(CvContour),
+                    CV_RETR_LIST, CV_CHAIN_APPROX_NONE, cvPoint(0,0));
+
+    // Clear images. IPL use.
+    cvZero(image02);
+    cvZero(image04);
+
+    // This cycle draw all contours and approximate it by ellipses.
+    int j=0;
+    double ortR=0.0;
+    double ortA=0.0;
+    Data->add("@b@C1Bulunan Nodüller");
+    for(;cont;cont = cont->h_next)
+    {
+        int i; // Indicator of cycle.
+        int count = cont->total; // This is number point in contour
+        CvPoint center;
+        CvSize size;
+
+        if( count < 32 )
+            continue;
+
+        // Alloc memory for contour point set.
+        PointArray = (CvPoint*)malloc( count*sizeof(CvPoint) );
+        PointArray2D32f= (CvPoint2D32f*)malloc( count*sizeof(CvPoint2D32f) );
+
+        // Alloc memory for ellipse data.
+        box = (CvBox2D32f*)malloc(sizeof(CvBox2D32f));
+
+        // Get contour point set.
+        cvCvtSeqToArray(cont, PointArray, CV_WHOLE_SEQ);
+
+        // Convert CvPoint set to CvBox2D32f set.
+        for(i=0; i<count; i++)
+        {
+            PointArray2D32f[i].x = (float)PointArray[i].x;
+            PointArray2D32f[i].y = (float)PointArray[i].y;
+        }
+
+        // Fits ellipse to current contour.
+        cvFitEllipse(PointArray2D32f, count, box);
+
+        // Draw current contour.
+        cvDrawContours(image04,cont,CV_RGB(255,255,255),CV_RGB(255,255,255),0,1,8,cvPoint(0,0));
+
+        // Convert ellipse data from float to integer representation.
+        center.x = cvRound(box->center.x);
+        center.y = cvRound(box->center.y);
+        size.width = cvRound(box->size.width*0.5);
+        size.height = cvRound(box->size.height*0.5);
+        box->angle = -box->angle;
+
+
+        if(size.height!=0 && size.height < 200 && size.width < 200) {
+           float rt=(float)size.width/size.height;
+
+           if(rt >= 0.1 && rt <= 10.0 ){
+             ortR+=(float)(size.width+size.height)/2;
+             ortA+=(float)(size.width*size.height);
+             cvEllipse(Pict->image, center, size,
+                  box->angle, 0, 360,
+                  CV_RGB(0,0,255), 2, CV_AA, 0);
+             sprintf(Buf,"No = %d Merkez ( %d , %d ) Ebatlar (En ,Boy) ( %d , %d ) ",++j,center.x,center.y,size.width,size.height);
+             Data->add(Buf);
+
+           }
+
+        }
+
+        // Free memory.
+
+        free(PointArray);
+        free(PointArray2D32f);
+        free(box);
+
+ }
+
+
+    sprintf(Buf,"Nodul Sayýsý %d Ortalama R : %0.3f ",j,ortR/j); 
+    Data->add(Buf);
+    ID[0]=(double)j/120;
+    ID[1]=ortR/(j*30.0);} {selected
+  }
+} 
+
+Function {FindNodule()} {open return_type void
+} {
+  code {char Buf[500];
+fann_type *sonuc;
+fann_type in[2];
+struct fann *ann;
+GetIdentty(numune,in);
+if(in[0]!=0){
+  ann=fann_create_from_file("nodul.net");
+  sonuc = fann_run(ann, in);
+  sprintf(Buf,"Sonuc %f  Nodül/mm2 = %.0f",*sonuc,*sonuc*25/0.08);
+  Data->add(Buf);
+  float t,f=*sonuc/0.08;
+  t=f-(int)f;
+  if(t>0.5)
+    f+=1;
+  sprintf(Buf,"@m@b@C1Nodül/mm2 = %d",((int)f)*25);
+  Data->add(Buf);
+  fann_destroy( ann );  
+}
+else
+  Data->add("Nodul Sayýsý Tepit edilemedi !");
+
+
+Data->topline(Data->size());} {}
+} 
