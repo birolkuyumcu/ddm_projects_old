@@ -1,0 +1,3221 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0110 
+header_name {.h} 
+code_name {.cxx}
+comment {//
+// cvPreProcessor, Visual Tool for OpenCv
+// Copyright (C) 2008  BlueKid
+// GUI tool for OpenCv 
+// Programmed by BlueKid");
+//  http://derindelimavi.blogspot.com/");
+// Please Send me any suggestion, modification or bugs.");
+// Don't hesitate to contact me for any question");
+// I will be very grateful with your feedbacks.");
+// bluekid70@gmail.com
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+} {in_source in_header
+} 
+
+decl {\#include "math.h"} {public
+} 
+
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include <FL/Fl_Chart.H>} {public
+} 
+
+decl {\#include <FL/Fl_Color_Chooser.H>} {public
+} 
+
+decl {\#include <FL/fl_ask.H>} {public
+} 
+
+decl {\#include <FL/fl_draw.H>} {public
+} 
+
+decl {\#include "Fl_OpenCV.H"} {public
+} 
+
+decl {\#include "Fl_MatrixReader.h"} {public
+} 
+
+decl {\#include "datatypes.h"} {public
+} 
+
+decl {\#include "cvutility.h"} {public
+} 
+
+decl {const char Version[]="cvPreProcessor 1.0";} {global
+} 
+
+decl {IplImage *img,*pimg,*timg;} {public
+} 
+
+decl {IplImage *mimg;} {public
+} 
+
+decl {Fl_OpenCV *orj,*proc;} {public
+} 
+
+decl {Processor *p;} {global
+} 
+
+Function {fl_hsv_color(double H, double S, double V)} {return_type Fl_Color
+} {
+  code {double R, G, B;
+
+H=H/30;
+S=S/255;
+V=V/255;
+if(H>S)
+ V=H;
+else
+ V=S;
+
+if (S < 5.0e-6) {
+    R = G = B = V;
+  } else {
+    int i = (int)H;  
+    double f = H - (float)i;
+    double p1 = V*(1.0-S);
+    double p2 = V*(1.0-S*f);
+    double p3 = V*(1.0-S*(1.0-f));
+    switch (i) {
+    case 0: R = V;   G = p3;  B = p1;  break;
+    case 1: R = p2;  G = V;   B = p1;  break;
+    case 2: R = p1;  G = V;   B = p3;  break;
+    case 3: R = p1;  G = p2;  B = V;   break;
+    case 4: R = p3;  G = p1;  B = V;   break;
+    case 5: R = V;   G = p1;  B = p2;  break;
+    }
+  }
+  return fl_rgb_color(255*R,255*G,255*B);} {}
+} 
+
+Function {make_window()} {} {
+  Fl_Window {} {
+    label {cvPreProcessor }
+    xywh {218 42 1064 678} type Double color 31 labelcolor 1 hide resizable
+    code0 {o->label(Version);}
+  } {
+    Fl_Group {} {open
+      xywh {10 50 1044 364}
+    } {
+      Fl_Group Before {
+        label {Image 1 ( img )} open
+        xywh {10 50 484 364} box EMBOSSED_BOX color 31 align 5
+        code0 {orj=new Fl_OpenCV(Before->x()+2,Before->y()+2,Before->w()-2,Before->h()-2);}
+        code1 {orj->FitWindows();}
+      } {}
+      Fl_Group After {
+        label {Image 2 ( pimg )} open
+        xywh {570 50 484 364} box EMBOSSED_BOX color 31 align 5
+        code0 {proc=new Fl_OpenCV(After->x()+2,After->y()+2,After->w()-2,After->h()-2);}
+        code1 {proc->FitWindows();}
+      } {}
+      Fl_Button {} {
+        label {@<-}
+        callback {p->CopyTo1();}
+        xywh {505 210 55 26} box GTK_UP_BOX color 21 labelcolor 3
+      }
+      Fl_Button {} {
+        label {...}
+        callback {p->Load1();}
+        tooltip {Open File} xywh {495 50 30 20} box GTK_THIN_UP_BOX color 21
+      }
+      Fl_Button MemorySet1 {
+        label {@-> M}
+        callback {p->CopyToMemory(1);
+MemoryGet1->activate();
+MemoryGet2->activate();}
+        tooltip {Copy to Memory} xywh {495 81 30 25} box GTK_THIN_UP_BOX color 21 labelsize 10 labelcolor 1
+      }
+      Fl_Button MemoryGet1 {
+        label {@<-  M}
+        callback {p->CopyFromMemory(1);}
+        tooltip {Copy form Memory} xywh {495 116 30 25} box GTK_THIN_UP_BOX color 21 labelsize 10 labelcolor 1 deactivate
+      }
+      Fl_Button MemorySet2 {
+        label {M @<-}
+        callback {p->CopyToMemory(2);
+MemoryGet1->activate();
+MemoryGet2->activate();}
+        tooltip {Copy to Memory} xywh {540 285 30 25} box GTK_THIN_UP_BOX color 21 labelsize 10 labelcolor 1
+      }
+      Fl_Button {} {
+        label {...}
+        callback {p->Load2();}
+        tooltip {Open File} xywh {540 260 30 20} box GTK_THIN_UP_BOX color 21
+      }
+      Fl_Button MemoryGet2 {
+        label {M @->}
+        callback {p->CopyFromMemory(2);}
+        tooltip {Copy form Memory} xywh {540 315 30 25} box GTK_THIN_UP_BOX color 21 labelsize 10 labelcolor 1 deactivate
+      }
+    }
+    Fl_Menu_Bar {} {
+      xywh {0 0 1064 25} box GTK_UP_BOX color 19
+    } {
+      Submenu {} {
+        label File open
+        xywh {0 0 62 20}
+      } {
+        MenuItem {} {
+          label {Open Image 1}
+          callback {p->Load1();}
+          xywh {0 0 30 20}
+        }
+        MenuItem {} {
+          label {Save  Image 1}
+          callback {p->Save1();}
+          xywh {10 10 30 20}
+        }
+        MenuItem {} {
+          label {Open Image 2}
+          callback {p->Load2();}
+          xywh {10 10 30 20}
+        }
+        MenuItem {} {
+          label {Save  Image 2}
+          callback {p->Save2();}
+          xywh {30 30 30 20}
+        }
+        MenuItem {} {
+          label Capture
+          callback {p->Capture();}
+          xywh {20 20 30 20}
+        }
+        MenuItem {} {
+          label {Clear All}
+          callback {p->Clear();}
+          xywh {30 30 30 20}
+        }
+        MenuItem {} {
+          label Undo
+          callback {p->Undo();}
+          xywh {10 10 30 20} shortcut 0xff08
+        }
+        MenuItem {} {
+          label {Save Code}
+          callback {p->SaveCode();}
+          xywh {20 20 30 20}
+        }
+        MenuItem {} {
+          label Exit
+          callback {exit(0);}
+          xywh {30 30 30 20}
+        }
+      }
+      Submenu {} {
+        label Image
+        xywh {0 0 62 20}
+      } {
+        MenuItem {} {
+          label Resize
+          callback {if(img==NULL)   return;  
+ReSizeForm *op=new ReSizeForm();
+op->show();}
+          xywh {0 0 30 20}
+        }
+        MenuItem {} {
+          label Rotate
+          callback {if(img==NULL)   return;  
+RotateForm *op=new RotateForm();
+op->show();}
+          xywh {0 0 30 20}
+        }
+        MenuItem {} {
+          label {Histogram + Statistics}
+          callback {if(img==NULL)   return;  
+HistForm *op=new HistForm();
+op->show();}
+          xywh {10 10 30 20}
+        }
+      }
+      Submenu {} {
+        label Color
+        xywh {10 10 62 20}
+      } {
+        MenuItem {} {
+          label {RGB To Gray}
+          callback {p->RGBToGray();}
+          xywh {10 10 30 20}
+        }
+        MenuItem {} {
+          label {Split Red}
+          callback {p->SRed();}
+          xywh {20 20 30 20}
+        }
+        MenuItem {} {
+          label {Split Green}
+          callback {p->SGreen();}
+          xywh {30 30 30 20}
+        }
+        MenuItem {} {
+          label {Split Blue}
+          callback {p->SBlue();}
+          xywh {40 40 30 20}
+        }
+        MenuItem {} {
+          label {Split Hue}
+          callback {p->SHue();}
+          xywh {50 50 30 20}
+        }
+        MenuItem {} {
+          label {Split Saturation}
+          callback {p->SSaturation();}
+          xywh {60 60 30 20}
+        }
+        MenuItem {} {
+          label {Equalizes histogram}
+          callback {p->EHist();}
+          xywh {50 50 30 20}
+        }
+        Submenu {} {
+          label Threshold
+          xywh {0 0 62 20}
+        } {
+          MenuItem {} {
+            label Normal
+            callback {p->NormalThreshold();}
+            xywh {70 70 30 20}
+          }
+          MenuItem {} {
+            label Adaptive
+            callback {p->AdaptiveThreshold();}
+            xywh {80 80 30 20}
+          }
+          MenuItem {} {
+            label Options
+            callback {ThresholdOptions *op=new ThresholdOptions();
+op->show();}
+            xywh {90 90 30 20}
+          }
+        }
+      }
+      Submenu {} {
+        label Morphology
+        xywh {20 20 62 20}
+      } {
+        MenuItem {} {
+          label Erode
+          callback {p->Erode();}
+          xywh {20 20 30 20}
+        }
+        MenuItem {} {
+          label Dilate
+          callback {p->Dilate();}
+          xywh {30 30 30 20}
+        }
+        MenuItem {} {
+          label Open
+          callback {p->Open();}
+          xywh {40 40 30 20}
+        }
+        MenuItem {} {
+          label Close
+          callback {p->Close();}
+          xywh {50 50 30 20}
+        }
+        MenuItem {} {
+          label Gradient
+          callback {p->Grad();}
+          xywh {60 60 30 20}
+        }
+        MenuItem {} {
+          label {Top hat}
+          callback {p->TopHat();}
+          xywh {70 70 30 20}
+        }
+        MenuItem {} {
+          label {Black hat}
+          callback {p->BlackHat();}
+          xywh {80 80 30 20}
+        }
+        MenuItem {} {
+          label Options
+          callback {MorphOptions *op=new MorphOptions();
+op->show();}
+          xywh {90 90 30 20}
+        }
+      }
+      Submenu {} {
+        label {Edge Detections}
+        xywh {10 10 62 20}
+      } {
+        MenuItem {} {
+          label Sobel
+          callback {p->Sobel();}
+          xywh {30 30 30 20}
+        }
+        MenuItem {} {
+          label Laplace
+          callback {p->Laplace();}
+          xywh {40 40 30 20}
+        }
+        MenuItem {} {
+          label Canny
+          callback {p->Canny();}
+          xywh {50 50 30 20}
+        }
+        MenuItem {} {
+          label Options
+          callback {EdgeOptions *op=new EdgeOptions();
+op->show();}
+          xywh {60 60 30 20}
+        }
+      }
+      Submenu {} {
+        label Arithmetical
+        xywh {20 20 62 20}
+      } {
+        MenuItem {} {
+          label Add
+          callback {p->Add();}
+          xywh {40 40 30 20} shortcut 0x8002b
+        }
+        MenuItem {} {
+          label Subtract
+          callback {p->Sub();}
+          xywh {50 50 30 20} shortcut 0x8002d
+        }
+        MenuItem {} {
+          label Multiply
+          callback {p->Mul();}
+          xywh {60 60 30 20} shortcut 0x8002a
+        }
+        MenuItem {} {
+          label Division
+          callback {p->Div();}
+          xywh {70 70 30 20} shortcut 0x8002f
+        }
+        MenuItem {} {
+          label Max
+          callback {p->Max();}
+          xywh {90 90 30 20}
+        }
+        MenuItem {} {
+          label Min
+          callback {p->Min();}
+          xywh {100 100 30 20}
+        }
+        MenuItem {} {
+          label {Absolute Diff}
+          callback {p->AbsDiff();}
+          xywh {80 80 30 20}
+        }
+        Submenu {} {
+          label Compare open
+          xywh {0 0 62 20}
+        } {
+          MenuItem {} {
+            label {Equal to}
+            callback {p->Compare(0);}
+            xywh {0 0 30 20}
+          }
+          MenuItem {} {
+            label {Greater than}
+            callback {p->Compare(1);}
+            xywh {10 10 30 20}
+          }
+          MenuItem {} {
+            label {Greater or Equal}
+            callback {p->Compare(2);}
+            xywh {20 20 30 20}
+          }
+          MenuItem {} {
+            label {Less than}
+            callback {p->Compare(3);}
+            xywh {30 30 30 20}
+          }
+          MenuItem {} {
+            label {Less or Equal}
+            callback {p->Compare(4);}
+            xywh {40 40 30 20}
+          }
+          MenuItem {} {
+            label {Not Equal to}
+            callback {p->Compare(5);}
+            xywh {50 50 30 20}
+          }
+        }
+      }
+      Submenu {} {
+        label Logical
+        xywh {25 25 62 20}
+      } {
+        MenuItem {} {
+          label And
+          callback {p->And();}
+          xywh {45 45 30 20}
+        }
+        MenuItem {} {
+          label Or
+          callback {p->Or();}
+          xywh {55 55 30 20}
+        }
+        MenuItem {} {
+          label Xor
+          callback {p->Xor();}
+          xywh {65 65 30 20}
+        }
+        MenuItem {} {
+          label Not
+          callback {p->Not();}
+          xywh {75 75 30 20}
+        }
+      }
+      Submenu {} {
+        label Filtering
+        xywh {30 30 62 20}
+      } {
+        MenuItem {} {
+          label Smooth
+          callback {if(img==NULL)   return;  
+SmoothForm *frm=new SmoothForm();
+frm->show();}
+          xywh {50 50 30 20}
+        }
+        MenuItem {} {
+          label Filter2D
+          callback {if(img==NULL)   return;  
+Filter2DForm *frm=new Filter2DForm();
+frm->show();}
+          xywh {60 60 30 20}
+        }
+        MenuItem {} {
+          label {Color - HS}
+          callback {if(img==NULL)   return;  
+if(img->nChannels!=3){
+  fl_alert("Source image must me color");
+  return; 
+}
+HSFilterForm *frm=new HSFilterForm();
+frm->show();}
+          xywh {70 70 30 20}
+        }
+        MenuItem {} {
+          label {Color RGB}
+          callback {if(img==NULL)   return;  
+if(img->nChannels!=3){
+  fl_alert("Source image must me color");
+  return; 
+}
+RGBFilterForm *frm=new RGBFilterForm();
+frm->show();}
+          xywh {80 80 30 20}
+        }
+      }
+      Submenu {} {
+        label Help open
+        xywh {40 40 62 20}
+      } {
+        MenuItem {} {
+          label About
+          callback {AboutDlg *ab=new AboutDlg();
+ab->show();}
+          xywh {60 60 30 20}
+        }
+      }
+    }
+    Fl_Browser Output {
+      xywh {5 416 1044 244} type Multi box DOWN_BOX color 19
+    }
+  }
+} 
+
+Function {} {} {
+  code {Fl::visual(FL_DOUBLE|FL_RGB);
+Fl_Window  * window;
+  img=0;
+  window = make_window( );
+  window->show( argc, argv );
+  p= new Processor();} {}
+} 
+
+class Processor {} {
+  Function {Processor()} {} {
+    code {m.iterations=1;
+  m.cols=3;
+  m.rows=3;
+  m.anchor_x=2;
+  m.anchor_y=2;
+  m.shape=CV_SHAPE_RECT;
+
+  ed.aperture=0;
+  ed.xOrder=1;
+  ed.yOrder=0;
+  ed.tmin=50;
+  ed.tmax=150;
+
+  th.thresh=128;
+  th.maxVal=255;
+  th.type=CV_THRESH_BINARY;
+  th.method=CV_ADAPTIVE_THRESH_MEAN_C;
+  th.block_size=3;
+  th.param1=5;
+  th.otsu=0;
+  r.ratio=100;  
+  r.rwidth=0;
+  r.rheight=0;  
+  r.aspect=1;
+  
+  sm.type=1;
+  sm.size1=3;
+  sm.size2=0;
+  sm.sigma1=0.0;
+  sm.sigma2=0.0;
+  
+  uimg=NULL;
+  upimg=NULL;
+  undo=false;
+  
+  flt.col=3;
+  flt.row=3;
+  flt.anchorx=-1;
+  flt.anchory=-1;
+  for(int i=0;i<81;i++)flt.data[i]=0.0;
+  
+  Clear();} {}
+  }
+  Function {FixFilename(char *src, char *dst)} {private
+  } {
+    code {int j=0;
+  for(int i=0; i<1024 ;i++){
+    dst[j]=src[i];
+    j++;
+    if(src[i]==0) break;
+    if(src[i]=='/') dst[j++]='/';
+   
+  }} {}
+  }
+  Function {CopyTo1()} {} {
+    code {if(pimg){
+    img=cvCloneImage(pimg);
+    orj->SetImage(img);
+    Before->redraw();
+  
+    Output->add("");
+    Output->add("/* Copy Image2 to Image1 */");
+    Output->add("  if(img)"); 
+    Output->add("    cvReleaseImage(&img);");
+    Output->add("  img=cvCloneImage(pimg);"); 
+    Output->bottomline(Output->size());
+  }} {}
+  }
+  Function {CopyFromMemory(int i)} {open
+  } {
+    code {if(i==1){ 
+    if(mimg){
+      img=cvCloneImage(mimg);
+      orj->SetImage(img);
+      Before->redraw();
+  
+      Output->add("");
+      Output->add("/* Copy from Memory to Image1 */");
+      Output->add("  if(img)"); 
+      Output->add("    cvReleaseImage(&img);");
+      Output->add("  img=cvCloneImage(mimg);"); 
+      Output->bottomline(Output->size());
+    }
+  }  
+  else{ 
+    if(mimg){
+      pimg=cvCloneImage(mimg);
+      proc->SetImage(pimg);
+      After->redraw();
+  
+      Output->add("");
+      Output->add("/* Copy from Memory to Image2 */");
+      Output->add("  if(pimg)"); 
+      Output->add("    cvReleaseImage(&pimg);");
+      Output->add("  pimg=cvCloneImage(mimg);"); 
+      Output->bottomline(Output->size());
+    }
+  }} {}
+  }
+  Function {CopyToMemory(int i)} {} {
+    code {if(i==1){ 
+    if(img){
+      mimg=cvCloneImage(img);   
+      Output->add("");
+      Output->add("/* Copy Image1 to Memory */");
+      Output->add("  if(mimg)"); 
+      Output->add("    cvReleaseImage(&mimg);");
+      Output->add("  mimg=cvCloneImage(img);"); 
+      Output->bottomline(Output->size());
+    }
+  }
+  else{
+    if(pimg){
+      mimg=cvCloneImage(pimg);   
+      Output->add("");
+      Output->add("/* Copy Image2 to Memory */");
+      Output->add("  if(mimg)"); 
+      Output->add("    cvReleaseImage(&mimg);");
+      Output->add("  mimg=cvCloneImage(pimg);"); 
+      Output->bottomline(Output->size());
+    }
+  }} {}
+  }
+  Function {CopyFromCapture(IplImage *cimg, char*file)} {open
+  } {
+    code {SaveState();
+  img=cimg;
+  orj->SetImage(img);
+  Before->redraw();
+
+  Output->add("");
+  char Buf[1024];
+  char Buf2[1024];  
+  if(file==NULL){
+    Output->add("/* Capture from Camera */");
+    Output->add("  if(img)"); 
+    Output->add("    cvReleaseImage(&img);");
+    sprintf(Buf,"  img=cvSnapshotFromCamera();");
+    Output->add(Buf);
+  }
+  else{
+    Output->add("/* Capture from Video File */");  
+    Output->add("  if(img)"); 
+    Output->add("    cvReleaseImage(&img);");
+    sprintf(Buf,"  img=cvSnapshotFromVideo( %c%s %c);",'"',file,'"');
+    FixFilename(Buf,Buf2);
+    Output->add(Buf2);
+
+  } 
+
+  Output->bottomline(Output->size());} {}
+  }
+  decl {IplImage *uimg;} {public
+  }
+  decl {IplImage *upimg;} {public
+  }
+  decl {int usize;} {public
+  }
+  decl {bool undo;} {public
+  }
+  Function {SaveState()} {} {
+    code {usize=Output->size();
+  if(uimg)
+    cvReleaseImage(&uimg);
+  if(upimg)
+    cvReleaseImage(&upimg);  
+  
+  if(img)
+    uimg=cvCloneImage(img);
+  if(pimg) 
+    upimg=cvCloneImage(pimg);
+  undo=true;} {}
+  }
+  Function {Undo(bool full=true)} {} {
+    code {if(undo==false) return;
+ if(full){
+    img=uimg;
+    orj->SetImage(img);
+    Before->redraw();
+    uimg=NULL;
+ }
+
+ pimg=upimg;
+ proc->SetImage(pimg);
+ After->redraw();
+ upimg=NULL;
+
+
+//  if(usize){  
+    while(usize < Output->size())
+       Output->remove(Output->size());
+    usize=0;
+//  }
+  undo=false;
+  
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Load1()} {open
+  } {
+    code {char* file;
+
+  file = fl_file_chooser("Open", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+  if(file==NULL) return;
+
+  SaveState();
+  orj->Load(file, CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR ); 
+  img=orj->image;
+// Board->redraw();
+  Before->redraw();
+
+
+  char Buf[1024];
+  char Buf2[1024];
+  Output->add("");
+  Output->add("/* Loads Images */");
+  Output->add("  if(img)"); 
+  Output->add("    cvReleaseImage(&img);");
+  sprintf(Buf,"  img=cvLoadImage( %c%s %c, CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR  );",'"',file,'"');
+  FixFilename(Buf,Buf2);
+  Output->add(Buf2);
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Save1()} {} {
+    code {if(!img) return;
+  char* file=NULL;
+  file = fl_file_chooser("Save", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+  if(file==NULL) return;
+  orj->Save(file);
+
+  char Buf[1024];
+  char Buf2[1024];  
+  Output->add("");
+  Output->add("/* Save Image */");
+  sprintf(Buf,"  cvSaveImage( %c%s %c,img );",'"',file,'"');
+  FixFilename(Buf,Buf2);
+  Output->add(Buf2);
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Load2()} {} {
+    code {char* file;
+
+  file = fl_file_chooser("Open", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+  if(file==NULL) return;
+  SaveState();
+  proc->Load(file, CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR ); 
+  pimg=proc->image;
+  After->redraw();
+
+  
+  char Buf[1024];
+  char Buf2[1024];
+  Output->add("");
+  Output->add("/* Loads Images */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  sprintf(Buf,"  pimg=cvLoadImage( %c%s %c, CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR  );",'"',file,'"');
+  FixFilename(Buf,Buf2);
+  Output->add(Buf2);
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Save2()} {} {
+    code {if(!pimg) return;
+  char* file=NULL;
+  file = fl_file_chooser("Save", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+  if(file==NULL) return;
+  proc->Save(file);
+
+  char Buf[1024];  
+  char Buf2[1024];
+  Output->add("");
+  Output->add("/* Save Image */");
+  sprintf(Buf,"  cvSaveImage( %c%s %c,pimg );",'"',file,'"');
+  FixFilename(Buf,Buf2);
+  Output->add(Buf2);
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Capture()} {} {
+    code {CaptureForm *cp=new CaptureForm();
+cp->show();
+
+if(cp->isSnapshot){
+  img=cp->getSnapshot();
+  Before->redraw();
+}} {}
+  }
+  Function {Clear()} {} {
+    code {orj->SetImage(NULL);
+  proc->SetImage(NULL);
+  Before->redraw();
+  After->redraw();
+  Output->clear();
+  Output->clear();
+  char Buf[512];
+  sprintf(Buf,"/* This Code generated by %s */",Version);
+  Output->add(Buf);
+  Output->add("\#include <cv.h>");
+  Output->add("\#include <highgui.h>");
+  Output->add("\#include <stdio.h>");  
+  Output->add("");
+  Output->add("IplImage* img,*pimg,*timg,*mimg;");
+  Output->add("void Process();");
+  Output->add("");
+  Output->add("int main( )");
+  Output->add("\{");
+  sprintf(Buf,"   puts(%cThis Code generated by %s%c);",'"',Version,'"');
+  Output->add(Buf);
+  Output->add("   Process();");
+  Output->add("   if(img)\{");
+  sprintf(Buf,"     cvNamedWindow( %cSource%c, 1 );",'"','"');
+  Output->add(Buf);
+  sprintf(Buf,"     cvShowImage( %cSource%c, img );",'"','"');
+  Output->add(Buf);
+  Output->add("   \}");
+  Output->add("   if(pimg)\{");
+  sprintf(Buf,"     cvNamedWindow( %cProcessed Image%c, 1 );",'"','"');
+  Output->add(Buf);
+  sprintf(Buf,"     cvShowImage( %cProcessed Image%c, pimg );",'"','"');
+  Output->add(Buf);
+  Output->add("   \}");
+  Output->add("   cvWaitKey(0);");
+  Output->add("");
+  Output->add("   if(img)");
+  Output->add("     cvReleaseImage(&img);");
+  Output->add("   if(pimg)");
+  Output->add("     cvReleaseImage(&pimg);");
+  Output->add("");
+  Output->add("\}");
+  Output->add("void Process()");
+  Output->add("\{");
+  Output->bottomline(Output->size());
+  img=NULL;
+  pimg=NULL;} {}
+  }
+  Function {SaveCode()} {} {
+    code {if(Output->size()<1) return;
+  char* file=NULL;
+  file = fl_file_chooser("Save Code ", "Code (*.\{c,cpp,cxx,\}\\t", 0);
+  if(file==NULL) return;
+
+  if(file!=NULL)\{
+    char Buf[1024];
+    FILE *fp;
+    fp=fopen(file,"wt");
+    if(fp)\{
+     for(int i=1;i<=Output->size();i++)\{
+       sprintf(Buf,"%s\\n",Output->text(i));
+       fputs(Buf,fp);
+     \}
+     fputs("\}",fp);
+     fclose(fp);   
+     fl_message("Code Saved");      
+    \}
+
+  \}} {}
+  }
+  Function {Exit()} {} {
+    code {exit(0);} {}
+  }
+  decl {resize r;} {public
+  }
+  Function {ReSize()} {} {
+    code {if(img==NULL)   return;  
+
+
+
+
+  SaveState();
+  pimg = cvCreateImage( cvSize(r.rwidth,r.rheight), img->depth, img->nChannels);
+
+  cvResize( img, pimg, r.method);
+  proc->SetImage(pimg);
+  After->redraw();
+  
+
+  char *Methods[]= {"CV_INTER_NN",
+ 	            "CV_INTER_LINEAR",
+		    "CV_INTER_AREA",
+		    "CV_INTER_CUBIC"};
+  char Buf[512];  
+  
+  Output->add(""); 
+  Output->add("/* Resizing image  */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  sprintf(Buf,"  pimg = cvCreateImage( cvSize(%d,%d), %d, %d);",r.rwidth,r.rheight, img->depth, img->nChannels);
+  Output->add(Buf);
+  sprintf(Buf,"  cvResize( img, pimg, %s);",Methods[r.method]);
+  Output->add(Buf);  
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Rotate(int angle)} {} {
+    code {if(img==NULL)   return;  
+
+
+
+
+
+  SaveState();
+  pimg = cvCloneImage (img);
+
+  float m[6];
+  CvMat M;
+  m[0] = (float) (cos (angle * CV_PI / 180.));
+  m[1] = (float) (-sin (angle * CV_PI / 180.));
+  m[2] = img->width * 0.5;
+  m[3] = -m[1];
+  m[4] = m[0];
+  m[5] = img->height * 0.5;
+  cvInitMatHeader (&M, 2, 3, CV_32FC1, m, CV_AUTOSTEP);
+  cvGetQuadrangleSubPix (img, pimg, &M);
+  proc->SetImage(pimg);
+  After->redraw();
+  
+
+  char Buf[512];  
+  
+  Output->add(""); 
+  Output->add("/* Rotating image  */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  sprintf(Buf,"  int angle= %d ;",angle);
+  Output->add("    pimg = cvCloneImage (img);");  
+  Output->add(Buf);
+  Output->add("  float m[6];");
+  Output->add("  CvMat M;");  
+  Output->add("  m[0] = (float) (cos (angle * CV_PI / 180.));");
+  Output->add("  m[1] = (float) (-sin (angle * CV_PI / 180.));");
+  Output->add("  m[2] = img->width * 0.5;");
+  Output->add("  m[3] = -m[1];");
+  Output->add("  m[4] = m[0];");
+  Output->add("  m[5] = img->height * 0.5;");
+  Output->add("  cvInitMatHeader (&M, 2, 3, CV_32FC1, m, CV_AUTOSTEP);");  
+  Output->add("  cvGetQuadrangleSubPix( img, pimg, &M); ");
+
+  Output->bottomline(Output->size());} {}
+  }
+  Function {RGBToGray()} {} {
+    code {if(img==NULL)   return;  
+  if(img->nChannels!=3){ 
+     fl_alert("image must be color");
+     return;  
+  }
+
+  SaveState();
+  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+  cvCvtColor( img, pimg, CV_RGB2GRAY );
+  proc->SetImage(pimg);
+  After->redraw();
+  Output->add(""); 
+  Output->add("/* Converts image from color space ( RGB ) to a Gray Scale */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );");
+  Output->add("  cvCvtColor( img, pimg, CV_RGB2GRAY );");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {SRed()} {} {
+    code {if(img==NULL)   return;  
+  if(img->nChannels!=3){ 
+     fl_alert("image must be color");
+     return;  
+  }
+
+  SaveState();  
+  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+  cvSplit( img,pimg,0,0,0);
+  proc->SetImage(pimg);
+  After->redraw();
+  Output->add(""); 
+  Output->add("/* Split Red Channel of image to a Gray Scale image */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );");
+  Output->add("  cvSplit( img,0,0,pimg,0);");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {SGreen()} {} {
+    code {if(img==NULL)   return;  
+  if(img->nChannels!=3){ 
+     fl_alert("image must be color");
+     return;  
+  }
+
+  SaveState();  
+  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+  cvSplit( img,0,pimg,0,0);
+  proc->SetImage(pimg);
+  After->redraw();
+  Output->add(""); 
+  Output->add("/* Split Green Channel of image to a Gray Scale image */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );");
+  Output->add("  cvSplit( img,0,pimg,0,0);");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {SBlue()} {} {
+    code {if(img==NULL)   return;  
+  if(img->nChannels!=3){ 
+     fl_alert("image must be color");
+     return;  
+  }
+
+  SaveState();  
+  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+  cvSplit( img,0,0,pimg,0);
+  proc->SetImage(pimg);
+  After->redraw();
+  Output->add(""); 
+  Output->add("/* Split Blue Channel of image to a Gray Scale image */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );");
+  Output->add("  cvSplit( img,pimg,0,0,0);");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {SHue()} {} {
+    code {if(img==NULL)   return;  
+  if(img->nChannels!=3){ 
+     fl_alert("image must be color");
+     return;  
+  }
+
+  SaveState();  
+  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+  timg = cvCreateImage( cvGetSize(img), 8, 3 );
+  cvCvtColor( img, timg, CV_RGB2HSV );
+  cvConvertScale(timg,timg, 255/180 ,0);
+  cvSplit( timg,pimg,0,0,0);
+  cvReleaseImage(&timg);
+  proc->SetImage(pimg);
+  After->redraw();
+
+  Output->add(""); 
+  Output->add("/* Split Hue Channel from HSV image to a Gray Scale image */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );");
+  Output->add("  timg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 3 );");
+  Output->add("  cvCvtColor( img, timg, CV_BGR2HSV );");
+  Output->add("  cvConvertScale(timg,timg, 255.0/180.0 ,0);");
+  Output->add("  cvSplit( timg,pimg,0,0,0);");
+  Output->add("  cvReleaseImage(&timg);");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {SSaturation()} {} {
+    code {if(img==NULL)   return;  
+  if(img->nChannels!=3){ 
+     fl_alert("image must be color");
+     return;  
+  }
+
+  SaveState();  
+  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+  timg = cvCreateImage( cvGetSize(img), 8, 3 );
+  cvCvtColor( img, timg, CV_RGB2HSV );
+  cvSplit( timg,0,pimg,0,0);
+  cvReleaseImage(&timg);
+
+  proc->SetImage(pimg);
+  After->redraw();
+  Output->add(""); 
+  Output->add("/* Split Saturation Channel from HSV to a Gray Scale image */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );");
+  Output->add("  timg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 3 );");
+  Output->add("  cvCvtColor( img, timg, CV_BGR2HSV );");
+  Output->add("  cvSplit( timg,0,pimg,0,0);");
+  Output->add("  cvReleaseImage(&timg);");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {EHist()} {} {
+    code {if(img==NULL)   return;  
+  if(img->nChannels!=1){ 
+     fl_alert("image must be a gray and single channel ");
+     return;  
+  }
+
+  SaveState();  
+  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+  cvEqualizeHist(img,pimg );
+  proc->SetImage(pimg);
+  After->redraw();
+  Output->add(""); 
+  Output->add("/* Equalizes histogram of grayscale image */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );");
+  Output->add("  cvEqualizeHist(img,pimg);");
+  Output->bottomline(Output->size());} {}
+  }
+  decl {threshold th;} {public
+  }
+  Function {NormalThreshold()} {} {
+    code {if(img==NULL)   return;  
+  SaveState();  
+  pimg= cvCloneImage (img);  
+  int typ;
+  if(th.otsu)
+    typ=th.type|CV_THRESH_OTSU;
+  else
+    typ=th.type;
+  cvThreshold (img, pimg, th.thresh,th.maxVal,typ);
+
+
+
+  proc->SetImage(pimg);
+  After->redraw();
+
+  char Buf[512];
+  char *Types[]={"CV_THRESH_BINARY",
+                 "CV_THRESH_BINARY_INV",
+                 "CV_THRESH_TRUNC",
+                 "CV_THRESH_TOZERO",
+                 "CV_THRESH_TOZERO_INV"};
+
+  Output->add("");
+  Output->add("/* Normal Threshold of image */");
+  Output->add("  if(pimg)");
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg= cvCloneImage (img); ");
+  char otsuOn[]= " | CV_THRESH_OTSU";
+  char otsuOff[]= " ";
+  char *p=th.otsu ? otsuOn : otsuOff;
+  sprintf(Buf,"cvThreshold (img, pimg, %.f, %.f, %s%s);", th.thresh,th.maxVal,Types[th.type],p);
+  Output->add(Buf);
+  Output->bottomline(Output->size());} {}
+  }
+  Function {AdaptiveThreshold()} {} {
+    code {if(img==NULL)   return;  
+
+
+  if(img->nChannels==3){
+    if(fl_choice("Source image must me single channel gray \\n Do you want to convert it ?","No","Yes",NULL)==0)
+      return; 
+    RGBToGray();
+    CopyTo1();
+  }
+
+  SaveState();  
+  pimg= cvCloneImage (img);  
+  int typ=th.type;
+  if(typ>=1)
+    typ=CV_THRESH_BINARY;
+  cvAdaptiveThreshold( img, pimg,th.maxVal,th.method,typ,th.block_size,th.param1);
+
+
+  proc->SetImage(pimg);
+  After->redraw();
+
+  char Buf[512];
+  char *Types[]={"CV_THRESH_BINARY",
+                 "CV_THRESH_BINARY_INV"};
+  char *Methods[]={"CV_THRESH_BINARY",
+                   "CV_THRESH_BINARY_INV"};                
+
+  Output->add("");
+  Output->add("/* Adaptive Threshold of image */");
+  Output->add("  if(pimg)");
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg= cvCloneImage (img); ");
+  sprintf(Buf,"cvAdaptiveThreshold(img, pimg, %.f, %s , %s ,%d , %.f );",th.maxVal,Types[typ],Methods[th.method],th.block_size,th.param1);
+  Output->add(Buf);
+  Output->bottomline(Output->size());} {}
+  }
+  decl {morph m;} {public
+  }
+  Function {Erode()} {} {
+    code {if(img==NULL)   return;  
+
+  SaveState();  
+  IplConvKernel *element;
+  pimg= cvCloneImage (img);  
+  element = cvCreateStructuringElementEx (m.cols,m.rows,m.anchor_x,m.anchor_y,m.shape, NULL);
+  cvErode (img,pimg, element,m.iterations);
+  proc->SetImage(pimg);
+  After->redraw();
+  cvReleaseStructuringElement(&element );
+  WriteCodeMorph(0);} {}
+  }
+  Function {Dilate()} {} {
+    code {if(img==NULL)   return;  
+
+  SaveState();  
+  IplConvKernel *element;
+  pimg= cvCloneImage (img);  
+  element = cvCreateStructuringElementEx (m.cols,m.rows,m.anchor_x,m.anchor_y,m.shape, NULL);
+  cvDilate (img,pimg, element,m.iterations);
+  proc->SetImage(pimg);
+  After->redraw();
+  cvReleaseStructuringElement(&element );
+  WriteCodeMorph(1);} {}
+  }
+  Function {Open()} {} {
+    code {if(img==NULL)   return;  
+
+  SaveState();  
+  IplConvKernel *element;
+  pimg= cvCloneImage (img);  
+  timg= cvCloneImage (img);  
+  element = cvCreateStructuringElementEx (m.cols,m.rows,m.anchor_x,m.anchor_y,m.shape, NULL);
+  cvMorphologyEx (img, pimg, timg,element,CV_MOP_OPEN, m.iterations);
+  proc->SetImage(pimg);
+  After->redraw();
+  cvReleaseStructuringElement(&element );
+  cvReleaseImage (&timg);
+  WriteCodeMorph(2);} {}
+  }
+  Function {Close()} {} {
+    code {if(img==NULL)   return;  
+
+  SaveState();  
+  IplConvKernel *element;
+  pimg= cvCloneImage (img);  
+  timg= cvCloneImage (img);  
+  element = cvCreateStructuringElementEx (m.cols,m.rows,m.anchor_x,m.anchor_y,m.shape, NULL);
+  cvMorphologyEx (img, pimg, timg,element,CV_MOP_CLOSE, m.iterations);
+  proc->SetImage(pimg);
+  After->redraw();
+  cvReleaseStructuringElement(&element );
+  cvReleaseImage (&timg);
+  WriteCodeMorph(3);} {}
+  }
+  Function {Grad()} {} {
+    code {if(img==NULL)   return;  
+
+  SaveState();  
+  IplConvKernel *element;
+  pimg= cvCloneImage (img);  
+  timg= cvCloneImage (img);  
+  element = cvCreateStructuringElementEx (m.cols,m.rows,m.anchor_x,m.anchor_y,m.shape, NULL);
+  cvMorphologyEx (img, pimg, timg,element,CV_MOP_GRADIENT, m.iterations);
+  proc->SetImage(pimg);
+  After->redraw();
+  cvReleaseStructuringElement(&element );
+  cvReleaseImage (&timg);
+  WriteCodeMorph(4);} {}
+  }
+  Function {TopHat()} {} {
+    code {if(img==NULL)   return;  
+
+  SaveState();  
+  IplConvKernel *element;
+  pimg= cvCloneImage (img);  
+  timg= cvCloneImage (img);  
+  element = cvCreateStructuringElementEx (m.cols,m.rows,m.anchor_x,m.anchor_y,m.shape, NULL);
+  cvMorphologyEx (img, pimg, timg,element,CV_MOP_TOPHAT, m.iterations);
+  proc->SetImage(pimg);
+  After->redraw();
+  cvReleaseStructuringElement(&element );
+  cvReleaseImage (&timg);
+  WriteCodeMorph(5);} {}
+  }
+  Function {BlackHat()} {} {
+    code {if(img==NULL)   return;  
+
+  SaveState();  
+  IplConvKernel *element;
+  pimg= cvCloneImage (img);  
+  timg= cvCloneImage (img);  
+  element = cvCreateStructuringElementEx (m.cols,m.rows,m.anchor_x,m.anchor_y,m.shape, NULL);
+  cvMorphologyEx (img, pimg, timg,element,CV_MOP_BLACKHAT, m.iterations);
+  proc->SetImage(pimg);
+  After->redraw();
+  cvReleaseStructuringElement(&element );
+  cvReleaseImage (&timg);
+  WriteCodeMorph(6);} {}
+  }
+  Function {WriteCodeMorph(int i)} {} {
+    code {char Buf[512];
+  char *Shapes[]={"CV_SHAPE_RECT",
+                  "CV_SHAPE_CROSS",
+                  "CV_SHAPE_ELLIPSE"};  
+                
+  char *Operations[]= {"Erode",
+	               "Dilate",
+		       "Open",
+		       "Close",
+		       "Gradiant",
+		       "Top Hat",		     
+		       "Black Hat"};                  
+  char *OpCodes[]= {"CV_MOP_OPEN",
+	            "CV_MOP_CLOSE",
+		    "CV_MOP_GRADIENT",
+		    "CV_MOP_TOPHAT",
+		    "CV_MOP_BLACKHAT"};                  		     
+
+
+  Output->add("");
+  sprintf(Buf,"/* Aplly %s Morphological Operation */" ,Operations[i]);
+
+  Output->add(Buf);
+  Output->add("{");
+  Output->add("  IplConvKernel *element;"); 
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg= cvCloneImage (img); "); 
+  sprintf(Buf,"  element = cvCreateStructuringElementEx (%d,%d,%d,%d,%s, NULL);",m.cols,m.rows,m.anchor_x,m.anchor_y,Shapes[m.shape]);
+  Output->add(Buf);
+  if(i>1){
+    Output->add("  timg= cvCloneImage (img);"); 
+    sprintf(Buf,"  cvMorphologyEx (img, pimg, timg,element,%s , %d);",OpCodes[i-2],m.iterations);
+    Output->add(Buf);
+    Output->add("  cvReleaseImage (&timg);");    
+  }
+  else if(i==0){
+    sprintf(Buf,"  cvErode (img,pimg, element, %d);",m.iterations);
+    Output->add(Buf);
+  }else {
+    sprintf(Buf,"  cvDilate (img,pimg, element, %d);",m.iterations);
+    Output->add(Buf);
+  }
+
+
+  Output->add("  cvReleaseStructuringElement(&element );");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  decl {edge ed;} {public
+  }
+  Function {Sobel()} {} {
+    code {if(img==NULL)   return;  
+
+  if(img->nChannels==3){
+    if(fl_choice("Source image must me single channel gray \\n Do you want to convert it ?","No","Yes",NULL)==0)
+       return; 
+    RGBToGray();
+    CopyTo1();
+  }
+
+  SaveState();  
+  timg = cvCreateImage (cvGetSize (img), IPL_DEPTH_16S, 1);  
+  pimg = cvCreateImage (cvGetSize (img), IPL_DEPTH_8U, 1);  
+  cvSobel (img, timg, ed.xOrder,ed.yOrder,Apertures[ed.aperture]);
+  cvConvertScaleAbs (timg, pimg);
+  proc->SetImage(pimg);
+  After->redraw();
+
+  cvReleaseImage (&timg);
+// WriteCode
+
+  char Buf[512];
+  Output->add("");
+
+  Output->add("/* Aplly Sobel Edge-Detection Operation */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  timg = cvCreateImage (cvGetSize (img), IPL_DEPTH_16S, 1);");  
+  Output->add("  pimg = cvCreateImage (cvGetSize (img), IPL_DEPTH_8U, 1);");  
+  sprintf(Buf,"  cvSobel (img, timg, %d, %d, %d);",ed.xOrder,ed.yOrder,Apertures[ed.aperture]);
+  Output->add(Buf);
+  Output->add("  cvConvertScaleAbs (timg, pimg);");
+  Output->add("  cvReleaseImage (&timg);");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Laplace()} {} {
+    code {if(img==NULL)   return;  
+
+  if(img->nChannels==3){
+    if(fl_choice("Source image must me single channel gray \\n Do you want to convert it ?","No","Yes",NULL)==0)
+       return; 
+    RGBToGray();
+    CopyTo1();
+  }
+
+  SaveState();  
+  timg = cvCreateImage (cvGetSize (img), IPL_DEPTH_16S, 1);  
+  pimg = cvCreateImage (cvGetSize (img), IPL_DEPTH_8U, 1);  
+  // see http://derindelimavi.blogspot.com/2009/10/opencv-20-izlenimleri.html
+  if(Apertures[ed.aperture]==-1)
+    cvLaplace (img, timg,Apertures[1]);
+  else
+    cvLaplace (img, timg,Apertures[ed.aperture]);
+  cvConvertScaleAbs (timg, pimg);
+  proc->SetImage(pimg);
+  After->redraw();
+
+  cvReleaseImage (&timg);
+// WriteCode
+
+  char Buf[512];
+  Output->add("");
+
+  Output->add("/* Aplly Laplace Edge-Detection Operation */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  timg = cvCreateImage (cvGetSize (img), IPL_DEPTH_16S, 1);");  
+  Output->add("  pimg = cvCreateImage (cvGetSize (img), IPL_DEPTH_8U, 1);");  
+  sprintf(Buf,"  cvLaplace (img, timg, %d);",Apertures[ed.aperture]);
+  Output->add(Buf);
+  Output->add("  cvConvertScaleAbs (timg, pimg);");
+  Output->add("  cvReleaseImage (&timg);");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Canny()} {} {
+    code {if(img==NULL)   return;  
+
+  if(img->nChannels==3){
+    if(fl_choice("Source image must me single channel gray \\n Do you want to convert it ?","No","Yes",NULL)==0)
+      return; 
+    RGBToGray();
+    CopyTo1();
+  }
+
+  SaveState();  
+  pimg = cvCreateImage (cvGetSize (img), IPL_DEPTH_8U, 1);  
+  // Dikkat min aperture size for canny 3
+  cvCanny (img, pimg, ed.tmin,ed.tmax,Apertures[ed.aperture]<3 ? 3 : Apertures[ed.aperture]);  
+  proc->SetImage(pimg);
+  After->redraw();
+
+
+  // WriteCode
+  char Buf[512];
+  Output->add("");
+
+  Output->add("/* Aplly Canny Edge-Detection Operation */");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCreateImage (cvGetSize (img), IPL_DEPTH_8U, 1);");  
+  sprintf(Buf,"  cvCanny (img, pimg, %d, %d, %d);",(int)ed.tmin,(int)ed.tmax,(Apertures[ed.aperture]<3 ? 3 : Apertures[ed.aperture]));
+  Output->add(Buf);
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Add()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;        
+  }
+
+
+  SaveState();  
+  IplImage *mask=NULL;
+
+  if(mimg && (mimg->width==pimg->width) &&(mimg->height==pimg->height))  
+    if(mimg->nChannels==1){
+      if(fl_choice("Do you want to use Memory Image as an Mask ?","No","Yes",NULL))
+        mask=mimg;
+    }
+
+  timg= cvCloneImage (img);  
+
+  cvAdd(img, pimg, timg, mask);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+
+  Output->add("/* Aplly Adding Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  IplImage *mask=NULL;");
+  if(mimg){
+    Output->add("  if(mimg->nChannels==1)");
+    Output->add("    mask=mimg;");
+  }
+
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvAdd(img, pimg, timg, mask);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+
+
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Sub()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;        
+  }
+
+  SaveState();  
+  IplImage *mask=NULL;
+  if(mimg && (mimg->width==pimg->width) &&(mimg->height==pimg->height))  
+    if(mimg->nChannels==1){
+      if(fl_choice("Do you want to use Memory Image as an Mask ?","No","Yes",NULL))
+        mask=mimg;
+    }
+
+  timg= cvCloneImage (img);  
+
+  cvSub(img, pimg, timg, mask);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Subtraction Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  IplImage *mask=NULL;");
+  if(mimg){
+    Output->add("  if(mimg->nChannels==1)");
+    Output->add("    mask=mimg;");
+  }
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvSub(img, pimg, timg, mask);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Mul()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;       
+  }
+
+  SaveState();  
+  timg= cvCloneImage (img);  
+  cvMul(img, pimg, timg);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Multiplication Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvMul(img, pimg, timg, 1);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Div()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;       
+  }
+
+
+  SaveState();  
+  timg= cvCloneImage (img);  
+  cvDiv(img, pimg, timg);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Division Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvDiv(img, pimg, timg, 1);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Max()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+
+  if(!(((pimg->nChannels==1)&&(img->nChannels==1)&&img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have a single channel, the same data type and the same size ");
+     return;        
+  }
+
+
+  SaveState();  
+  timg= cvCloneImage (img);  
+  cvMax(img, pimg, timg);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Max Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvMax(img, pimg, timg);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Min()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!(((pimg->nChannels==1)&&(img->nChannels==1)&&img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have a single channel, the same data type and the same size ");
+     return;       
+  }
+
+
+  SaveState();  
+  timg= cvCloneImage (img);  
+  cvMin(img, pimg, timg);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Min Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvMin(img, pimg, timg);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {AbsDiff()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;        
+  }
+
+  SaveState();  
+  timg= cvCloneImage (img);  
+  cvAbsDiff(img, pimg, timg);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Absolute Difference  Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvAbsDiff(img, pimg, timg);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Compare(int op)} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!(((pimg->nChannels==1)&&(img->nChannels==1)&&img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have a single channel, the same data type and the same size ");
+     return;        
+  }
+
+  SaveState();  
+
+  timg= cvCloneImage (img);  
+  cvCmp(img,pimg,timg,op);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  char Buf[512];
+  char *OpCodes[]= {"CV_CMP_EQ",
+	            "CV_CMP_GT",
+		    "CV_CMP_GE",
+		    "CV_CMP_LT",
+		    "CV_CMP_LE",		    
+		    "CV_CMP_NE"}; 
+
+  Output->add("");
+  Output->add("/* Aplly Compare Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  sprintf(Buf,"  cvCmp(img, pimg, timg, %s );",OpCodes[op]);
+  Output->add(Buf);
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {And()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;     
+  }
+
+
+  SaveState();  
+  IplImage *mask=NULL;
+  if(mimg && (mimg->width==pimg->width) &&(mimg->height==pimg->height))  
+    if(mimg->nChannels==1){
+      if(fl_choice("Do you want to use Memory Image as an Mask ?","No","Yes",NULL))
+        mask=mimg;
+    }
+
+  timg= cvCloneImage (img);  
+  cvAnd(img, pimg, timg, mask);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly And Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  IplImage *mask=NULL;");
+  if(mimg){
+    Output->add("  if(mimg->nChannels==1)");
+    Output->add("    mask=mimg;");
+  }
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvAnd(img, pimg, timg, mask);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Or()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;        
+  }
+
+
+  SaveState();  
+  IplImage *mask=NULL;
+  if(mimg && (mimg->width==pimg->width) &&(mimg->height==pimg->height))  
+    if(mimg->nChannels==1){
+      if(fl_choice("Do you want to use Memory Image as an Mask ?","No","Yes",NULL))
+        mask=mimg;
+    }
+
+  timg= cvCloneImage (img);  
+  cvOr(img, pimg, timg, mask);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Or Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  IplImage *mask=NULL;");
+  if(mimg){
+    Output->add("  if(mimg->nChannels==1)");
+    Output->add("    mask=mimg;");
+  }
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvOr(img, pimg, timg, mask);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Xor()} {} {
+    code {if(img==NULL)   return;  
+  if(pimg==NULL)  return;  
+  if(!((img->nChannels==pimg->nChannels)&& (img->width==pimg->width) &&(img->height==pimg->height)) ){
+     fl_alert("All the arrays must have the same type,and the same size ");
+     return;       
+  }
+
+
+  SaveState();  
+  IplImage *mask=NULL;
+  if(mimg && (mimg->width==pimg->width) &&(mimg->height==pimg->height))  
+    if(mimg->nChannels==1){
+      if(fl_choice("Do you want to use Memory Image as an Mask ?","No","Yes",NULL))
+        mask=mimg;
+    }
+
+  timg= cvCloneImage (img);  
+  cvXor(img, pimg, timg, mask);
+
+  proc->SetImage(timg);
+  pimg=timg;
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Xor Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  IplImage *mask=NULL;");
+  if(mimg){
+    Output->add("  if(mimg->nChannels==1)");
+    Output->add("    mask=mimg;");
+  }
+  Output->add("  if(timg)"); 
+  Output->add("    cvReleaseImage(&timg);");
+  Output->add("  timg = cvCloneImage (img);");  
+  Output->add("  cvXor(img, pimg, timg, mask);");
+  Output->add("  cvReleaseImage (&pimg);");
+  Output->add("  pimg=timg;");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Not()} {} {
+    code {if(img==NULL)   return;  
+  
+
+  SaveState();  
+  pimg= cvCloneImage (img);  
+  cvNot(img, pimg);
+
+  proc->SetImage(pimg);
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Aplly Logical Not Operation */");
+  Output->add("/* Alert! there is no size and channel check */");
+  Output->add("{");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCloneImage (img);");  
+  Output->add("  cvNot(img, pimg);");
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  decl {smoothoptions  sm;} {public
+  }
+  Function {Smooth()} {} {
+    code {char *TypeNames[]={
+"CV_BLUR",
+"CV_GAUSSIAN",
+"CV_MEDIAN",
+"CV_BILATERAL"
+};
+char Buf[512];
+
+if(img==NULL)   return;  
+
+  if(!sm.size1%2 || sm.size1 < 1 ){
+    fl_alert("Size I : should be odd (1, 3, 5, ...)");
+    return; 
+  }
+ 
+  if(sm.size2 && (sm.size2 < 0 || !sm.size2%2)){
+    fl_alert("Size II : should be odd or zero");
+    return; 
+  }
+
+
+  SaveState();  
+  pimg= cvCloneImage (img);  
+  cvSmooth (img, pimg, sm.type+1, sm.size1, sm.size2,sm.sigma1,sm.sigma2);
+
+  proc->SetImage(pimg);
+  After->redraw();
+
+// WriteCode
+
+  Output->add("");
+  Output->add("/* Smoothes the image */");
+  Output->add("{");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCloneImage (img);");  
+  sprintf(Buf,"  cvSmooth (img, pimg, %s , %d , %d ,%.3f , %.3f );",TypeNames[sm.type], sm.size1, sm.size2,sm.sigma1,sm.sigma2);
+  Output->add(Buf);
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  Function {Filter2D(int row,int col,int X,int Y,float *data)} {} {
+    code {CvMat kernel = cvMat (row,col, CV_32F, data);
+
+
+  SaveState();  
+  pimg = cvCloneImage (img);
+
+  // WriteCode
+  char Buf[512];
+  Output->add("");
+  Output->add("/* Filter 2D  */");
+  Output->add("{");
+  sprintf(Buf,"  float data[%d];",row*col);
+  Output->add(Buf);
+  for(int i=0;i<row*col;i++){
+    sprintf(Buf,"  data[%d]=%f;",i,data[i]);
+    Output->add(Buf);    
+  }
+  // WriteCode  
+
+  cvNormalize (&kernel, &kernel, 1.0, 0, CV_L1);
+  cvFilter2D (img, pimg, &kernel, cvPoint (X, Y));
+  proc->SetImage(pimg);
+  After->redraw();
+  
+
+  
+
+  // WriteCode
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  Output->add("  pimg = cvCloneImage (img);");  
+  
+  sprintf(Buf,"  CvMat kernel = cvMat (%d, %d, CV_32F, data);",row,col);
+  Output->add(Buf);  
+  Output->add("  cvNormalize (&kernel, &kernel, 1.0, 0, CV_L1);");
+  
+  sprintf(Buf,"  cvFilter2D (img, pimg, &kernel, cvPoint (%d,%d));",X,Y);
+  Output->add(Buf);
+  Output->add("}");
+  Output->bottomline(Output->size());
+
+  free(data);} {}
+  }
+  Function {RGBFilter(int mode,int Rmin,int Rmax,int Gmin,int Gmax,int Bmin,int Bmax )} {} {
+    code {SaveState();
+  pimg=cvFilterRGB(img,Rmin,Rmax, Gmin, Gmax,Bmin,  Bmax, mode);
+  proc->SetImage(pimg);
+  After->redraw();
+  
+  // WriteCode
+
+  char Buf[512];
+
+  Output->add("");
+  Output->add("/* RGB Color Filter */");
+  Output->add("{");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  sprintf(Buf,"    pimg=cvFilterRGB(img,%d,%d, %d, %d, %d, %d, %d);",Rmin,Rmax, Gmin, Gmax,Bmin,  Bmax, mode);
+  Output->add(Buf);
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+  decl {filter2doptions flt;} {public
+  }
+  Function {HSFilter(int mode,int Hmin,int Hmax,int Smin,int Smax)} {} {
+    code {SaveState();
+  pimg=cvFilterHS(img, Hmin, Hmax, Smin,Smax,mode);
+  proc->SetImage(pimg);
+  After->redraw();
+  
+  // WriteCode
+
+  char Buf[512];
+
+  Output->add("");
+  Output->add("/* Hue Saturation Color Filter */");
+  Output->add("{");
+  Output->add("  if(pimg)"); 
+  Output->add("    cvReleaseImage(&pimg);");
+  sprintf(Buf,"    pimg=cvFilterHS(img, %d, %d, %d, %d, %d);",Hmin, Hmax, Smin,Smax,mode);
+  Output->add(Buf);
+  Output->add("}");
+  Output->bottomline(Output->size());} {}
+  }
+} 
+
+Function {cb_Ok(Fl_Return_Button*o, void*w)} {} {
+  code {((Fl_Window *)(o->parent()))->hide();} {}
+} 
+
+class AboutDlg {} {
+  Function {AboutDlg()} {open
+  } {
+    Fl_Window window {
+      label About open
+      xywh {402 277 441 284} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback cb_Ok
+        xywh {300 240 130 30} box GTK_UP_BOX color 30
+      }
+      Fl_Browser Info {
+        xywh {15 14 415 212} box EMBOSSED_FRAME color 31 textcolor 4
+      }
+    }
+  }
+  Function {show()} {} {
+    code {Info->add("@l@c@C1cvPreProcessor");
+  Info->add("  cvPreProcessor is a GUI tool for OpenCv ");
+  Info->add("  Version : 0.90 ");
+
+  Info->add(" ");
+  Info->add("* Programmed by BlueKid");
+  Info->add("  http://derindelimavi.blogspot.com/");
+  Info->add(" ");
+  Info->add("* Please Send me any suggestion, modification or bugs.");
+  Info->add(" Don't hesitate to contact me for any question");
+  Info->add(" I will be very grateful with your feedbacks.");
+  Info->add(" bluekid70@gmail.com");
+
+  window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+} 
+
+class MorphOptions {} {
+  Function {MorphOptions()} {} {
+    Fl_Window window {
+      label {Morphological Operations} open
+      xywh {428 196 271 336} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {p->m.iterations=iterations->value();
+p->m.cols=cols->value();
+p->m.rows=rows->value();
+p->m.anchor_x=ax->value();
+p->m.anchor_y=ay->value();
+p->m.shape=Shape->value();
+hide();}
+        xywh {131 296 130 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Spinner iterations {
+        label {Number of iterations:}
+        xywh {150 16 40 24} maximum 10
+      }
+      Fl_Group {} {
+        label {Structuring Element} open
+        xywh {10 63 245 209} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Choice Shape {
+          label {Shape :} open
+          xywh {80 80 155 24} box NO_BOX down_box BORDER_BOX
+          code0 {Shape->add("Rectangular ");}
+          code1 {Shape->add("Cross-Shaped ");}
+          code2 {Shape->add("Elliptic");}
+        } {}
+        Fl_Spinner cols {
+          label {Number of columns :}
+          xywh {195 114 40 24} maximum 99
+        }
+        Fl_Spinner rows {
+          label {Number of rows :}
+          xywh {195 154 40 24} maximum 99
+        }
+        Fl_Spinner ax {
+          label {Anchor X :}
+          xywh {195 188 40 24} maximum 49
+        }
+        Fl_Spinner ay {
+          label {Anchor Y :}
+          xywh {195 222 40 24} maximum 49
+        }
+      }
+    }
+  }
+  Function {show()} {} {
+    code {iterations->value(p->m.iterations);
+  cols->value(p->m.cols);
+  rows->value(p->m.rows);
+  ax->value(p->m.anchor_x);
+  ay->value(p->m.anchor_y);
+  Shape->value(p->m.shape);
+  window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+} 
+
+class EdgeOptions {} {
+  Function {EdgeOptions()} {open
+  } {
+    Fl_Window window {
+      label {Edge Detection } open
+      xywh {779 179 271 336} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {p->ed.xOrder=xOrder->value();
+p->ed.yOrder=yOrder->value();
+p->ed.tmin=tmin->value();
+p->ed.tmax=tmax->value();
+p->ed.aperture=Aperture->value();
+
+hide();}
+        xywh {131 296 130 30} box GTK_UP_BOX color 30
+      }
+      Fl_Choice Aperture {
+        label {Aperture  Size :} open
+        xywh {111 16 155 24} down_box BORDER_BOX
+        code0 {Aperture->add("CV_SCHARR");}
+        code1 {Aperture->add("1x3 or 3x1");}
+        code2 {Aperture->add("3x3");Aperture->add("5x5");}
+        code3 {Aperture->add("7x7");Aperture->value(1);}
+      } {}
+      Fl_Group {} {
+        label Sobel
+        xywh {15 66 246 60} box EMBOSSED_FRAME labelfont 2 labelcolor 4 align 5
+      } {
+        Fl_Round_Button xOrder {
+          label {X Order}
+          xywh {29 75 81 15} type Radio down_box ROUND_DOWN_BOX value 1 align 24
+        }
+        Fl_Round_Button yOrder {
+          label YOrder
+          xywh {31 100 79 16} type Radio down_box ROUND_DOWN_BOX align 24
+        }
+      }
+      Fl_Group {} {
+        label Canny open
+        xywh {15 146 246 129} box EMBOSSED_FRAME labelfont 2 labelcolor 4 align 5
+      } {
+        Fl_Value_Slider tmin {
+          label {Threshold Min}
+          callback {tmax->minimum(tmin->value()+1);
+tmax->redraw();}
+          xywh {25 175 226 20} type {Horz Knob} box PLASTIC_DOWN_BOX color 12 selection_color 1 align 5 maximum 255 step 1 textsize 14
+        }
+        Fl_Value_Slider tmax {
+          label {Threshold Max}
+          callback {tmin->maximum(tmax->value()-1);
+tmin->redraw();}
+          xywh {25 230 226 20} type {Horz Knob} box PLASTIC_DOWN_BOX color 12 selection_color 1 align 5 maximum 255 step 1 value 255 textsize 14
+        }
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {xOrder->value(p->ed.xOrder);
+  yOrder->value(p->ed.yOrder);
+  tmin->value(p->ed.tmin);
+  tmax->value(p->ed.tmax);
+  Aperture->value(p->ed.aperture);
+
+  window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+} 
+
+class ThresholdOptions {} {
+  Function {ThresholdOptions()} {} {
+    Fl_Window window {
+      label {Threshold Options} open
+      xywh {385 91 416 448} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {Update();
+hide();}
+        xywh {306 405 99 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Group {} {
+        label {Normal } open
+        xywh {15 116 390 112} box EMBOSSED_FRAME labelfont 2 labelcolor 4 align 5
+      } {
+        Fl_Value_Slider thresh {
+          label {Threshold Value}
+          xywh {25 145 370 20} type {Horz Knob} box PLASTIC_DOWN_BOX color 12 selection_color 1 align 5 maximum 255 step 1 value 128 textsize 14
+        }
+        Fl_Check_Button Otsu {
+          label {use Otsu method}
+          callback {if(Otsu->value()) 
+  thresh->deactivate();
+else
+  thresh->activate();}
+          xywh {30 190 64 20} down_box DOWN_BOX
+        }
+      }
+      Fl_Value_Slider max {
+        label {Max Value}
+        xywh {20 30 380 20} type {Horz Knob} box PLASTIC_DOWN_BOX color 12 selection_color 1 align 5 maximum 255 step 1 value 255 textsize 14
+      }
+      Fl_Choice Type {
+        label {Threshold Type :} open
+        xywh {130 66 245 24} down_box BORDER_BOX
+        code0 {Type->add("CV_THRESH_BINARY");}
+        code1 {Type->add("CV_THRESH_BINARY_INV");}
+        code2 {Type->add("CV_THRESH_TRUNC");Type->add("CV_THRESH_TOZERO");}
+        code3 {Type->add("CV_THRESH_TOZERO_INV");Type->value(0);}
+      } {}
+      Fl_Group {} {
+        label {Adaptive Threshold} open
+        xywh {20 254 385 133} box EMBOSSED_FRAME labelfont 2 labelcolor 4 align 5
+      } {
+        Fl_Choice Method {
+          label {Method :} open
+          xywh {89 260 306 21} down_box BORDER_BOX
+          code0 {Method->add("CV_ADAPTIVE_THRESH_MEAN_C");}
+          code1 {Method->add("CV_ADAPTIVE_THRESH_GAUSSIAN_C");}
+          code2 {Method->value(0);}
+        } {}
+        Fl_Spinner BlockSize {
+          label {Block Size :}
+          xywh {110 339 40 24} minimum 3 maximum 33 step 2 value 3
+        }
+        Fl_Value_Input Param1 {
+          label {Method-parameter:}
+          xywh {155 296 40 24} minimum -50 maximum 50 value 5
+        }
+      }
+      Fl_Button {} {
+        label {Apply Normal }
+        callback {Update();
+p->NormalThreshold();}
+        xywh {20 405 105 30} box GTK_UP_BOX color 15
+      }
+      Fl_Button {} {
+        label {Apply Adaptive}
+        callback {Update();
+p->AdaptiveThreshold();}
+        xywh {135 405 105 30} box GTK_UP_BOX color 15
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {thresh->value(p->th.thresh);
+  max->value(p->th.maxVal);
+  Type->value(p->th.type);
+  Method->value(p->th.method);
+  BlockSize->value(p->th.block_size);
+  Param1->value(p->th.param1);
+  Otsu->value(p->th.otsu);
+  if(Otsu->value()) 
+    thresh->deactivate();
+  else
+    thresh->activate();
+
+
+  window->show();} {}
+  }
+  Function {hide()} {open
+  } {
+    code {window->hide();} {}
+  }
+  Function {Update()} {open
+  } {
+    code {p->th.thresh=thresh->value();
+  p->th.maxVal=max->value();
+  p->th.type=Type->value();
+  p->th.method=Method->value();
+  p->th.block_size=BlockSize->value();
+  p->th.param1=Param1->value();
+  p->th.otsu=Otsu->value();} {}
+  }
+} 
+
+class ReSizeForm {} {
+  Function {ReSizeForm()} {open
+  } {
+    Fl_Window window {
+      label {ReSize Image} open
+      xywh {438 206 359 336} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {p->r.method=Interpolation->value();
+  p->r.ratio=ratio->value();
+  p->r.aspect=aspect->value();
+  p->r.rwidth=rwidth->value();
+  p->r.rheight=rheight->value();  
+  p->ReSize();
+  hide();}
+        xywh {215 296 130 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Choice Interpolation {
+        label {Interpolation :} open
+        xywh {115 21 195 24} box NO_BOX down_box BORDER_BOX
+        code0 {Interpolation->add("Nearest-Neigbor");}
+        code1 {Interpolation->add("Bilinear");}
+        code2 {Interpolation->add("Pixel Area");}
+        code3 {Interpolation->add("Bicubic");Interpolation->value(1);}
+      } {}
+      Fl_Check_Button aspect {
+        label {Preserve Aspect Ratio}
+        callback {if(aspect->value())
+  ratio->activate();
+else
+  ratio->deactivate();}
+        xywh {30 134 210 26} down_box DOWN_BOX value 1
+      }
+      Fl_Value_Output oldw {
+        label {Image Width:}
+        xywh {120 66 120 24} value 10
+      }
+      Fl_Value_Output oldh {
+        label {Image Height:}
+        xywh {120 100 120 24} value 20
+      }
+      Fl_Value_Slider ratio {
+        label {Ratio % :}
+        callback {rwidth->value(int(oldw->value()*ratio->value()*0.01));
+rheight->value(int(oldh->value()*ratio->value()*0.01));}
+        xywh {89 170 251 20} type Horizontal color 23 align 4 minimum 10 maximum 500 step 10 value 100 textsize 14
+      }
+      Fl_Value_Input rwidth {
+        label {New Width:}
+        xywh {120 206 147 24}
+      }
+      Fl_Value_Input rheight {
+        label {New Heigth:}
+        xywh {120 246 147 24}
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {oldw->value(img->width);
+  oldh->value(img->height);
+  Interpolation->value(p->r.method);
+  ratio->value(p->r.ratio);
+  aspect->value(p->r.aspect);
+
+  if(aspect->value()){
+    ratio->activate();
+    rwidth->value(int(oldw->value()*ratio->value()*0.01));
+    rheight->value(int(oldh->value()*ratio->value()*0.01));  
+  }
+  else{
+    ratio->deactivate();
+    rwidth->value(img->width);
+    rheight->value(img->height);  
+  }
+  
+  window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+} 
+
+class HistForm {} {
+  Function {HistForm()} {} {
+    Fl_Window window {
+      label {Color Histogram} open
+      xywh {284 60 811 535} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {hide();}
+        xywh {671 495 130 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Box Chart {
+        xywh {10 44 791 362} box GTK_DOWN_BOX color 18
+        class Fl_Chart
+      }
+      Fl_Spinner Type {
+        label {Chart Type  :}
+        callback {Chart->type(Type->value());
+Chart->redraw();}
+        xywh {100 10 40 24} minimum 0 maximum 4 value 3
+      }
+      Fl_Choice Ch {
+        label {Channel :}
+        callback {Draw();} open
+        xywh {260 10 190 24} down_box BORDER_BOX
+        code0 {Ch->add("Red"); Ch->add("Green");Ch->add("Blue");}
+        code1 {Ch->add("Hue");Ch->add("Saturation");}
+        code2 {Ch->value(0);}
+      } {}
+      Fl_Value_Output Non_Zero {
+        label {Count Non-zero :}
+        xywh {121 427 114 24}
+      }
+      Fl_Value_Output Sum {
+        label {Sum :}
+        xywh {120 461 115 24}
+      }
+      Fl_Value_Output Avg {
+        label {Avarage :}
+        xywh {120 495 115 24}
+      }
+      Fl_Value_Output StdDev {
+        label {Standart Deviation:}
+        xywh {441 427 114 24}
+      }
+      Fl_Value_Output Min {
+        label {Min :}
+        xywh {440 461 115 24}
+      }
+      Fl_Value_Output Max {
+        label {Max :}
+        xywh {440 495 115 24}
+      }
+      Fl_Value_Output Width {
+        label {Image Width :}
+        xywh {680 427 114 24}
+      }
+      Fl_Value_Output Height {
+        label {Image Height :}
+        xywh {680 461 114 24}
+      }
+    }
+  }
+  Function {show()} {} {
+    code {Chart->autosize(1);
+Calculate();
+Draw();
+if(img->nChannels==1)
+  Ch->hide();
+
+window->show();} {}
+  }
+  Function {hide()} {} {
+    code {int k=1;
+  if(img->nChannels==3) 
+    k=5;
+  for(int i=0;i< k;i++){
+    cvReleaseImage (&himg[i]);  
+    cvReleaseHist (&hist[i]);  
+  }  
+//  fl_alert("Images Released");
+  window->hide();} {}
+  }
+  decl {CvHistogram *hist[5];} {}
+  decl {IplImage* himg[5];} {}
+  decl {int non_zeros[5];} {}
+  decl {double sums[5];} {}
+  decl {double avgs[5];} {}
+  decl {double std_devs[5];} {}
+  decl {double mins[5];} {}
+  decl {double maxs[5];} {}
+  Function {Draw()} {open
+  } {
+    code {int np=256;
+  int kRed[]  ={1,0,0,0,1,1};
+  int kGreen[]={0,1,0,1,1,1};
+  int kBlue[]={0,0,1,1,0,1};
+  int j=Ch->value();
+  int ci;
+
+  if(img->nChannels==1)
+    ci=5;
+  else
+    ci=j;
+
+  Chart->clear();
+  Chart->type(Type->value());
+  if(j==3)
+    np=181;
+  
+  char buf[4];
+  for(int i=0;i<np;i++){
+  
+    if(i%10==0){
+       sprintf(buf,"%d",i);
+    }
+    else
+      buf[0]=0;
+    Chart->add(cvGetReal1D (hist[j]->bins, i),buf,fl_rgb_color(kRed[ci]*i,kGreen[ci]*i,kBlue[ci]*i));
+  }
+  
+  Non_Zero->value(non_zeros[j]);
+  Sum->value(sums[j]);  
+  Avg->value(avgs[j]);      
+  StdDev->value(std_devs[j]);
+  Min->value(mins[j]);  
+  Max->value(maxs[j]);} {}
+  }
+  Function {Calculate()} {open
+  } {
+    code {float crange[] = { 0, 255 };  
+  float *ranges[] = { crange };
+  int hist_size = 256;
+  int k=1;
+  if(img->nChannels==3) 
+    k=5;
+  
+  for(int i=0;i< k;i++)
+    himg[i] = cvCreateImage (cvSize (img->width, img->height), img->depth, 1);
+
+
+  if(img->nChannels==1){
+    cvCopy (img, himg[0], NULL);  
+
+  }
+  else{
+    cvSplit (img, himg[0], himg[1], himg[2], 0);  
+    timg = cvCreateImage( cvGetSize(img), 8, 3 );
+    cvCvtColor( img, timg, CV_RGB2HSV );
+    cvSplit (timg, himg[3], 0, 0, 0);
+    cvSplit (timg, 0, himg[4], 0, 0);
+    cvReleaseImage (&timg);          
+  }
+  for(int i=0;i<k;i++){
+
+     hist[i] = cvCreateHist (1, &hist_size, CV_HIST_ARRAY, ranges, 1);
+     cvCalcHist (&himg[i], hist[i], 0, NULL);
+
+     CvScalar avg, sd;
+     non_zeros[i]=cvCountNonZero(himg[i]);
+     cvAvgSdv(himg[i], &avg, &sd);
+     avgs[i]=avg.val[0];
+     std_devs[i]=sd.val[0];
+     cvMinMaxLoc(himg[i],&mins[i],&maxs[i]);       
+     
+  }
+  
+Height->value(img->height);
+Width->value(img->width);} {}
+  }
+} 
+
+class SmoothForm {} {
+  Function {SmoothForm()} {} {
+    Fl_Window window {
+      label {Smoothes the image} open
+      xywh {597 347 312 192} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {save();
+  hide();}
+        xywh {190 145 115 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Choice Type {
+        label {Smooth Type :} open
+        xywh {115 21 185 24} box NO_BOX down_box BORDER_BOX
+        code0 {Type->add("CV_BLUR");Type->add("CV_GAUSSIAN");}
+        code1 {Type->add("CV_MEDIAN");Type->add("CV_BILATERAL");}
+        code2 {Type->value(1);}
+      } {}
+      Fl_Value_Input size1 {
+        label {Size I     :}
+        xywh {80 62 50 23} value 3
+      }
+      Fl_Value_Input size2 {
+        label {Size II    :}
+        xywh {80 95 50 24}
+      }
+      Fl_Value_Input sigma1 {
+        label {Sigma I :}
+        xywh {250 62 50 23}
+      }
+      Fl_Value_Input sigma2 {
+        label {Sigma II :}
+        xywh {250 95 50 24}
+      }
+      Fl_Button {} {
+        label Apply
+        callback {save();
+  p->Smooth();}
+        xywh {20 145 120 30} box GTK_UP_BOX color 15
+      }
+    }
+  }
+  Function {show()} {} {
+    code {Type->value(p->sm.type);
+size1->value(p->sm.size1);
+size2->value(p->sm.size2);
+sigma1->value(p->sm.sigma1);
+sigma2->value(p->sm.sigma2);
+window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+  Function {save()} {} {
+    code {p->sm.type=Type->value();
+  p->sm.size1=size1->value();
+  p->sm.size2=size2->value();
+  p->sm.sigma1=sigma1->value();
+  p->sm.sigma2=sigma2->value();} {}
+  }
+} 
+
+class RotateForm {} {
+  Function {RotateForm()} {} {
+    Fl_Window window {
+      label {Rotates the image} open
+      xywh {337 378 400 123} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {hide();}
+        xywh {272 80 120 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Button {} {
+        label Apply
+        callback {p->Rotate(Angle->value());}
+        xywh {272 33 120 30} box GTK_UP_BOX color 15
+      }
+      Fl_Dial dl {
+        callback {Angle->value(dl->value());}
+        xywh {15 16 90 87} type Line box GTK_ROUND_UP_BOX color 179 minimum -130 maximum 130 step 1
+      }
+      Fl_Value_Output Angle {
+        label {Rotate Angle}
+        xywh {130 44 99 24} align 1
+      }
+    }
+  }
+  Function {show()} {} {
+    code {window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+} 
+
+class RGBFilterForm {} {
+  decl {bool FirstTime;} {}
+  Function {RGBFilterForm()} {} {
+    Fl_Window window {
+      label {RGB Filter} open
+      xywh {341 348 545 269} type Double box UP_BOX color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {hide();}
+        xywh {405 215 120 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Button {} {
+        label Apply
+        callback {if(FirstTime==false)
+  p->Undo(false);
+else
+  FirstTime=false;  
+p->RGBFilter(Mode->value(),Rmin->value(),Rmax->value(),Gmin->value(),Gmax->value(),Bmin->value(),Bmax->value());}
+        xywh {250 215 120 30} box GTK_UP_BOX color 15
+      }
+      Fl_Group Chart {
+        xywh {10 14 185 181} box UP_FRAME
+      } {
+        Fl_Box C5 {
+          xywh {21 24 40 40} box DOWN_BOX
+        }
+        Fl_Box Cm {
+          xywh {63 68 74 74} box DIAMOND_DOWN_BOX
+        }
+        Fl_Box C7 {
+          xywh {80 25 40 40} box DOWN_BOX
+        }
+        Fl_Box C8 {
+          xywh {140 25 40 40} box DOWN_BOX
+        }
+        Fl_Box C3 {
+          xywh {20 85 40 40} box DOWN_BOX
+        }
+        Fl_Box C1 {
+          xywh {20 145 40 40} box DOWN_BOX
+        }
+        Fl_Box C2 {
+          xywh {80 145 40 40} box DOWN_BOX
+        }
+        Fl_Box C6 {
+          xywh {140 85 40 40} box DOWN_BOX
+        }
+        Fl_Box C4 {
+          xywh {140 145 40 40} box DOWN_BOX
+        }
+      }
+      Fl_Value_Slider Rmin {
+        label Rmin
+        callback {Rmin->color(fl_rgb_color(Rmin->value(),0,0));
+Rmax->minimum(Rmin->value());
+changecolor();}
+        xywh {220 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 1 labelfont 1 labelcolor 1 align 5 maximum 254 step 1 textsize 14 textcolor 7
+      }
+      Fl_Value_Slider Rmax {
+        label Rmax
+        callback {Rmax->color(fl_rgb_color(Rmax->value(),0,0));
+Rmin->maximum(Rmax->value());
+changecolor();}
+        xywh {260 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 1 labelfont 1 labelcolor 1 align 5 minimum 1 maximum 255 step 1 value 255 textsize 14 textcolor 7
+      }
+      Fl_Value_Slider Gmin {
+        label Gmin
+        callback {Gmin->color(fl_rgb_color(0,Gmin->value(),0));
+Gmax->minimum(Gmin->value());
+changecolor();}
+        xywh {335 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 2 labelfont 1 labelcolor 2 align 5 maximum 254 step 1 textsize 14 textcolor 7
+      }
+      Fl_Value_Slider Gmax {
+        label Gmax
+        callback {Gmax->color(fl_rgb_color(0,Gmax->value(),0));
+Gmin->maximum(Gmax->value());
+changecolor();}
+        xywh {380 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 2 labelfont 1 labelcolor 2 align 5 minimum 1 maximum 255 step 1 value 255 textsize 14 textcolor 7
+      }
+      Fl_Value_Slider Bmin {
+        label Bmin
+        callback {Bmin->color(fl_rgb_color(0,0,Bmin->value()));
+Bmax->minimum(Bmin->value());
+changecolor();}
+        xywh {450 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 4 labelfont 1 labelcolor 4 align 5 maximum 254 step 1 textsize 14 textcolor 7
+      }
+      Fl_Value_Slider Bmax {
+        label Bmax
+        callback {Bmax->color(fl_rgb_color(0,0,Bmax->value()));
+Bmin->maximum(Bmax->value());
+changecolor();}
+        xywh {495 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 4 labelfont 1 labelcolor 4 align 5 minimum 1 maximum 255 step 1 value 255 textsize 14 textcolor 7
+      }
+      Fl_Check_Button Mode {
+        label {Color Mask}
+        xywh {25 220 110 15} down_box DOWN_BOX value 1
+      }
+    }
+  }
+  Function {show()} {} {
+    code {changecolor();
+Rmin->color(fl_rgb_color(Rmin->value(),0,0));
+Gmin->color(fl_rgb_color(0,Gmin->value(),0));
+Bmin->color(fl_rgb_color(0,0,Bmin->value()));
+FirstTime=true;
+window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+  Function {changecolor()} {} {
+    code {C1->color(fl_rgb_color(Rmin->value(),Gmin->value(), Bmin->value()));
+C2->color(fl_rgb_color(Rmax->value(),Gmin->value(), Bmin->value()));
+C3->color(fl_rgb_color(Rmin->value(),Gmax->value(), Bmin->value()));
+C4->color(fl_rgb_color(Rmin->value(),Gmin->value(), Bmax->value()));
+
+C5->color(fl_rgb_color(Rmax->value(),Gmax->value(), Bmin->value()));
+C6->color(fl_rgb_color(Rmax->value(),Gmin->value(), Bmax->value()));
+C7->color(fl_rgb_color(Rmin->value(),Gmax->value(), Bmax->value()));
+C8->color(fl_rgb_color(Rmax->value(),Gmax->value(), Bmax->value()));
+unsigned char rm, gm,bm;
+
+rm=(Rmax->value()+Rmin->value())/2;
+gm=(Gmax->value()+Gmin->value())/2;
+bm=(Bmax->value()+Bmin->value())/2;
+
+Cm->color(fl_rgb_color(rm,gm,bm));
+
+Chart->redraw();} {}
+  }
+} 
+
+class HSFilterForm {} {
+  decl {bool FirstTime;} {}
+  Function {HSFilterForm()} {open
+  } {
+    Fl_Window window {
+      label {Hue - Saturation  Filter} open
+      xywh {687 170 451 269} type Double box UP_BOX color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {hide();}
+        xywh {310 210 120 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Button {} {
+        label Apply
+        callback {if(FirstTime==false)
+  p->Undo(false);
+else
+  FirstTime=false;  
+p->HSFilter(Mode->value(),Hmin->value(),Hmax->value(),Smin->value(),Smax->value());}
+        xywh {150 210 120 30} box GTK_UP_BOX color 15
+      }
+      Fl_Group Chart {open
+        xywh {10 14 185 181} box UP_FRAME
+      } {
+        Fl_Box Cm {
+          xywh {63 68 74 74} box DIAMOND_DOWN_BOX
+        }
+        Fl_Box C3 {
+          xywh {30 35 60 60} box DIAMOND_DOWN_BOX
+        }
+        Fl_Box C1 {
+          xywh {30 115 60 60} box DIAMOND_DOWN_BOX
+        }
+        Fl_Box C2 {
+          xywh {110 115 60 60} box DIAMOND_DOWN_BOX
+        }
+        Fl_Box C4 {
+          xywh {110 35 60 60} box DIAMOND_DOWN_BOX
+        }
+      }
+      Fl_Group Sld {open
+        xywh {240 31 190 159}
+      } {
+        Fl_Value_Slider Hmin {
+          label Hmin
+          callback {// Rmin->color(fl_rgb_color(Rmin->value(),0,0));
+Hmax->minimum(Hmin->value());
+changecolor();
+Hmin->redraw();}
+          xywh {240 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 14 labelfont 1 labelcolor 1 align 5 maximum 180 step 1 textsize 14 textcolor 7
+        }
+        Fl_Value_Slider Hmax {
+          label Hmax
+          callback {//Rmax->color(fl_rgb_color(Rmax->value(),0,0));
+Hmin->maximum(Hmax->value());
+changecolor();}
+          xywh {280 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 14 labelfont 1 labelcolor 1 align 5 maximum 180 step 1 value 180 textsize 14 textcolor 7
+        }
+        Fl_Value_Slider Smin {
+          label Smin
+          callback {// Smin->color(fl_rgb_color(0,Gmin->value(),0));
+Smax->minimum(Smin->value());
+changecolor();}
+          xywh {355 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 5 labelfont 1 labelcolor 2 align 5 maximum 255 step 1 textsize 14 textcolor 7
+        }
+        Fl_Value_Slider Smax {
+          label Smax
+          callback {Smin->maximum(Smax->value());
+changecolor();}
+          xywh {400 31 30 159} type {Vert Knob} box GTK_DOWN_BOX color 5 labelfont 1 labelcolor 2 align 5 maximum 255 step 1 value 255 textsize 14 textcolor 7
+        }
+      }
+      Fl_Check_Button Mode {
+        label {Color Mask}
+        xywh {25 220 110 15} down_box DOWN_BOX value 1
+      }
+    }
+  }
+  Function {show()} {} {
+    code {changecolor();
+window->show();
+FirstTime=true;} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+  Function {changecolor()} {open
+  } {
+    code {C1->color(fl_hsv_color(Hmin->value(),Smin->value(), 255));
+C2->color(fl_hsv_color(Hmax->value(),Smin->value(), 255));
+C3->color(fl_hsv_color(Hmin->value(),Smax->value(), 255));
+C4->color(fl_hsv_color(Hmax->value(),Smax->value(), 255));
+
+
+unsigned char hm, sm;
+
+hm=(Hmax->value()+Hmin->value())/2;
+sm=(Smax->value()+Smin->value())/2;
+
+
+Cm->color(fl_hsv_color(hm,sm,255));
+
+Chart->redraw();
+Sld->redraw();} {}
+  }
+} 
+
+class Filter2DForm {} {
+  decl {int FirstTime;} {}
+  Function {Filter2DForm()} {} {
+    Fl_Window window {
+      label {Filter 2D} open
+      xywh {693 226 529 379} type Double color 31 align 0 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {p->flt.row=Row->value();
+p->flt.col=Col->value();
+p->flt.anchorx=X->value();
+p->flt.anchory=Y->value();
+float *d=Data->GetData();
+for(int i=0;i<p->flt.row*p->flt.col;i++)
+   p->flt.data[i]=d[i];
+
+hide();}
+        xywh {395 335 120 30} box GTK_THIN_UP_BOX color 30
+      }
+      Fl_Button {} {
+        label Apply
+        callback {if(X->value()>=Row->value() || Y->value()>=Row->value()){
+  fl_alert("The anchor shoud lie within the kernel");
+  return;
+}
+if(FirstTime==false)
+  p->Undo(false);
+else
+  FirstTime=false;  
+p->Filter2D(Row->value(),Col->value(),X->value(),Y->value(),Data->GetData());}
+        xywh {255 335 120 30} box GTK_UP_BOX color 15
+      }
+      Fl_Scroll Data {open
+        xywh {17 68 502 252} box DOWN_BOX color 19
+        code0 {Data->type(0);}
+        code1 {Data->SetRowCol(p->flt.row,p->flt.col);}
+        code2 {Data->SetData(p->flt.data);}
+        class Fl_MatrixReader
+      } {}
+      Fl_Counter Col {
+        label {Column }
+        callback {if(Data->nCol > Col->value())
+     Data->HideCol();
+   else
+     Data->ShowCol();}
+        xywh {20 30 56 20} type Simple align 5 minimum 1 maximum 9 step 1 value 3
+      }
+      Fl_Counter Row {
+        label Row
+        callback {if(Data->nRow > Row->value())
+     Data->HideRow();
+   else
+     Data->ShowRow();}
+        xywh {95 30 56 20} type Simple align 5 minimum 1 maximum 9 step 1 value 3
+      }
+      Fl_Counter X {
+        label {Anchor X}
+        xywh {190 30 56 20} type Simple align 5 minimum -1 maximum 9 step 1 value -1
+      }
+      Fl_Counter Y {
+        label {Anchor Y}
+        xywh {270 30 56 20} type Simple align 5 minimum -1 maximum 9 step 1 value -1
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {window->show();
+Row->value(p->flt.row);
+Col->value(p->flt.col);
+X->value(p->flt.anchorx);
+Y->value(p->flt.anchory);
+Data->SetData(p->flt.data);
+FirstTime=true;} {}
+  }
+  Function {hide()} {open
+  } {
+    code {window->hide();} {}
+  }
+} 
+
+class CaptureForm {open
+} {
+  decl {double Vtimer;} {protected
+  }
+  decl {char *file;} {}
+  decl {Fl_Capture *Cap;} {public
+  }
+  decl {Fl_OpenCV *video;} {public
+  }
+  decl {bool playing;} {public
+  }
+  decl {bool isSnapshot;} {public
+  }
+  Function {CaptureForm()} {open
+  } {
+    code {playing=false;
+isSnapshot=false;
+Cap=NULL;} {}
+    Fl_Window window {
+      label {Capture Ýmage} open
+      xywh {605 58 736 665} type Double color 31 align 0 hotspot
+      code0 {o->set_modal();} modal visible
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback {hide();}
+        xywh {660 460 70 30} box GLEAM_THIN_UP_BOX color 30
+      }
+      Fl_Group videoPad {
+        xywh {5 6 644 484} box EMBOSSED_BOX color 36
+        code0 {video=new Fl_OpenCV(videoPad->x()+2,videoPad->y()+2,videoPad->w()-2,videoPad->h()-2);}
+        code1 {video->FitWindows();}
+      } {}
+      Fl_Button {} {
+        callback {OpenCam();}
+        tooltip {Open Web-Cam} image {img/camera.png} xywh {655 5 70 70} box GTK_UP_BOX color 23
+      }
+      Fl_Button {} {
+        callback {OpenVideo();}
+        tooltip {Open Video - File} image {img/video.png} xywh {655 85 70 70} box GTK_UP_BOX color 23
+      }
+      Fl_Button PlayPauseButton {
+        callback {PlayPause();}
+        tooltip {Play / Pause} image {img/play-pause.png} xywh {5 500 38 38} box GTK_UP_BOX deactivate
+      }
+      Fl_Value_Slider Position {
+        callback {Position_CB();}
+        xywh {50 500 675 35} type {Horz Fill} box PLASTIC_UP_BOX color 21 selection_color 1 maximum 100 step 1 textsize 14
+      }
+      Fl_Browser Out {
+        xywh {5 550 725 105} box GTK_DOWN_BOX color 39
+      }
+      Fl_Button {} {
+        callback {Snapshot();}
+        image {img/snashot.png} xywh {655 165 70 70} box GTK_UP_BOX color 23
+      }
+    }
+  }
+  Function {show()} {} {
+    code {window->show();} {}
+  }
+  Function {hide()} {} {
+    code {playing=false;
+Fl::remove_timeout(CaptureForm::Playing_CB,(void *)this);
+delete Cap;
+window->hide();} {}
+  }
+  Function {Playing_CB(void* obj)} {open return_type {static void}
+  } {
+    code {CaptureForm* c=(CaptureForm *)obj;
+
+if(c->Position->value()>=99.0){
+   c->Cap->SetPositionPercent(0);
+   c->playing=false;
+}
+if(c->playing==false) return;
+c->video->SetImage(c->Cap->GetFrame());
+c->videoPad->redraw();
+if(c->Position->visible())
+   c->Position->value(c->Cap->GetPositionPercent());
+
+Fl::add_timeout(c->Vtimer,CaptureForm::Playing_CB,obj);} {selected
+    }
+  }
+  Function {OpenCam()} {} {
+    code {if(playing) return ;
+if(Cap!=NULL)
+     delete Cap;
+Cap=new Fl_Capture();
+if(!Cap->CaptureFromCAM(-1)) return;
+file=NULL;
+video->SetImage(Cap->GetFrame());
+videoPad->redraw();
+CaptureForm::playing=true;
+Position->hide();
+PlayPauseButton->activate();
+
+double fps=Cap->GetFPS();
+if(fps ==0.0)
+  fps=20;
+
+Vtimer = 1.0 / fps;
+
+Out->add("Capture From Web Cam ");
+char Buf[255];
+sprintf(Buf, " Capture FPS : %.1lf",fps);
+Out->add(Buf);
+
+Fl::add_timeout(Vtimer,CaptureForm::Playing_CB,(void*)this);} {}
+  }
+  Function {OpenVideo()} {} {
+    code {if(playing) return ;
+  file = fl_file_chooser("Open", "Video (*.{avi,dat})\\t", 0);
+  if(file==NULL) return;
+
+  if(Cap!=NULL)
+     delete Cap;
+
+  Cap=new Fl_Capture();
+if(!Cap->CaptureFromFile(file)) return;
+video->SetImage(Cap->GetFrame());
+videoPad->redraw();
+CaptureForm::playing=true;
+Position->value(0);
+Position->show();
+PlayPauseButton->activate();
+double fps=Cap->GetFPS();
+if(fps==0.0)
+  fps=20;
+
+Vtimer = 1.0 / fps;
+
+Out->add("Capture From Video File ");
+char Buf[255];
+sprintf(Buf, " Capture FPS : %.1lf",fps);
+Out->add(Buf);   
+
+Fl::add_timeout(Vtimer,CaptureForm::Playing_CB,(void*)this);} {}
+  }
+  Function {Position_CB()} {open
+  } {
+    code {// Out->add("Sorry it doesnt  work because of OpenCV read Reference Manual");
+
+if(Fl::event_is_click())
+{
+   playing=false;
+     double pos=Position->value();
+    Cap->SetPositionPercent(Position->value());
+   playing=true;
+   Fl::add_timeout(Vtimer,CaptureForm::Playing_CB,(void*)this);
+   char Buf[255];
+   sprintf(Buf, " Position : %.1lf",pos);
+   Out->add(Buf);
+   Out->add("Postion changed with click");
+}
+else
+  Out->add("Postion changed with time");} {}
+  }
+  Function {PlayPause()} {} {
+    code {if(Cap==NULL) return;
+if(playing)
+  playing=false;
+else{
+  playing=true;
+  Fl::add_timeout(Vtimer,CaptureForm::Playing_CB,(void*)this);
+}} {}
+  }
+  Function {Snapshot()} {} {
+    code {if(Cap==NULL) return;
+if(playing)
+   PlayPause();
+isSnapshot=true;
+p->CopyFromCapture(getSnapshot(),file);
+hide();} {}
+  }
+  Function {getSnapshot()} {return_type {IplImage *}
+  } {
+    code {if(isSnapshot)
+ return cvCloneImage(video->image);
+else
+ return NULL;} {}
+  }
+} 

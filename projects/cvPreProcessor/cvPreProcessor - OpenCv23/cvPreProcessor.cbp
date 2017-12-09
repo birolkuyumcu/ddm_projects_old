@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="cvPreProcessor" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="default">
+				<Option output="cvPreProcessor" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+			</Target>
+			<Environment>
+				<Variable name="FLTK_DIR" value="C:\fltk-1.1.10" />
+			</Environment>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="default;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-g" />
+			<Add option="-mms-bitfields" />
+			<Add option="-DWIN32" />
+			<Add directory="$(FLTK_DIR)" />
+			<Add directory="C:\OpenCV-2.3.0\build\include\opencv" />
+			<Add directory="C:\OpenCV-2.3.0\build\include" />
+		</Compiler>
+		<Linker>
+			<Add library="fltk" />
+			<Add library="gdi32" />
+			<Add library="user32" />
+			<Add library="kernel32" />
+			<Add library="ole32" />
+			<Add library="uuid" />
+			<Add library="comctl32" />
+			<Add library="wsock32" />
+			<Add library="m" />
+			<Add library="opencv_highgui230" />
+			<Add library="opencv_core230" />
+			<Add library="opencv_imgproc230" />
+			<Add library="opencv_video230" />
+			<Add directory="$(FLTK_DIR)\lib" />
+			<Add directory="C:\OpenCV-2.3.0\build\x86\vc10\lib" />
+		</Linker>
+		<Unit filename="Fl_MatrixReader.cpp" />
+		<Unit filename="Fl_MatrixReader.h" />
+		<Unit filename="Fl_OpenCV.cxx" />
+		<Unit filename="Fl_OpenCV.h" />
+		<Unit filename="OpenCv-2.0 Uyumsuzlukları.txt" />
+		<Unit filename="cvPreProcessor.cxx" />
+		<Unit filename="cvPreProcessor.fl" />
+		<Unit filename="cvutility.cpp" />
+		<Unit filename="cvutility.h" />
+		<Unit filename="datatypes.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

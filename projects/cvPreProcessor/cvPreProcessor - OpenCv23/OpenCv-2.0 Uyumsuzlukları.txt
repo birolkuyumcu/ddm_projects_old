@@ -1,0 +1,18 @@
+Splitler çalýþýyor
+
+Thresohld : Kýrýlýyor
+Adaptive Thresohld : Çalýþýyor
+
+Morfolojik iþlemler tamamiyle Çalýþýyor
+
+Sobel : Çalýþýyor
+Laplace : Kýrýlýyor
+CannY  : Kýrýlýyor
+
+
+Blurr : Çalýþýyor
+Smooth :Kýrýlýyor
+Median : Kýrýlýyor
+Bilateral : Yanlýþ Çalýþýyor
+
+Filter 2D : Kýrýlýyor
