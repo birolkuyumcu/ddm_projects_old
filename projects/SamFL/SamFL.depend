@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1230908974 source:c:\projects\samfl\sfl_fuzzyfier.c
+	"sfl_fuzzyfier.h"
+
+1230909048 c:\projects\samfl\sfl_fuzzyfier.h
+
+1230909090 source:c:\projects\samfl\sfl_fuzzyset.c
+	"sfl_fuzzyset.h"
+
+1230909148 c:\projects\samfl\sfl_fuzzyset.h
+
+1230908886 source:c:\projects\samfl\sfl_defuzzyfier.c
+	"sfl_defuzzyfier.h"
+
+1230908930 c:\projects\samfl\sfl_defuzzyfier.h
+
