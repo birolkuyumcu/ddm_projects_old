@@ -1,0 +1,15 @@
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\ColorFilter.exe
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\ColorFilter.pdb
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\OpenCvSharp.Blob.dll
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\OpenCvSharp.CPlusPlus.dll
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\OpenCvSharp.dll
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\OpenCvSharp.Extensions.dll
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\OpenCvSharp.MachineLearning.dll
+D:\ProjectCSharp\ColorFilter\ColorFilter\bin\Debug\OpenCvSharp.UserInterface.dll
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Debug\ColorFilter.Form1.resources
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Debug\ColorFilter.Properties.Resources.resources
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Debug\ColorFilter.exe
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Debug\ColorFilter.pdb

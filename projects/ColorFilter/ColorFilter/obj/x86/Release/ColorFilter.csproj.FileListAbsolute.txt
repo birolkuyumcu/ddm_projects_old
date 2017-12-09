@@ -1,0 +1,5 @@
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Release\ResolveAssemblyReference.cache
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Release\ColorFilter.Form1.resources
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Release\ColorFilter.Properties.Resources.resources
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Release\GenerateResource.read.1.tlog
+D:\ProjectCSharp\ColorFilter\ColorFilter\obj\x86\Release\GenerateResource.write.1.tlog
