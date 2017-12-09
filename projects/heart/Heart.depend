@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1203880021 source:c:\projects\heart\main.cpp
+	"main.h"
+
+1203880021 c:\projects\heart\main.h
+	<FL/Fl.H>
+	<fann.h>
+	<stdio.h>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Input.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Choice.H>
+

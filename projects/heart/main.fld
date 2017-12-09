@@ -1,0 +1,232 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0108 
+header_name {.h} 
+code_name {.cpp}
+decl {\#include <FL/fl_ask.H>} {public
+} 
+
+decl {\#include <fann.h>} {public
+} 
+
+decl {\#include <stdio.h>} {public
+} 
+
+Function {} {open
+} {
+  Fl_Window window_main {
+    label {Heart disease}
+    xywh {125 72 480 559} type Double box PLASTIC_UP_BOX color 8 align 80 visible
+  } {
+    Fl_Input Age {
+      label {Age (20 -100 ) :}
+      xywh {305 10 100 24} type Float labelfont 9 labelsize 22
+    }
+    Fl_Button {} {
+      label {Result @->}
+      callback {Hesapla();}
+      xywh {35 494 115 26} box PLASTIC_UP_BOX color 4
+    }
+    Fl_Output To {
+      xywh {170 496 280 24} labelfont 9 labelsize 22
+    }
+    Fl_Choice Sex {
+      label {Sex :} open
+      xywh {305 44 115 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {Sex->add("Female");}
+      code1 {Sex->add("Male");}
+      code2 {o->value(0);}
+    } {}
+    Fl_Choice Chest {
+      label {Chest Pain Type :} open
+      xywh {305 78 115 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {Chest->add("Angina");}
+      code1 {Chest->add("Abnang");}
+      code2 {Chest->add("Notang");}
+      code3 {Chest->add("Asympt"); o->value(0);}
+    } {}
+    Fl_Input BPress {
+      label {Blood Pressure (70-190) :}
+      xywh {305 116 100 24} type Float labelfont 9 labelsize 22
+    }
+    Fl_Input Cholestral {
+      label {Cholesteral (120-580) :}
+      xywh {305 150 100 24} type Float labelfont 9 labelsize 22
+    }
+    Fl_Choice Ecg {
+      label {Electrocardiographic Results :} open
+      xywh {305 215 115 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {Ecg->add("Norm");}
+      code1 {Ecg->add("Abn");}
+      code2 {Ecg->add("Hyp");}
+      code3 {o->value(0);}
+    } {}
+    Fl_Input HRate {
+      label {Max heart rate (60-210) :}
+      xywh {305 255 100 24} type Float labelfont 9 labelsize 22
+    }
+    Fl_Choice Exc {
+      label {Exercise Induced Angina :} open
+      xywh {305 289 115 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {Exc->add("True");}
+      code1 {Exc->add("False");}
+      code2 {o->value(0);}
+    } {}
+    Fl_Input Oldpeak {
+      label {Oldpeak (0-5) :}
+      xywh {305 320 100 24} type Float labelfont 9 labelsize 22
+    }
+    Fl_Choice Slope {
+      label {Slope :} open
+      tooltip {the slope of the peak exercise ST segment} xywh {305 360 115 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {Slope->add("Up");}
+      code1 {Slope->add("Flat");}
+      code2 {Slope->add("Down");}
+      code3 {o->value(0);}
+    } {}
+    Fl_Choice NVessel {
+      label {Number of vessels colored :} open
+      xywh {305 400 55 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {NVessel->add("0");}
+      code1 {NVessel->add("1");}
+      code2 {NVessel->add("2");}
+      code3 {NVessel->add("3");o->value(0);}
+    } {}
+    Fl_Choice Thal {
+      label {Thal :} open
+      xywh {305 434 150 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {Thal->add("Normal");}
+      code1 {Thal->add("Fixed Defect");}
+      code2 {Thal->add("Reversable defect");o->value(0);}
+    } {}
+    Fl_Choice BSugar {
+      label {Fasting Blood Sugar  <  120  :} open
+      xywh {305 184 115 24} down_box BORDER_BOX labelfont 9 labelsize 22
+      code0 {BSugar->add("True");}
+      code1 {BSugar->add("False");}
+      code2 {o->value(0);}
+    } {}
+  }
+} 
+
+Function {Hesapla()} {open return_type void
+} {
+  code {char buf[50];
+float to;
+fann_type *out;
+fann_type input[25];
+int ch;
+
+struct fann *ann = fann_create_from_file("heart.net");
+if(ann==NULL){
+   fl_alert("Can not Open Neural Network File - heart.net - " );
+   return;
+}
+// Init
+for(int i=0;i<25;i++)input[i]=0;
+
+// Age
+input[0]=atof(Age->value());
+//Normalizasyon
+//  
+input[0]=(input[0]-20.0)/80.0;
+// Sex
+input[1]=Sex->value();
+
+// Chest PainType
+ch=(int)Chest->value();
+switch (ch){
+   case 0: input[2]=1;
+          break; 
+   case 1: input[3]=1;
+          break; 
+   case 2: input[4]=1;
+          break; 
+   case 3: input[5]=1;
+          break;                     
+
+}
+
+// Bload Press
+input[6]=atof(BPress->value());
+input[6]=(input[6]-70.0)/120.0;
+
+// Cholestral
+input[7]=atof(Cholestral->value());
+input[7]=(input[7]-120.0)/460.0;
+
+//Fasting blood sugar 
+input[8]=BSugar->value();
+
+// Chest PainType
+ch=(int)Ecg->value();
+switch (ch){
+   case 0: input[9]=1;
+          break; 
+   case 1: input[10]=1;
+          break; 
+   case 2: input[11]=1;
+          break;          
+
+}
+
+// Heart Rate
+input[12]=atof(HRate->value());
+input[12]=(input[12]-60.0)/150.0;
+
+
+//Exc
+input[13]=Exc->value();
+
+// Oldpeak
+input[14]=atof(Oldpeak->value());
+input[14]=(input[14])/5.0;
+
+// Slope
+ch=(int)Slope->value();
+switch (ch){
+   case 0: input[15]=1;
+          break; 
+   case 1: input[16]=1;
+          break; 
+   case 2: input[17]=1;
+          break;          
+
+}
+
+// Number of Vessel
+ch=(int)NVessel->value();
+switch (ch){
+   case 0: input[18]=1;
+          break; 
+   case 1: input[19]=1;
+          break; 
+   case 2: input[20]=1;
+          break; 
+   case 3: input[21]=1;
+          break;                     
+
+}
+
+// Thal
+ch=(int)Thal->value();
+switch (ch){
+   case 0: input[22]=1;
+          break; 
+   case 1: input[23]=1;
+          break; 
+   case 2: input[24]=1;
+          break;          
+
+}
+
+
+out = fann_run(ann, input);
+if(*out<0.5) 
+   sprintf(buf,"Healthy  %% %.2f",100*((*out)+0.5)/0.5);   
+else
+   sprintf(buf,"heart disease  %% %.2f",100*(*out));   
+
+To->value(buf);
+fann_destroy(ann);} {selected
+  }
+} 
