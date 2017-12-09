@@ -1,0 +1,323 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0108 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Button.H>} {public
+} 
+
+decl {\#include <FL/fl_ask.H>} {public
+} 
+
+decl {\#include <stdlib.h>} {public
+} 
+
+decl {\#include <string.h>} {public
+} 
+
+decl {\#include "fann.h"} {public
+} 
+
+decl {struct fann *ann;} {public
+} 
+
+decl {struct fann *val;} {public
+} 
+
+decl {struct fann *hml;} {public
+} 
+
+decl {Fl_Button *But[9];} {public
+} 
+
+decl {float Board[9];} {public
+} 
+
+decl {int count;} {public
+} 
+
+Function {make_window()} {} {
+  Fl_Window {} {
+    label {OXO Game } open selected
+    tooltip {OXO game Programmed by BlueKid} xywh {484 287 458 152} type Double box PLASTIC_DOWN_BOX color 27 visible
+  } {
+    Fl_Group Table {
+      xywh {15 10 130 130} box FLAT_BOX color 23
+    } {
+      Fl_Button But0 {
+        user_data 0
+        callback cb_But
+        xywh {20 15 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[0]=o;}
+      }
+      Fl_Button But1 {
+        user_data 1
+        callback cb_But
+        xywh {60 15 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[1]=o;}
+      }
+      Fl_Button But2 {
+        user_data 2
+        callback cb_But
+        xywh {100 15 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[2]=o;}
+      }
+      Fl_Button But3 {
+        user_data 3
+        callback cb_But
+        xywh {20 55 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[3]=o;}
+      }
+      Fl_Button But4 {
+        user_data 4
+        callback cb_But
+        xywh {60 55 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[4]=o;}
+      }
+      Fl_Button But5 {
+        user_data 5
+        callback cb_But
+        xywh {100 55 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[5]=o;}
+      }
+      Fl_Button But6 {
+        user_data 6
+        callback cb_But
+        xywh {20 95 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[6]=o;}
+      }
+      Fl_Button But7 {
+        user_data 7
+        callback cb_But
+        xywh {60 95 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[7]=o;}
+      }
+      Fl_Button But8 {
+        user_data 8
+        callback cb_But
+        xywh {100 95 40 40} box PLASTIC_UP_BOX color 14 labelsize 21 deactivate
+        code0 {But[8]=o;}
+      }
+    }
+    Fl_Button {} {
+      label {Oynayalým !}
+      callback {InitMove();
+int i;
+for(i=0;i<9;i++){
+  But[i]->box(FL_PLASTIC_UP_BOX);
+  But[i]->activate();
+  But[i]->label("");
+}
+ 
+// Rastgele ilk hamle
+i=rand()%9;
+Board[i]=1;
+PrintBoard(Board);
+
+Isaretle(i,true);}
+      tooltip {New Game} xywh {345 80 100 55} box PLASTIC_UP_BOX color 1
+    }
+    Fl_Group Method {
+      xywh {165 80 160 55} box PLASTIC_UP_FRAME
+    } {
+      Fl_Round_Button Method1 {
+        label {Rastgele Eðitimli}
+        tooltip {ANN Trained with Randomly produced  Data} xywh {190 90 135 15} type Radio down_box ROUND_DOWN_BOX
+        code0 {o->value(1);}
+      }
+      Fl_Round_Button {} {
+        label {Böl Öðren}
+        tooltip {Parsed  and 2 ANN trained for where and how} xywh {190 110 125 15} type Radio down_box ROUND_DOWN_BOX
+      }
+    }
+    Fl_Value_Output ins {
+      label {ÝNSAN :}
+      tooltip Human xywh {230 21 40 28} box PLASTIC_THIN_UP_BOX labelsize 18 labelcolor 4
+    }
+    Fl_Value_Output ysa {
+      label {BÝLGÝSAYAR  :}
+      tooltip Computer xywh {402 21 40 28} box PLASTIC_THIN_UP_BOX labelsize 18 labelcolor 1
+    }
+  }
+} 
+
+Function {} {} {
+  code {Fl_Window  * window;
+window = make_window( );
+//
+ann = fann_create_from_file("oxo.net");
+val = fann_create_from_file("value.net");
+hml = fann_create_from_file("hamle.net");
+
+InitMove();
+//
+
+window->show( argc, argv );
+return ( Fl :: run( ) );} {}
+} 
+
+Function {ComputerMove()} {} {
+  code {if(Method1->value()==0) {
+  ComputerMove2();
+  return;
+}
+
+float *out;
+float brd[9];
+float otmp[9];
+float max=0.0;
+int pmax;
+
+out = fann_run(ann, Board);
+memcpy(otmp,out,9*sizeof(float));
+
+for(int i=0;i<9;i++)
+  if((otmp[i]-Board[i])<0.1) otmp[i]=-2;
+
+for(int i=0;i<9;i++)
+  if(otmp[i]>max){
+    max=otmp[i];
+    pmax=i;
+  }
+
+Board[pmax]=1;
+Isaretle(pmax,true);
+if(isEnd(Board)==1)
+  ComputerWin();} {}
+} 
+
+Function {ComputerMove2()} {} {
+  code {float *out;
+float *hout;
+float in[3];
+float onem[8];
+float max=0.0;
+int pmax;
+
+char X1[8]={0,3,6,0,1,2,0,2};
+char X2[8]={1,4,7,3,4,5,4,4};
+char X3[8]={2,5,8,6,7,8,8,6};
+
+for(int i=0;i<8;i++){
+   in[0]=Board[X1[i]];
+   in[1]=Board[X2[i]];
+   in[2]=Board[X3[i]];
+   out = fann_run(val, in);   
+   onem[i]=*out;
+   if(onem[i]>max){
+     max=onem[i];
+     pmax=i;
+   }  
+
+}
+
+in[0]=Board[X1[pmax]];
+in[1]=Board[X2[pmax]];
+in[2]=Board[X3[pmax]];
+out = fann_run(hml, in);   
+
+for(int i=0;i<3;i++)
+  out[i]=out[i]-in[i];
+  if(out[0])
+     pmax=X1[pmax];   
+  else if(out[1])
+     pmax=X2[pmax];
+  else if(out[2])
+     pmax=X3[pmax];  
+  else{
+    for(int i=0;i<9;i++)
+      if(Board[i]==0) pmax =i;
+
+  }
+
+Board[pmax]=1;
+
+Isaretle(pmax,true);
+
+if(isEnd(Board)==1)
+  ComputerWin();} {}
+} 
+
+Function {InitMove()} {} {
+  code {for(int i=0;i<9;i++)
+    Board[i]=0.0;
+
+count=0;} {}
+} 
+
+Function {PrintBoard(float *out)} {} {
+  code {/*
+char Buf[40];
+Out->clear();
+Out->add("");
+sprintf(Buf,"[%.1f] [%.1f] [%.1f]",out[0],out[1],out[2]);
+Out->add(Buf);
+sprintf(Buf,"[%.1f] [%.1f] [%.1f]",out[3],out[4],out[5]);
+Out->add(Buf);
+sprintf(Buf,"[%.1f] [%.1f] [%.1f]",out[6],out[7],out[8]);
+Out->add(Buf);
+Out->add("");
+*/} {}
+} 
+
+Function {isEnd(float *brd)} {return_type int
+} {
+  code {char X1[8]={0,3,6,0,1,2,0,2};
+char X2[8]={1,4,7,3,4,5,4,4};
+char X3[8]={2,5,8,6,7,8,8,6};
+
+for(int i=0;i<8;i++){
+   if(brd[X1[i]]==brd[X2[i]] &&   brd[X2[i]]==brd[X3[i]] && brd[X3[i]]!=0){
+        return (int)brd[X1[i]];
+     }
+   }
+return 0;} {}
+} 
+
+Function {cb_But(Fl_Button*b, void*u)} {return_type void
+} {
+  code {if(Board[(int)u]) return;
+Isaretle((int)u,false);
+Board[(int)u]=-1;
+if(isEnd(Board)==-1)
+  HumanWin();
+else
+  ComputerMove();} {}
+} 
+
+Function {HumanWin()} {} {
+  code {fl_alert("Malesef Siz Kazandýnýz... ");
+int v=(int)ins->value();
+v+=1;
+ins->value(v);
+EndGame();} {}
+} 
+
+Function {ComputerWin()} {} {
+  code {fl_alert("Ben Kazandým... ");
+int v=(int)ysa->value();
+v+=1;
+ysa->value(v);
+EndGame();} {}
+} 
+
+Function {EndGame()} {} {
+  code {int i;
+for(i=0;i<9;i++){
+  But[i]->deactivate();
+}} {}
+} 
+
+Function {Isaretle(int i,bool isysa)} {} {
+  code {But[i]->box(FL_BORDER_FRAME);
+// But[i]->deactivate();
+if(isysa){
+  But[i]->label("X");
+  But[i]->labelcolor(FL_RED);
+}
+else{
+  But[i]->label("O");
+  But[i]->labelcolor(FL_BLUE);
+}
+
+Table->redraw();} {}
+} 

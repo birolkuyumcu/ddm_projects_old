@@ -1,0 +1,75 @@
+# depslib dependency file v1.0
+1183143622 source:c:\projects\oxorun\main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"fann.h"
+
+1183299573 source:c:\projects\oxo_game\oxo_game.cxx
+	"oxo_game.h"
+
+1183299573 c:\projects\oxo_game\oxo_game.h
+	<FL/Fl.H>
+	<FL/Fl_Button.H>
+	<FL/fl_ask.H>
+	<stdlib.h>
+	<string.h>
+	"fann.h"
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Group.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Round_Button.H>
+	<FL/Fl_Value_Output.H>
+
+1179677911 c:\program files\code blocks\package\include\fl\fl.h
+	"Enumerations.H"
+
+1179304248 c:\program files\code blocks\package\include\fl\enumerations.h
+	"Fl_Export.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_export.h
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_double_window.h
+	"Fl_Window.H"
+
+1121420093 c:\program files\code blocks\package\include\fl\fl_window.h
+	"Fl_Group.H"
+
+1121420093 c:\program files\code blocks\package\include\fl\fl_group.h
+	"Fl_Widget.H"
+
+1121420093 c:\program files\code blocks\package\include\fl\fl_widget.h
+	"Enumerations.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_button.h
+	"Fl_Widget.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_browser.h
+	"Fl_Browser_.H"
+
+1143588440 c:\program files\code blocks\package\include\fl\fl_browser_.h
+	"Fl_Group.H"
+	"Fl_Scrollbar.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_scrollbar.h
+	"Fl_Slider.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_slider.h
+	"Fl_Valuator.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_valuator.h
+	"Fl_Widget.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_round_button.h
+	"Fl_Light_Button.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_light_button.h
+	"Fl_Button.H"
+
+1113420928 c:\program files\code blocks\package\include\fl\fl_ask.h
+	"Enumerations.H"
+
+1113610397 c:\program files\code blocks\package\include\fl\fl_value_output.h
+	"Fl_Valuator.H"
+
