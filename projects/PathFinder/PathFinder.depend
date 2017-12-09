@@ -1,0 +1,49 @@
+# depslib dependency file v1.0
+1169478393 source:c:\xynth\projects\pathfinder\pathfinder.cxx
+	"PathFinder.h"
+
+1169469476 c:\xynth\projects\pathfinder\pathfinder.h
+	<FL/Fl.H>
+	"pathfinder_t.h"
+	<FL/fl_ask.H>
+	<stdio.h>
+	<stdlib.h>
+	"Cell.h"
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Counter.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+
+1122059246 c:\xynth\projects\lib2dp-0.2\include\pathfinder_t.h
+	"node_t.h"
+	"map_t.h"
+	"heap_t.h"
+	"list_t.h"
+
+1122048438 c:\xynth\projects\lib2dp-0.2\include\node_t.h
+
+1129574506 c:\xynth\projects\lib2dp-0.2\include\map_t.h
+
+1122048342 c:\xynth\projects\lib2dp-0.2\include\heap_t.h
+	"node_t.h"
+
+1122048372 c:\xynth\projects\lib2dp-0.2\include\list_t.h
+
+1169469414 c:\xynth\projects\pathfinder\cell.h
+	<FL/Fl_Box.H>
+
+1122059246 c:\xynth\projects\pathfinder\include\pathfinder_t.h
+	"node_t.h"
+	"map_t.h"
+	"heap_t.h"
+	"list_t.h"
+
+1122048438 c:\xynth\projects\pathfinder\include\node_t.h
+
+1129574506 c:\xynth\projects\pathfinder\include\map_t.h
+
+1122048342 c:\xynth\projects\pathfinder\include\heap_t.h
+	"node_t.h"
+
+1122048372 c:\xynth\projects\pathfinder\include\list_t.h
+

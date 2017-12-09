@@ -1,0 +1,173 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include "pathfinder_t.h"} {public
+} 
+
+decl {\#include <FL/fl_ask.H>} {public
+} 
+
+decl {\#include <stdio.h>} {selected public
+} 
+
+decl {\#include <stdlib.h>} {public
+} 
+
+decl {\#include "Cell.h"} {public
+} 
+
+decl {map_t map;} {public
+} 
+
+decl {short *cells;} {public
+} 
+
+Function {make_window()} {open
+} {
+  Fl_Window {} {
+    label {Path Finder} open
+    xywh {241 141 551 498} type Double color 29 resizable visible
+  } {
+    Fl_Counter X_limit {
+      label {Max X Len}
+      xywh {5 25 110 20} type Simple box PLASTIC_UP_BOX color 1 align 1 minimum 10 maximum 1000 step 10 value 50
+    }
+    Fl_Counter Y_limit {
+      label {Max Y Len}
+      xywh {130 25 110 20} type Simple box PLASTIC_UP_BOX color 1 align 1 minimum 10 maximum 1000 step 10 value 50
+    }
+    Fl_Button {} {
+      label {Random  Map}
+      callback {int iy,ix;
+int x_limit, y_limit;
+x_limit=(int)X_limit->value();
+y_limit=(int)Y_limit->value();
+Map->clear();
+Map->position(0,0); // reset scroller
+Map->begin(); // begin adding children
+
+Cell *c;
+// srand(time(NULL));
+for (iy = 0; iy < y_limit; ++iy) {
+	for (ix = 0; ix < x_limit; ++ix) {
+            c=new Cell(ix*15+Map->x(),iy*15+Map->y());
+            if ((ix == 0 && iy == 0) || (ix == x_limit-1 && iy == y_limit-1))
+               c->check(false);
+	    else if (rand()%100 > 65)
+               c->check(true);            
+            else
+               c->check(false);            
+
+            Map->add(c);
+
+	}
+
+}
+
+Map->end();
+Map->redraw();}
+      xywh {250 5 75 40} box PLASTIC_DOWN_BOX color 1 labelfont 3 align 128
+    }
+    Fl_Button {} {
+      label {Find Path}
+      callback {int ix, iy;
+pathfinder_t *pf;
+list_t *path;
+int c;
+char a;
+int cost;
+int result;
+int st_x, st_y, tar_x, tar_y, st, tar;
+list_iterator_t lit;
+int x_limit, y_limit;
+x_limit=(int)X_limit->value();
+y_limit=(int)Y_limit->value();
+
+cells = (short*)malloc(x_limit*y_limit*sizeof(short));
+for (iy = 0; iy < y_limit; iy++) {   // dosyadan okuyor
+	for (ix = 0; ix < x_limit; ix++) {
+	   Cell *c=(Cell*)Map->child(POS(ix, iy, x_limit));
+	   cells[POS(ix, iy, x_limit)] = c->checked;
+	}
+}
+pf = pfAlloc(x_limit*y_limit, x_limit*y_limit);
+map.x_limit = x_limit;
+map.y_limit = y_limit;
+st_x = st_y = 0;  // baþlangýç
+tar_x = x_limit-1; tar_y = y_limit-1; // hedef
+st = POS(st_x, st_y, x_limit); // baþlangýç
+tar = POS(tar_x, tar_y, x_limit); // hedef
+map.cells = cells;
+pfSetMap(pf, &map);
+path = lAlloc();
+result = pfFindPath(pf, st, tar, path, &cost);
+if (result == SOLVED) {
+     fl_message(" Solved\\n Cost: %d\\n", cost);
+     
+        for (lit = path->front; lit != 0; lit = lit->next){
+           Cell *c=(Cell*)Map->child(lit->val);	
+           c->walk();
+	}
+}
+else
+     fl_message("No solution\\n");
+free(cells);
+free(path);
+pfFree(pf);
+Map->init_sizes();
+Map->position(0,0);
+Map->redraw();}
+      xywh {415 5 125 40} box PLASTIC_DOWN_BOX color 1 labelfont 3 labelsize 18 align 128
+    }
+    Fl_Scroll Map {open
+      xywh {0 60 550 440} color 29 resizable
+    } {}
+    Fl_Button {} {
+      label {Empty Map}
+      callback {int iy,ix;
+int x_limit, y_limit;
+x_limit=(int)X_limit->value();
+y_limit=(int)Y_limit->value();
+Map->clear();
+Map->position(0,0); // reset scroller
+Map->begin(); // begin adding children
+Cell *c;
+// srand(time(NULL));
+for (iy = 0; iy < y_limit; ++iy) {
+	for (ix = 0; ix < x_limit; ++ix) {
+            c=new Cell(ix*15+Map->x(),iy*15+Map->y());	
+//            c=new Cell(Map->x()+ix*15,Map->y()+iy*15);
+//            c=new Cell(ix*15,iy*15);
+/*            
+            if ((ix == 0 && iy == 0) || (ix == x_limit-1 && iy == y_limit-1))
+               c->check(false);
+	    else if (rand()%100 > 65)
+               c->check(true);            
+            else
+               c->check(false);            
+*/
+            Map->add(c);
+
+	}
+
+}
+
+
+Map->end();
+Map->redraw();}
+      xywh {335 5 70 40} box PLASTIC_DOWN_BOX color 1 labelfont 3 align 128
+    }
+  }
+} 
+
+Function {} {open
+} {
+  code {Fl_Window  * window;
+
+
+    window = make_window( );
+
+    window->show( argc, argv );
+    return ( Fl :: run( ) );} {}
+} 
