@@ -1,0 +1,198 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include "Fl_OpenCV.H"} {public
+} 
+
+decl {\#include "BlobResult.h"} {public
+} 
+
+decl {IplImage *src;} {public
+} 
+
+decl {CBlobResult blobs;} {public
+} 
+
+decl {Fl_OpenCV *Pict;} {public
+} 
+
+Function {make_window()} {} {
+  Fl_Window Win {
+    label {cvBlobsLib Demo } open
+    tooltip {http://derindelimavi.blogspot.com/} xywh {511 117 654 551} type Double color 23 visible
+  } {
+    Fl_Button Open {
+      label {...}
+      callback Open_CB
+      tooltip Open xywh {425 4 30 26} box GTK_THIN_UP_BOX color 15 labelfont 1 labelsize 18
+    }
+    Fl_Scroll Board {open
+      xywh {5 65 640 480} box FLAT_BOX color 19
+      code0 {Pict=new Fl_OpenCV(Board->x(),Board->y(),Board->w(),Board->h());}
+      code1 {Board->add(Pict);}
+      code2 {Pict->FitWindows();}
+    } {}
+    Fl_Output FName {
+      label {Image :}
+      xywh {55 6 360 24}
+    }
+    Fl_Button Save {
+      label {Save Blobs}
+      callback Save_CB
+      tooltip Open xywh {559 4 86 26} box GTK_UP_BOX color 15 labelfont 1 labelsize 10 deactivate
+    }
+    Fl_Button Find {
+      label {Find Blobs}
+      callback {Apply();}
+      tooltip Open xywh {460 4 91 26} box GTK_UP_BOX color 15 labelfont 1 labelsize 10 deactivate
+    }
+    Fl_Counter No {
+      label {Blob :}
+      callback {ShowBlob();}
+      xywh {45 36 95 24} type Simple box GTK_UP_BOX color 21 labelcolor 4 align 4 minimum 0 maximum 10 step 1
+    }
+    Fl_Value_Slider Thresh {
+      label {Thrsh :}
+      tooltip {Threshold value} xywh {415 34 136 26} type {Horz Knob} box GTK_UP_BOX color 21 align 4 maximum 255 step 1 value 100 textsize 14
+    }
+    Fl_Value_Slider MBlob {
+      label {Min Blob}
+      tooltip {discard the blobs with less area ...  pixels} xywh {205 36 155 24} type {Horz Knob} box GTK_UP_BOX color 22 align 4 minimum 1 maximum 2500 step 10 value 1000 textsize 14
+    }
+    Fl_Counter Stype {
+      tooltip {Blob Showing Type} xywh {565 34 80 26} type Simple box GTK_UP_BOX color 21 labelcolor 7 align 4 minimum 1 maximum 5 step 1 value 1
+    }
+  }
+} 
+
+Function {} {open
+} {
+  code {Fl_Window  * window;
+src=0;
+window = make_window( );
+Fl::set_atclose(Close);
+window->show( argc, argv );
+return ( Fl :: run( ) );} {}
+} 
+
+Function {Open_CB(Fl_Widget*,void*)} {open return_type {static void}
+} {
+  code {char* file;
+
+file = fl_file_chooser("Open", "Picture (*.{jpg,png,bmp,dib,sr,ras,pbm,pgm,ppm,tif,tiff})\\t", 0);
+if(file==NULL) return;
+
+FName->value(file);
+
+if(src)
+ cvReleaseImage(&src);
+ 
+blobs.ClearBlobs();
+No->deactivate();
+
+Pict->Load(file, 0);
+Save->activate();
+Find->activate();
+src=cvCloneImage(Pict->image);
+Board->redraw();} {}
+} 
+
+Function {Apply()} {open
+} {
+  code {int nblobs;
+IplImage* tmp = 0;
+tmp = cvCreateImage(cvGetSize(src), IPL_DEPTH_8U,1);
+cvThreshold( src, tmp, Thresh->value(), 255, CV_THRESH_BINARY );
+
+blobs = CBlobResult( tmp, NULL, 255);
+blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, MBlob->value());
+//	blobs.Filter( blobs, B_EXCLUDE, CBlobGetArea(), B_LESS, param2 );
+nblobs=blobs.GetNumBlobs();
+if(nblobs){ 
+  fl_message("%d Blobs Found ( Area >=  %.0f pixel )",nblobs,MBlob->value());
+  No->maximum(blobs.GetNumBlobs() - 1);
+  No->activate();
+  No->value(0);
+  ShowBlob();
+}
+else
+  fl_message("Nothing Found !  :( ");
+  
+cvReleaseImage(&tmp);} {}
+} 
+
+Function {Close(Fl_Window*,void*)} {open return_type void
+} {
+  code {if(src)
+ cvReleaseImage(&src);
+exit(0);} {}
+} 
+
+Function {Save_CB(Fl_Widget*,void*)} {return_type {static void}
+} {
+  code {char* file=NULL;
+file = fl_file_chooser("Save", "Blob List(*.{txt})\\t", file);
+if(file==NULL) return;
+blobs.PrintBlobs(file);} {}
+} 
+
+Function {ShowBlob()} {open
+} {
+  code {IplImage *outputImage;
+outputImage = cvCreateImage( cvSize( src->width, src->height ), IPL_DEPTH_8U, 3 );
+cvMerge( src, src, src, NULL, outputImage );
+CBlob bl;
+blobs.GetNthBlob( CBlobGetPerimeter(), No->value(), bl);
+
+// CvBox2D el=bl.GetEllipse();
+// cvEllipse(, CvPoint center, CvSize axes, double angle, 0, 0, CV_RGB( 255, 0, 0 ));
+
+// bl.FillBlob( outputImage, CV_RGB( 255, 0, 0 ));
+
+int st=Stype->value();
+CvBox2D bx;
+CvPoint center;
+CvSize size;
+
+switch(st){
+    case 1 :
+     bl.FillBlob( outputImage, CV_RGB( 255, 0, 0 ));
+    break;
+    case 2:
+      cvRectangle(outputImage,cvPoint(bl.MinX(),bl.MinY() ),cvPoint(bl.MaxX(), bl.MaxY() ), CV_RGB( 0,0,255),2);
+    break;
+    case 3:
+      bl.FillBlob( outputImage, CV_RGB( 255, 0, 0 ));
+      cvRectangle(outputImage,cvPoint(bl.MinX(),bl.MinY() ),cvPoint(bl.MaxX(), bl.MaxY() ), CV_RGB( 0,0,255),2);
+    break;
+    case 4:
+
+       bx=bl.GetEllipse();
+       center.x = cvRound(bx.center.x);
+       center.y = cvRound(bx.center.y);
+       size.width = cvRound(bx.size.width*0.5);
+       size.height = cvRound(bx.size.height*0.5);
+       bx.angle = -bx.angle;
+       cvEllipse(outputImage, center, size,bx.angle, 0, 360, CV_RGB(0,0,255),2);
+    break;
+    case 5:
+       bl.FillBlob( outputImage, CV_RGB( 255, 0, 0 ));
+       bx=bl.GetEllipse();
+       center.x = cvRound(bx.center.x);
+       center.y = cvRound(bx.center.y);
+       size.width = cvRound(bx.size.width*0.5);
+       size.height = cvRound(bx.size.height*0.5);
+       bx.angle = -bx.angle;
+       cvEllipse(outputImage, center, size,bx.angle, 0, 360, CV_RGB(0,0,255),2);
+    break;
+}
+
+
+Pict->SetImage(outputImage);
+Board->redraw();} {selected
+  }
+} 
