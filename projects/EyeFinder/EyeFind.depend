@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1212651579 source:c:\projects\eyefinder\eyefinder.cpp
+	"EyeFinder.h"
+
+1211944168 c:\projects\eyefinder\eyefinder.h
+	<cv.h>
+	<fann.h>
+
+1200091789 source:c:\projects\eyefinder\fl_opencv.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_OpenCV.h"
+
+1212643892 c:\projects\eyefinder\fl_opencv.h
+	<FL/Fl_Widget.H>
+	<FL/fl_ask.H>
+	<cv.h>
+	<highgui.h>
+
+1212935292 source:c:\projects\eyefinder\eyefind.cxx
+	"EyeFind.h"
+
+1212935292 c:\projects\eyefinder\eyefind.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	"Fl_OpenCV.H"
+	"EyeFinder.h"
+	<fann.h>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Scroll.H>
+	<FL/Fl_Output.H>
+	<FL/Fl_Choice.H>
+	<FL/Fl_Return_Button.H>
+	<FL/Fl_Browser.H>
+

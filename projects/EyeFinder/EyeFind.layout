@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="All" />
+	<File name="EyeFinder.cpp" open="1" top="1" tabpos="3">
+		<Cursor position="408" topLine="10" />
+	</File>
+	<File name="Face.h" open="0" top="0" tabpos="5">
+		<Cursor position="514" topLine="0" />
+	</File>
+	<File name="Fl_OpenCV.cxx" open="1" top="0" tabpos="1">
+		<Cursor position="43" topLine="0" />
+	</File>
+	<File name="Fl_OpenCV.h" open="1" top="0" tabpos="2">
+		<Cursor position="452" topLine="24" />
+	</File>
+</CodeBlocks_layout_file>
