@@ -1,0 +1,28 @@
++ Komut satýrýndan Parça çalma
++ eriþilebilir olmayan parçalarýn bittiði tespit edilemiyor.
++ File chooser un native olanýna çevrilecek
+? add Multiple file chose
+Fl_Scope da sesle olan uyumsuzluðunu kontrol et // lattency
+find and add icon for program  // portable bir çözüm yok gibi
+add support AudioCD
+Parça ekleme için dizin kabul etme
+Open kısmında dir_chose -> filename_list -> çalınabilecek dosyaları seçip ekle
++ linux versiyonunu çýkar
++ Ses ayarý yeni parça çalýnýrmken yapýlmýyor
++ desteklenmiyen dosya eklettirme
+dosya açýlmadýysa hata mesajý ver
+Multi language support
+fl_sound'u düzenle
+eriþilebilir olmayan dosya çalarken Position Disable yapýlacak
+about dialog
+Playing file information dialog
+Birden Fazla açýlmayý önle
+Linux Problemlerini kontrol et
+drag drop hatalı
+Çalma hýzýný ekle
+Saati Kaldır
+Reklam'ı geliştir
+
+
+
+

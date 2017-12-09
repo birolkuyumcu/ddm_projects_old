@@ -1,0 +1,525 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0108 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include <FL/fl_ask.H>} {public
+} 
+
+decl {\#include "Fl_Drop_Browser.h"} {public
+} 
+
+decl {\#include "reklam.h"} {public
+} 
+
+decl {\#include "fl_sound.h"} {public
+} 
+
+decl {\#include "Fl_Scope.h"} {public
+} 
+
+decl {\#include "fl_ext_file_chooser.h"} {public
+} 
+
+decl {\#include <string>} {public
+} 
+
+decl {using namespace std;} {public
+} 
+
+decl {using namespace audiere;} {public
+} 
+
+decl {Reklam *adv;} {public
+} 
+
+decl {string fname;} {public
+} 
+
+decl {int gap;} {public
+} 
+
+decl {Fl_Sound *sound} {public
+} 
+
+Function {make_window()} {} {
+  Fl_Window {} {
+    label {BluePlayer by BlueKid - 0.7 Beta} open
+    xywh {372 102 380 460} type Double box PLASTIC_UP_BOX color 222 selection_color 1
+    code0 {sound=new Fl_Sound();} visible
+  } {
+    Fl_Button Open {
+      callback {char* file;
+
+file=SelectFile();
+if(file==NULL) return;
+  PList->clear();
+  PList->add(file);
+  PList->select(1);
+  PlayFile();}
+      tooltip Open image {open.png} xywh {10 65 35 40} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Play {
+      callback {if(PList->value()==0) return; // seçilmiþ þarký yoksa
+
+if(fname!=PList->text(PList->value())) // yeni þarkýmý 
+  PlayFile();
+else if(!sound->isPlaying()) // Eðer Pause yapýlmýþsa
+{
+  Fl::add_timeout(0.5, Playing_CB);
+  sound->Play();
+}}
+      tooltip Play image {db next.png} xywh {50 65 35 40} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Pause {
+      callback {if(!sound->isPlaying()) return;
+Fl::remove_timeout(Playing_CB);
+sound->Stop();}
+      tooltip Pause image {pausep.png} xywh {90 65 35 40} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Add {
+      callback {char* file;
+file=SelectFile();
+
+  if(file==NULL) return;
+  PList->add(file);
+  if(PList->size()==1){
+    PList->select(1);
+    PlayFile();      
+  }}
+      tooltip Add image {db insert.png} xywh {10 190 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Delete {
+      user_data {"Delete"}
+      callback {int size,pos;
+pos=PList->value(); // þu an seçili olan 
+size=PList->size();   
+if(size==0) return;
+if(fname==PList->text(pos)){ // çalýnan parça siliniyorsa
+// Position->value(Position->maximum());// paçayý sona al
+  sound->Stop();   
+
+}
+PList->remove(PList->value());
+size=PList->size();   
+if(size==0){  // eðer liste boþsa
+  Fl::remove_timeout(Playing_CB);
+  sound->Stop();   
+  return;
+}
+if(pos>size) pos=1;
+ PList->select(pos);
+return;}
+      tooltip Delete image {db delete.png} xywh {35 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button First {
+      callback {if(PList->size()==1) return;
+   PList->select(1);
+   return;}
+      tooltip First image {db first.png} xywh {105 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Previous {
+      callback {int size,pos;
+   pos=PList->value();
+   size=PList->size();   
+   if(size==1||pos==1) return;
+   PList->select(pos-1);
+   return;}
+      tooltip Previous image {db previous.png} xywh {130 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Next {
+      callback {int size,pos;
+   pos=PList->value();
+   size=PList->size();   
+   if(size==1||pos==size)return;
+   PList->select(pos+1);
+   return;}
+      tooltip Next image {db next.png} xywh {155 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Last {
+      callback {int size;
+   size=PList->size(); 
+   if(size==1) return;
+   PList->select(size);
+   return;}
+      tooltip Last image {db last.png} xywh {180 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Up {
+      callback {int size,pos;
+   pos=PList->value();
+   size=PList->size();   
+   if(size<2||pos==1) return;
+   PList->swap(pos,pos-1);
+   PList->select(pos-1);
+   return;}
+      tooltip Up image {fill up.png} xywh {60 191 20 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Down {
+      callback {int size,pos;
+   pos=PList->value();
+   size=PList->size();   
+   if(size<2||pos==size) return;
+   PList->swap(pos,pos+1);
+   PList->select(pos+1);
+   return;}
+      tooltip Down image {fill down.png} xywh {80 191 20 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Browser PList {
+      callback {if(Fl::event_clicks() && Fl::event_is_click()){
+  if(PList->value()) PlayFile();
+  return;
+}
+
+if(Fl::event_length()&& !Fl::event_is_click()){
+   char *buf=(char *)Fl::event_text();
+   char *tmp;
+   \#ifndef WIN32
+/*  Linux k¹sm¹nda space tuºunu %20 olarak ekliyor dropda gerikalan k¹sm¹ 
+
+
+  char *buf=(char *)Fl::event_text();
+  buf[Fl::e_length-3]=0;  // r//n k¹sm¹ at¹l¹yor
+  buf=&buf[7];            // file:/// k¹sm¹ at¹l¹yor
+*/
+
+
+     buf[Fl::e_length-3]=0;  // r//n k¹sm¹ at¹l¹yor
+     buf=&buf[7];            // file:/// k¹sm¹ at¹l¹yor
+     do{
+       tmp=strstr( buf, "%20");
+       if(!tmp) break;
+       tmp[0]=' ';
+       for(int i=1;tmp[i]==0;i++){
+         tmp[i]=tmp[i+1];
+       }
+     }while(1);
+    
+   \#endif 
+
+
+    tmp=(char*)fl_filename_ext(buf);
+    //.mp3
+    tmp++; //mp3
+    if(sound->isSupported((tmp))){
+       PList->add(buf);
+       Fl::e_length = 0;
+    }
+}}
+      tooltip {Play List} xywh {10 225 360 225} type Hold box PLASTIC_DOWN_BOX when 3
+      class Fl_Drop_Browser
+    }
+    Fl_Slider Position {
+      callback {if(!sound) return;
+sound->SetPosition((int)Position->value());}
+      tooltip Position xywh {10 115 360 15} type {Horz Knob} box PLASTIC_DOWN_BOX color 230 selection_color 1
+    }
+    Fl_Value_Slider Volume {
+      callback {if(!sound) return;
+sound->SetVolume(Volume->value());}
+      tooltip Volume xywh {130 65 240 15} type {Horz Knob} box PLASTIC_DOWN_BOX color 230 selection_color 1 labelcolor 1 value 0.5 textsize 14 textcolor 1
+    }
+    Fl_Value_Slider Balance {
+      callback {if(!sound) return;
+sound->SetPan(Balance->value());}
+      tooltip Balance xywh {130 90 240 15} type {Horz Knob} box PLASTIC_DOWN_BOX color 230 selection_color 1 labelcolor 1 minimum -1 step 0.1 textsize 14 textcolor 1
+    }
+    Fl_Clock {} {
+      xywh {10 5 50 50} box PLASTIC_UP_BOX color 230 selection_color 0
+    }
+    Fl_Box Playing {
+      label {http://blueplayer.sourceforge.net/}
+      xywh {65 6 305 48} box PLASTIC_UP_BOX color 230 labelfont 3 labelcolor 1 align 64
+      code0 {adv=new Reklam();}
+      code1 {adv->SetWait(5);}
+    }
+    Fl_Group {} {
+      xywh {10 139 360 42} box PLASTIC_UP_BOX color 230
+    } {
+      Fl_Box wave {
+        xywh {13 142 352 36}
+        code0 {wave->TraceColour((Fl_Color)222);}
+        code1 {wave->datatype(FL_SCOPE_SIGNED);}
+        code2 {wave->tracetype(FL_SCOPE_TRACE_LOOP_CLEAR);}
+        class Fl_Scope
+      }
+    }
+    Fl_Button Load {
+      callback {PList->load("blueplayer.lst");
+if(PList->size()==0) return;
+PList->select(1);
+PlayFile();}
+      tooltip {Load Play List} image {load.png} xywh {230 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Save {
+      callback {int size =PList->size();   
+if(size==0) return;
+FILE *fp;
+fp=fopen("blueplayer.lst","w");
+if(fp){
+  int i;
+  for(i=1;i<size;i++)
+    fprintf(fp,"%s\\n",PList->text(i));
+  fputs(PList->text(i),fp);
+  fclose(fp);
+
+}
+else
+ fl_alert("Play List File Not Saved !!!");}
+      tooltip {Save Play List} image {save.png} xywh {255 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button PInfo {
+      callback {if(!sound->isPlaying()) return;
+Info Info_Dlg;
+Info_Dlg.show();}
+      tooltip Information image {Information.png} xywh {205 191 24 24} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button Help {
+      callback {About a;
+a.show();}
+      tooltip About image {help-2.png} xywh {335 184 35 35} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+    Fl_Button AudioCD {
+      tooltip {Audio CD Mode} image {cd_bluek.png} xywh {295 184 35 35} box SHADOW_FRAME down_box DOWN_FRAME color 7 align 16
+    }
+  }
+} 
+
+Function {} {open
+} {
+  code {Fl_Window  * window;
+window = make_window( );
+//
+if(argc==2) 
+  PList->add(argv[1]);
+else
+  PList->load("blueplayer.lst");
+
+  
+if(PList->size()>0){
+  PList->select(1);
+  PlayFile();
+}
+//
+window->show();} {selected
+  }
+} 
+
+Function {Playing_CB(void*)} {return_type void
+} {
+  code {//if(Position->value()==Position->maximum()||!sound->isPlaying())\{ 
+if(!sound->isPlaying())\{ 
+  int pos,size;
+  pos=PList->value();
+  size=PList->size();
+  if(fname==PList->text(PList->value()))pos++;
+  if(pos>size) pos=pos%size;
+  PList->select(pos);
+  Position->value(0);
+  PlayFile();  
+  return;
+\}
+if(sound->isSeekable()) 
+  Position->value(sound->GetPosition ());
+int VBuf[2];
+sound->ReadSample(2,VBuf);
+wave->Add((VBuf[0])/gap);
+Playing->label(adv->Get());  
+Fl::repeat_timeout(0.1, Playing_CB);} {}
+} 
+
+Function {PlayFile()} {return_type void
+} {
+  code {fname=PList->text(PList->value());
+if(sound->isPlaying()){
+  Fl::remove_timeout(Playing_CB);
+  sound->Stop();
+}
+sound->Load((char *)fname.c_str());
+if (!sound) {
+   fl_alert("Sound file not opened ");
+   return;
+}
+gap=(sound->sample_format==SF_U8)? 256 : 32767;
+if(sound->sample_format==SF_U8){
+   gap=256;
+   wave->datatype(FL_SCOPE_UNSIGNED);   
+   
+}
+else{
+   gap=32767;
+   wave->datatype(FL_SCOPE_SIGNED);   
+   
+}
+
+
+if(sound->isSeekable())
+  Position->maximum(sound->GetLength());
+  Position->value(0);
+  sound->SetVolume(Volume->value());
+  adv->SetEffect(PList->value()%2);
+  adv->SetText((char*)fl_filename_name(fname.c_str()));  
+  Fl::add_timeout(0.1, Playing_CB);
+wave->clear();
+sound->Play();} {}
+} 
+
+Function {SelectFile()} {return_type {char *}
+} {
+  code {char* file;
+//file = fl_file_chooser("Open", "Sound (*.{mp3,mp2,flac,wav,ogg,aiff,aifc,,mod,s3m,it,xm,spx})\\t", 0);
+char  * pDesc[ 12] ={ 
+    "MP3 *.mp3"
+    ,"MP3 *.mp2" 
+    ,"FLAC" 
+    ,"WAVE"         
+    ,"Ogg Vorbis"
+    ,"AIFF *.aiff"
+    ,"AIFF *.aifc"
+    ,"MOD *.mod"                         
+    ,"MOD *.s3m"                         
+    ,"MOD *.it"                             
+    ,"MOD *.xm"                        
+    ,"SPEEX"                         
+    
+    };
+    
+  char  * pExt[ 12] = { 
+  "*.mp3"
+    ,"*.mp2" 
+    ,"*.flac" 
+    ,"*.wav"         
+    ,"*.ogg"
+    ,"*.aiff"
+    ,"*.aifc"
+    ,"*.mod"                         
+    ,"*.s3m"                         
+    ,"*.it"                             
+    ,"*.xm"                        
+    ,"*.spx"                         
+    
+      
+      };
+  file =fl_ext_file_chooser( "Open Sound File",
+                      pDesc, pExt, 12, EXT_VALID_ONLY,
+                      FIL_READ, NULL );
+                      
+return file;} {}
+} 
+
+class Info {open
+} {
+  Function {Info()} {} {
+    Fl_Window window {
+      label Information open
+      xywh {4 30 446 244} type Double box PLASTIC_UP_BOX color 222 hide
+      code0 {o->set_modal();}
+    } {
+      Fl_Browser Not {
+        xywh {10 10 430 190} box PLASTIC_DOWN_BOX
+      }
+      Fl_Return_Button Ok {
+        label Ok
+        callback cb_Ok
+        xywh {10 205 430 30} box PLASTIC_UP_BOX color 222 labelfont 1
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {char Buf[500];
+Not->clear();
+// Not->add("@b@C1Playing File ");
+sprintf(Buf,"@b@C1Playing File  : %s",fl_filename_name(fname.c_str()));
+Not->add(Buf);
+sound->GetFormat();
+sprintf(Buf,"Channel_count : %d",sound->channel_count);
+Not->add(Buf);
+sprintf(Buf,"Sample Rate : %d",sound->sample_rate);
+Not->add(Buf);
+sprintf(Buf,"Sample Format : %s -%d ",(sound->sample_format==SF_U8)? "unsigned 8-bit integer" : "signed 16-bit integer in host endianness ",sound->sample_format );
+Not->add(Buf);
+
+int tagc=  sound->GetTagCount();
+if(!tagc) Not->add("No Tag !!!!");
+
+for(int i=0;i<tagc;i++){
+  sprintf(Buf,"%s :  %s" ,sound->GetTagKey(i),sound->GetTagValue(i));
+  Not->add(Buf);
+}
+
+
+window->show();} {}
+  }
+} 
+
+class About {open
+} {
+  Function {About()} {} {
+    Fl_Window window {
+      label About
+      xywh {293 247 564 316} type Double box PLASTIC_UP_BOX color 222 align 0
+      code0 {o->set_modal();} visible
+    } {
+      Fl_Return_Button Ok {
+        label Ok
+        callback cb_Ok
+        xywh {455 20 95 35} box PLASTIC_UP_BOX color 222
+      }
+      Fl_Browser Not {
+        xywh {10 75 550 235} type Select box DOWN_BOX align 130
+      }
+      Fl_Box {} {
+        image {bp3.png} xywh {10 5 200 65} box PLASTIC_UP_FRAME color 222
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {string ln;
+char Buf[500];
+Not->add("@C1BluePlayer 0.7 ");
+Not->add("Simple Cross-Platform Sound Player");
+Not->add("@C4http://blueplayer.sourceforge.net/");
+Not->add("");
+sound->GetSupportedFileFormats();
+sprintf(Buf,"Audiere versiyon : %s\\n",sound->GetVersion());
+Not->add("@b@C1Supperted File Formats ");
+
+for(int i=0;i< sound->formats.size();i++){
+   ln="@b"+(sound->formats[i].description);
+   Not->add(ln.c_str());
+   std::vector<std::string> ext=sound->formats[i].extensions;
+   for(int j=0;j< ext.size();j++){
+      ln="   "+ext[j]; 
+      Not->add(ln.c_str());
+    }
+  }
+
+    //  Desteklenen ses sistemleri
+Not->add("@b@C1Supported Sound Systems");
+sound->GetSupportedAudioDevices();
+    for(int j=0;j< sound->devices.size();j++){
+        Not->add((sound->devices[j].name).c_str());
+        Not->add((sound->devices[j].description).c_str());
+     }
+
+Not->add("");
+Not->add("@b@C1Thanks to ...");
+Not->add(" *  CodeBlocks for near excellent Cross-Platform IDE   ...");
+Not->add(" *  FLTK for Cross-Platform GUI library and Fluid...");
+Not->add(" *  Audiere for Cross-Platform Sound Library...");
+Not->add(" *  Michael Pearce for nice Fl_Scope widget...");
+Not->add(" *  Don Zimmer for native filechoser widget - fl_ext_file_chooser - for windows ..");
+
+window->show();} {}
+  }
+  Function {hide()} {} {
+    code {window->hide();} {}
+  }
+} 
+
+Function {cb_Ok(Fl_Return_Button*o, void*w)} {} {
+  code {((Fl_Window *)(o->parent()))->hide();} {}
+} 

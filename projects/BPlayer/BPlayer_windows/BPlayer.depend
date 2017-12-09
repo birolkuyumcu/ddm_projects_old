@@ -1,0 +1,557 @@
+# depslib dependency file v1.0
+1171537933 source:c:\xynth\projects\bplayer\bplayer.cxx
+	"BPlayer.h"
+	<FL/Fl_Image.H>
+
+1171537933 c:\xynth\projects\bplayer\bplayer.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	<FL/fl_ask.H>
+	"Fl_Drop_Browser.h"
+	"reklam.h"
+	"fl_sound.h"
+	"Fl_Scope.h"
+	"fl_ext_file_chooser.h"
+	<string>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Slider.H>
+	<FL/Fl_Value_Slider.H>
+	<FL/Fl_Clock.H>
+	<FL/Fl_Box.H>
+	<FL/Fl_Group.H>
+	<FL/Fl_Browser.H>
+	<FL/Fl_Return_Button.H>
+
+1112281283 c:\program files\codeblocks\include\fl\fl.h
+	"Enumerations.H"
+
+1113606797 c:\program files\codeblocks\include\fl\enumerations.h
+	"Fl_Export.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_export.h
+
+1113606797 c:\program files\codeblocks\include\fl\fl_double_window.h
+	"Fl_Window.H"
+
+1121416493 c:\program files\codeblocks\include\fl\fl_window.h
+	"Fl_Group.H"
+
+1121416493 c:\program files\codeblocks\include\fl\fl_group.h
+	"Fl_Widget.H"
+
+1121416493 c:\program files\codeblocks\include\fl\fl_widget.h
+	"Enumerations.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_button.h
+	"Fl_Widget.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_image.h
+	"Enumerations.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_browser.h
+	"Fl_Browser_.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_browser_.h
+	"Fl_Group.H"
+	"Fl_Scrollbar.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_scrollbar.h
+	"Fl_Slider.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_slider.h
+	"Fl_Valuator.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_valuator.h
+	"Fl_Widget.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_value_slider.h
+	"Fl_Slider.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_clock.h
+	"Fl_Widget.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_box.h
+	"Fl_Widget.H"
+
+1123458602 c:\program files\codeblocks\include\fl\fl_file_chooser.h
+	<FL/Fl.H>
+	<FL/Fl_Double_Window.H>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<FL/Fl_Group.H>
+	<FL/Fl_Choice.H>
+	<FL/Fl_Menu_Button.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Preferences.H>
+	<FL/Fl_Tile.H>
+	<FL/Fl_File_Browser.H>
+	<FL/Fl_Box.H>
+	<FL/Fl_Check_Button.H>
+	<FL/Fl_File_Input.H>
+	<FL/Fl_Return_Button.H>
+	<FL/fl_ask.H>
+
+1105643994 c:\program files\codeblocks\include\stdio.h
+	<_mingw.h>
+	<stddef.h>
+	<stdarg.h>
+	<sys/types.h>
+
+1105643992 c:\program files\codeblocks\include\_mingw.h
+
+1105643994 c:\program files\codeblocks\include\stddef.h
+
+1105643994 c:\program files\codeblocks\include\stdarg.h
+
+1105643996 c:\program files\codeblocks\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
+1105643994 c:\program files\codeblocks\include\stdlib.h
+	<_mingw.h>
+	<stddef.h>
+
+1105643994 c:\program files\codeblocks\include\string.h
+	<_mingw.h>
+	<stddef.h>
+
+1113606797 c:\program files\codeblocks\include\fl\fl_choice.h
+	"Fl_Menu_.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_menu_.h
+	"Fl_Widget.H"
+	"Fl_Menu_Item.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_menu_item.h
+	"Fl_Widget.H"
+	"Fl_Image.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_menu_button.h
+	"Fl_Menu_.H"
+
+1122361141 c:\program files\codeblocks\include\fl\fl_preferences.h
+	<windows.h>
+	<stdio.h>
+	"Fl_Export.H"
+
+1104675270 c:\program files\codeblocks\include\windows.h
+	<winresrc.h>
+	<stdarg.h>
+	<windef.h>
+	<wincon.h>
+	<winbase.h>
+	<wingdi.h>
+	<winuser.h>
+	<winnls.h>
+	<winver.h>
+	<winnetwk.h>
+	<winreg.h>
+	<winsvc.h>
+	<cderr.h>
+	<dde.h>
+	<ddeml.h>
+	<dlgs.h>
+	<imm.h>
+	<lzexpand.h>
+	<mmsystem.h>
+	<nb30.h>
+	<rpc.h>
+	<shellapi.h>
+	<winperf.h>
+	<commdlg.h>
+	<winspool.h>
+	<winsock2.h>
+	<winsock.h>
+	<ole2.h>
+
+1104675270 c:\program files\codeblocks\include\winresrc.h
+	<winuser.h>
+	<winnt.h>
+	<winver.h>
+	<dde.h>
+	<dlgs.h>
+	<commctrl.h>
+
+1104675270 c:\program files\codeblocks\include\winuser.h
+
+1104675270 c:\program files\codeblocks\include\winnt.h
+	<winerror.h>
+	<string.h>
+	<basetsd.h>
+	<pshpack4.h>
+	<poppack.h>
+
+1104675270 c:\program files\codeblocks\include\winerror.h
+
+1104675260 c:\program files\codeblocks\include\basetsd.h
+
+1104675266 c:\program files\codeblocks\include\pshpack4.h
+
+1104675266 c:\program files\codeblocks\include\poppack.h
+
+1104675270 c:\program files\codeblocks\include\winver.h
+
+1104675262 c:\program files\codeblocks\include\dde.h
+
+1104675262 c:\program files\codeblocks\include\dlgs.h
+
+1104675262 c:\program files\codeblocks\include\commctrl.h
+	<prsht.h>
+
+1104675266 c:\program files\codeblocks\include\prsht.h
+
+1104675270 c:\program files\codeblocks\include\windef.h
+	<winnt.h>
+
+1104675270 c:\program files\codeblocks\include\wincon.h
+
+1104675270 c:\program files\codeblocks\include\winbase.h
+
+1104675270 c:\program files\codeblocks\include\wingdi.h
+
+1104675270 c:\program files\codeblocks\include\winnls.h
+
+1104675270 c:\program files\codeblocks\include\winnetwk.h
+
+1104675270 c:\program files\codeblocks\include\winreg.h
+
+1104675270 c:\program files\codeblocks\include\winsvc.h
+
+1104675262 c:\program files\codeblocks\include\cderr.h
+
+1104675262 c:\program files\codeblocks\include\ddeml.h
+
+1104675262 c:\program files\codeblocks\include\imm.h
+
+1104675264 c:\program files\codeblocks\include\lzexpand.h
+
+1104675264 c:\program files\codeblocks\include\mmsystem.h
+
+1104675264 c:\program files\codeblocks\include\nb30.h
+
+1104675266 c:\program files\codeblocks\include\rpc.h
+	<windows.h>
+	<rpcdce.h>
+	<rpcnsi.h>
+	<rpcnterr.h>
+	<winerror.h>
+	<excpt.h>
+
+1104675268 c:\program files\codeblocks\include\rpcdce.h
+	<basetyps.h>
+	<rpcdcep.h>
+
+1104675260 c:\program files\codeblocks\include\basetyps.h
+
+1104675268 c:\program files\codeblocks\include\rpcdcep.h
+
+1104675268 c:\program files\codeblocks\include\rpcnsi.h
+
+1104675268 c:\program files\codeblocks\include\rpcnterr.h
+
+1105643992 c:\program files\codeblocks\include\excpt.h
+	<_mingw.h>
+	<windef.h>
+
+1104675268 c:\program files\codeblocks\include\shellapi.h
+	<pshpack2.h>
+	<poppack.h>
+
+1104675266 c:\program files\codeblocks\include\pshpack2.h
+
+1104675270 c:\program files\codeblocks\include\winperf.h
+
+1104675262 c:\program files\codeblocks\include\commdlg.h
+	<unknwn.h>
+	<prsht.h>
+
+1104675268 c:\program files\codeblocks\include\unknwn.h
+	<windows.h>
+	<objfwd.h>
+	<wtypes.h>
+
+1104675266 c:\program files\codeblocks\include\objfwd.h
+	<basetyps.h>
+
+1104675272 c:\program files\codeblocks\include\wtypes.h
+	<rpc.h>
+	<rpcndr.h>
+
+1104675268 c:\program files\codeblocks\include\rpcndr.h
+	<rpcnsip.h>
+	<objfwd.h>
+
+1104675268 c:\program files\codeblocks\include\rpcnsip.h
+
+1104675270 c:\program files\codeblocks\include\winspool.h
+
+1104675270 c:\program files\codeblocks\include\winsock2.h
+	<windows.h>
+
+1104675270 c:\program files\codeblocks\include\winsock.h
+	<windows.h>
+	<mswsock.h>
+
+1104675264 c:\program files\codeblocks\include\mswsock.h
+
+1104675266 c:\program files\codeblocks\include\ole2.h
+	<winerror.h>
+	<objbase.h>
+	<olectlid.h>
+	<oleauto.h>
+	<oleidl.h>
+
+1104675266 c:\program files\codeblocks\include\objbase.h
+	<rpc.h>
+	<rpcndr.h>
+	<stdlib.h>
+	<basetyps.h>
+	<wtypes.h>
+	<unknwn.h>
+	<objidl.h>
+	<cguid.h>
+
+1104675266 c:\program files\codeblocks\include\objidl.h
+	<objfwd.h>
+
+1104675262 c:\program files\codeblocks\include\cguid.h
+
+1104675266 c:\program files\codeblocks\include\olectlid.h
+
+1104675266 c:\program files\codeblocks\include\oleauto.h
+	<oaidl.h>
+
+1104675266 c:\program files\codeblocks\include\oaidl.h
+
+1104675266 c:\program files\codeblocks\include\oleidl.h
+	<objfwd.h>
+
+1113606797 c:\program files\codeblocks\include\fl\fl_tile.h
+	"Fl_Group.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_file_browser.h
+	"Fl_Browser.H"
+	"Fl_File_Icon.H"
+	"filename.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_file_icon.h
+	"Fl.H"
+
+1152509424 c:\program files\codeblocks\include\fl\filename.h
+	"Fl_Export.H"
+	<sys/types.h>
+	"/usr/include/dirent.h"
+	<sys/types.h>
+	<direct.h>
+	<sys/types.h>
+	<dirent.h>
+
+1105643992 c:\program files\codeblocks\include\direct.h
+	<_mingw.h>
+	<stddef.h>
+	<io.h>
+
+1105643994 c:\program files\codeblocks\include\io.h
+	<_mingw.h>
+	<sys/types.h>
+	<stdint.h>
+
+1105643994 c:\program files\codeblocks\include\stdint.h
+	<stddef.h>
+
+1105643992 c:\program files\codeblocks\include\dirent.h
+	<_mingw.h>
+	<io.h>
+
+1113606797 c:\program files\codeblocks\include\fl\fl_check_button.h
+	"Fl_Light_Button.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_light_button.h
+	"Fl_Button.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_file_input.h
+	<FL/Fl_Input.H>
+
+1113606797 c:\program files\codeblocks\include\fl\fl_input.h
+	"Fl_Input_.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_input_.h
+	"Fl_Widget.H"
+
+1113606797 c:\program files\codeblocks\include\fl\fl_return_button.h
+	"Fl_Button.H"
+
+1113417327 c:\program files\codeblocks\include\fl\fl_ask.h
+	"Enumerations.H"
+
+1139860620 c:\program files\codeblocks\include\audiere.h
+	<vector>
+	<string>
+
+1113606797 c:\program files\codeblocks\include\fl\fl_hold_browser.h
+	"Fl_Browser.H"
+
+1163329658 source:c:\cb_projects\bplayer\bplayer.cxx
+	"BPlayer.h"
+	<FL/Fl_Image.H>
+
+1163329658 c:\cb_projects\bplayer\bplayer.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	<FL/fl_ask.H>
+	<FL/Fl_Hold_Browser.H>
+	"fl_sound.h"
+	"Fl_Scope.h"
+	<string>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Slider.H>
+	<FL/Fl_Value_Slider.H>
+	<FL/Fl_Clock.H>
+	<FL/Fl_Box.H>
+	<FL/Fl_Group.H>
+
+1164798060 source:c:\xynth\projects\bplayer\fl_sound.cpp
+	"fl_sound.h"
+
+1168766216 c:\xynth\projects\bplayer\fl_sound.h
+	<audiere.h>
+
+1163157730 c:\xynth\projects\bplayer\fl_scope.h
+	<FL/Fl_Widget.H>
+
+1108336344 source:c:\xynth\projects\bplayer\fl_scope.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_Scope.h"
+	<stdlib.h>
+	<stdio.h>
+
+1113606797 c:\program files\codeblocks\include\fl\fl_draw.h
+	"Enumerations.H"
+
+1108336344 source:c:\cb_projects\bplayer\fl_scope.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_Scope.h"
+	<stdlib.h>
+	<stdio.h>
+
+1163157730 c:\cb_projects\bplayer\fl_scope.h
+	<FL/Fl_Widget.H>
+
+1163342270 source:c:\cb_projects\bplayer\fl_sound.cpp
+	"fl_sound.h"
+
+1163337644 c:\cb_projects\bplayer\fl_sound.h
+	<audiere.h>
+
+1102831250 source:c:\xynth\projects\bplayer\fl_ext_file_chooser.cpp
+	"fl_ext_file_chooser.h"
+	<stdlib.h>
+	<string.h>
+	<FL/Fl.H>
+	<FL/x.H>
+	<commdlg.h>
+	<dlgs.h>
+	<cderr.h>
+	<string>
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+
+1102831250 c:\xynth\projects\bplayer\fl_ext_file_chooser.h
+
+1113606797 c:\program files\codeblocks\include\fl\x.h
+	"Enumerations.H"
+	"win32.H"
+	"mac.H"
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+	<X11/Xatom.h>
+	"Fl_Window.H"
+
+1126766478 c:\program files\codeblocks\include\fl\win32.h
+	<windows.h>
+	"Fl_Window.H"
+
+1113606797 c:\program files\codeblocks\include\fl\mac.h
+	<Carbon/Carbon.h>
+	"Fl_Window.H"
+
+1165305720 c:\xynth\projects\bplayer\fl_drop_browser.h
+	<FL/Fl_Hold_Browser.H>
+
+1164486272 source:c:\xynth\projects\bplayer\reklam.cpp
+	"reklam.h"
+
+1163923822 c:\xynth\projects\bplayer\reklam.h
+	<string>
+	<vector>
+
+1108339944 source:c:\projects\bplayer\fl_scope.cxx
+	<FL/Fl.H>
+	<FL/fl_draw.H>
+	"Fl_Scope.h"
+	<stdlib.h>
+	<stdio.h>
+
+1163161330 c:\projects\bplayer\fl_scope.h
+	<FL/Fl_Widget.H>
+
+1102834850 source:c:\projects\bplayer\fl_ext_file_chooser.cpp
+	"fl_ext_file_chooser.h"
+	<stdlib.h>
+	<string.h>
+	<FL/Fl.H>
+	<FL/x.H>
+	<commdlg.h>
+	<dlgs.h>
+	<cderr.h>
+	<string>
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+
+1102834850 c:\projects\bplayer\fl_ext_file_chooser.h
+
+1164801660 source:c:\projects\bplayer\fl_sound.cpp
+	"fl_sound.h"
+
+1168769816 c:\projects\bplayer\fl_sound.h
+	<audiere.h>
+
+1164489872 source:c:\projects\bplayer\reklam.cpp
+	"reklam.h"
+
+1163927422 c:\projects\bplayer\reklam.h
+	<string>
+	<vector>
+
+1202509421 source:c:\projects\bplayer\bplayer.cxx
+	"BPlayer.h"
+	<FL/Fl_Image.H>
+
+1202509421 c:\projects\bplayer\bplayer.h
+	<FL/Fl.H>
+	<FL/Fl_File_Chooser.H>
+	<FL/fl_ask.H>
+	"Fl_Drop_Browser.h"
+	"reklam.h"
+	"fl_sound.h"
+	"Fl_Scope.h"
+	"fl_ext_file_chooser.h"
+	<string>
+	<FL/Fl_Double_Window.H>
+	<FL/Fl_Button.H>
+	<FL/Fl_Slider.H>
+	<FL/Fl_Value_Slider.H>
+	<FL/Fl_Clock.H>
+	<FL/Fl_Box.H>
+	<FL/Fl_Group.H>
+	<FL/Fl_Browser.H>
+	<FL/Fl_Return_Button.H>
+
+1165309320 c:\projects\bplayer\fl_drop_browser.h
+	<FL/Fl_Hold_Browser.H>
+

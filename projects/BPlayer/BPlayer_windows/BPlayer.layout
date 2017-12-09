@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="BPlayer.cxx" open="1" top="0" tabpos="6">
+		<Cursor position="127738" topLine="2000" />
+	</File>
+	<File name="BPlayer.h" open="1" top="0" tabpos="7">
+		<Cursor position="1556" topLine="29" />
+	</File>
+	<File name="Fl_Drop_Browser.h" open="1" top="1" tabpos="4">
+		<Cursor position="922" topLine="3" />
+	</File>
+	<File name="Fl_Scope.cxx" open="1" top="0" tabpos="8">
+		<Cursor position="2197" topLine="33" />
+	</File>
+	<File name="ToDoList.txt" open="1" top="0" tabpos="1">
+		<Cursor position="763" topLine="0" />
+	</File>
+	<File name="blueplayer.lst" open="0" top="0" tabpos="4">
+		<Cursor position="57" topLine="0" />
+	</File>
+	<File name="fl_ext_file_chooser.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="503" topLine="99" />
+	</File>
+	<File name="fl_sound.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="16" topLine="0" />
+	</File>
+	<File name="reklam.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="1215" topLine="71" />
+	</File>
+</CodeBlocks_layout_file>
